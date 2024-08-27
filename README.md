@@ -21,7 +21,9 @@ This repository integrates various **spike-based image reconstruction methods**.
 
 ## 🎉 Updates
 
-**240826:** We update the SpikeFormer<sup>[7]</sup> and RSIR<sup>[8]</sup> methods, the UHSR<sup>[9]</sup> dataset and the piqe non-reference metric.
+* **24-08-26:** We update the `SpikeFormer`<sup>[7]</sup> and `RSIR`<sup>[8]</sup> methods, the `UHSR`<sup>[9]</sup> dataset and the `piqe` non-reference metric.
+
+* **24-07-19:** We release the Spike-Zoo base code.
 
 ## 🗓️ Todo
 - [ ] Support more spike-based image reconstruction methods. (CVPR24 Zhao et al., TCSVT23 Zhao et al.) 
@@ -50,11 +52,11 @@ pip install -r requirements.txt
 ### Datasets Preparation
 Most methods in this repository are trained using the `REDS` dataset<sup>[3]</sup>. The [train](https://drive.google.com/file/d/1ozR2-fNmU10gA_TCYUfJN-ahV6e_8Ke7/view?usp=sharing) and [test](https://drive.google.com/file/d/12q0yJ7V9KtF_y-ZcCn2B-q0zFP8ysdv3/view) parts can be downloaded using the provided links.
 
-The `real-world` spike dataset<sup>[6]</sup> is available for download [here](https://openi.pcl.ac.cn/Cordium/SpikeCV/datasets/dirs/57050f24-f6da-4670-bf2f-3134ca625cdc?type=-1).
+The `real-world` spike dataset<sup>[6]</sup> `recVidarReal2019` is available for download [here](https://openi.pcl.ac.cn/Cordium/SpikeCV/datasets/dirs/57050f24-f6da-4670-bf2f-3134ca625cdc?type=-1).
 
-The `UHSR` real-world spike dataset with class label is available for download  [here](https://github.com/Evin-X/UHSR).
+The `UHSR` real-world spike dataset <sup>[9]</sup> with class label is available for download  [here](https://github.com/Evin-X/UHSR).
 
-After downloading, please put them under the `Data` folder and rename the train and test parts to `train` and `test` folders, respectively. The project should then be organized as follows:
+After downloading, please put them under the `Data` folder and rename the train and test parts of the REDS dataset to `train` and `test` folders, respectively. The project should then be organized as follows:
 ```
 <project root>
 ├── compare_zoo
@@ -85,7 +87,7 @@ This repository offers three usages:
 ### Arguments Overview
 We use three command-line arguments, `test_params`, `test_metric`, and `test_imgs`, to specify the usage mode.
 
-`methods:` Specifies methods to measure. Default 'Spk2ImgNet, WGSE, SSML, TFP, TFI, TFSTP'.
+`methods:` Specifies methods to measure. Default 'Spk2ImgNet,WGSE,SSML,TFP,TFI,TFSTP,RSIR,SpikeFormer'.
 
 `metrics:` Specifies metrics to measure. Default 'psnr, ssim, lpips, niqe, brisque, liqe_mix, clipiqa'.
 
