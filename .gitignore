@@ -4,5 +4,5 @@ Data/U-CALTECH/*
 imgs/data/*
 logs/*
 imgs/*
-compare_zoo/LRN
+compare_zoo/LRN/*.pth
 run_self.sh
