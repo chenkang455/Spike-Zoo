@@ -1,4 +1,8 @@
 Data/REDS/*
 Data/recVidarReal2019/*
+Data/U-CALTECH/*
 imgs/data/*
-
+logs/*
+imgs/*
+compare_zoo/LRN
+run_self.sh

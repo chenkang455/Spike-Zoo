@@ -55,6 +55,7 @@ def highlight_and_zoom_image(image_array, x, y, width, height):
 
 
 def load_network(load_path, network, strict=False):
+    
     if isinstance(network, nn.DataParallel) or isinstance(network, DistributedDataParallel):
         network = network.module
     load_net = torch.load(load_path)
@@ -69,8 +70,12 @@ def load_network(load_path, network, strict=False):
             load_net_clean[k[7:]] = v
         else:
             load_net_clean[k] = v
-    
-    network.load_state_dict(load_net_clean, strict=strict)
+    if 'model_state_dict' in load_net_clean.keys():
+        network.load_state_dict(load_net_clean['model_state_dict'], strict=strict)
+    elif 'model' in load_net_clean.keys():
+        network.load_state_dict(load_net_clean['model'], strict=strict)
+    else:
+        network.load_state_dict(load_net_clean, strict=strict)
         
 # Save Network 
 def save_network(network, save_path):
@@ -284,3 +289,4 @@ def SpikeToRaw(save_path, SpikeSeq, filpud=True, delete_if_exists=True):
         fid.write(data.tobytes())
     fid.close()
     return
+

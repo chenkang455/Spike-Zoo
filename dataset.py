@@ -75,7 +75,25 @@ class SpikeData_Real(torch.utils.data.Dataset):
         _  = torch.zeros((1,1,self.height,self.width))
         return spike,_
     
+class SpikeData_UHSR(torch.utils.data.Dataset):
+    def __init__(self, root_dir, stage):
+        self.root_dir = root_dir
+        self.stage = stage
+        self.data_list = os.path.join(root_dir, stage)
+        self.data_list = sorted(os.listdir(self.data_list))
+        self.length = len(self.data_list)
+        
     
+    def __getitem__(self, idx: int):
+        data = np.load(os.path.join(self.root_dir,self.stage,self.data_list[idx]))
+        spk = data['spk'].astype(np.float32)
+        spk = spk[:,13:237,13:237] # [200,250,250] -> [200,224,224]
+        return spk,np.zeros(1)
+
+    def __len__(self):
+        return self.length
+
+
 class RandomTransforms:
     def __init__(self,p_horizontal = 0.5,p_vertical=0.5,degrees = 30):
         self.p_horizontal = p_horizontal
