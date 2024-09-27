@@ -19,6 +19,8 @@ If you like it, please give us a star ⭐ on GitHub.
 ## 📕 Introduction 
 This repository integrates various **spike-based image reconstruction methods**. It aims to assist in comparing and visualizing previous approaches on the standard REDS dataset, Real-world spike dataset, or a single spike sequence.
 
+* My goal is to develop a robust spike-based image reconstruction framework similar to [nerfstudio](https://docs.nerf.studio/index.html). If you're passionate about contributing to this project, feel free to contact me through mrchenkang@stu.pku.edu.cn 😊🎉🎉🎉
+
 ## 🎉 Updates
 
 * **24-08-26:** We update the `SpikeFormer`<sup>[7]</sup> and `RSIR`<sup>[8]</sup> methods, the `UHSR`<sup>[9]</sup> dataset and the `piqe` non-reference metric.
