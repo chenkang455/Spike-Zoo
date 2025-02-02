@@ -1,0 +1,37 @@
+data:
+  interp: 20
+  alpha: 0.4 
+
+seed: 6666
+
+loader:
+  # crop_size: [128, 128]
+  crop_size: [96, 96]
+  pair_step: 4
+
+model:
+  arch: 'sunet'
+  seq_len: 8
+  flow_weight_decay: 0.0004
+  flow_bias_decay: 0.0
+  #########################
+  kwargs:
+    activation_type: 'lif'
+    mp_activation_type: 'amp_lif'
+    spike_connection: 'concat'
+    num_encoders: 3
+    num_resblocks: 1
+    v_threshold: 1.0
+    v_reset: None
+    tau: 2.0
+
+
+train:
+  print_freq: 100
+  mixed_precision: True
+  vis_freq: 20
+
+optimizer:
+  solver: Adam
+  momentum: 0.9
+  beta: 0.999

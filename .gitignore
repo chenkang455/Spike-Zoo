@@ -1,0 +1,8 @@
+spikezoo/data
+spikezoo/models/weights
+*.pt
+*.pth
+spikezoo/data
+spikezoo/archs/spcsnet
+test.py
+run.sh
