@@ -102,7 +102,7 @@ We finish the training with one 4090 GPU in `2 minutes`, achieving `34.7dB` in P
 
 ### 4. Others
 We provide a faster `load_vidar_dat` function implemented with `cpp` (by @zeal-ye):
-``` bash
+``` python
 import spikezoo as sz
 spike = sz.load_vidar_dat("data/scissor.dat",width = 400,height = 250,version='cpp')
 ```
