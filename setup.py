@@ -10,7 +10,7 @@ with open("./README.md", "r", encoding="utf-8") as fh:
 setup(
     install_requires=install_requires,
     name="spikezoo",
-    version="0.1.2",
+    version="0.2",
     author="Kang Chen",
     author_email="mrchenkang@stu.pku.edu.cn",
     description="A deep learning toolbox for spike-to-image models.",

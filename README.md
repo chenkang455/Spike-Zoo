@@ -4,9 +4,13 @@
 </h2>
 
 ## 📖 About
-⚡Spike-Zoo is the go-to library for state-of-the-art pretrained **spike-to-image** models for reconstructing the image from the given spike stream. Whether you're looking for a **simple inference** solution or **training** your own spike-to-image models, ⚡Spike-Zoo is a modular toolbox that supports both. 
+⚡ Spike-Zoo is the go-to library for state-of-the-art pretrained **spike-to-image** models designed to reconstruct images from spike streams. Whether you're looking for a simple inference solution or aiming to train your own spike-to-image models, ⚡Spike-Zoo is a modular toolbox that supports both, with key features including:
 
-If Spike-Zoo helps your research or work, please help to ⭐ this repo or recommend it to your friends. Thanks😊
+- Fast inference with pre-trained models.
+- Training support for custom-designed spike-to-image models.
+- Specialized functions for processing spike data.
+
+
 
 ## 🚩 Updates/Changelog
 * **25-02-02:** Release the `Spike-Zoo v0.2` code, which supports more methods, provide more usages.
