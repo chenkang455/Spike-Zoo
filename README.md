@@ -1,7 +1,7 @@
-<h3 align="center"> 
+<h2 align="center"> 
   <a href="">Spike-Zoo: A Toolbox for Spike-to-Image Reconstruction
   </a>
-</h3>
+</h2>
 
 ## 📖 About
 ⚡ Spike-Zoo is the go-to library for state-of-the-art pretrained **spike-to-image** models designed to reconstruct images from spike streams. Whether you're looking for a simple inference solution or aiming to train your own spike-to-image models, ⚡Spike-Zoo is a modular toolbox that supports both, with key features including:
