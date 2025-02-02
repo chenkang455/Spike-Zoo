@@ -101,7 +101,7 @@ We finish the training with one 4090 GPU in `2 minutes`, achieving `34.7dB` in P
 > 🌟 We encourage users to develop their models using our framework, with the tutorial being released soon.
 
 ### 4. Others
-We provide a faster `load_vidar_dat` function implemented with `cpp` (by @zeal-ye):
+We provide a faster `load_vidar_dat` function implemented with `cpp` (by [@zeal-ye](https://github.com/zeal-ye)):
 ``` python
 import spikezoo as sz
 spike = sz.load_vidar_dat("data/scissor.dat",width = 400,height = 250,version='cpp')
@@ -145,7 +145,7 @@ print(sz.get_metrics())
 
 
 ## ✨‍ Acknowledgment
-Our code is built on the open-source projects of [SpikeCV](https://spikecv.github.io/), [IQA-Pytorch](https://github.com/chaofengc/IQA-PyTorch), [BasicSR](https://github.com/XPixelGroup/BasicSR) and [NeRFStudio](https://github.com/nerfstudio-project/nerfstudio).We appreciate the effort of the contributors to these repositories. Thanks for @ruizhao26 and @Leozhangjiyuan for their help in building this project.
+Our code is built on the open-source projects of [SpikeCV](https://spikecv.github.io/), [IQA-Pytorch](https://github.com/chaofengc/IQA-PyTorch), [BasicSR](https://github.com/XPixelGroup/BasicSR) and [NeRFStudio](https://github.com/nerfstudio-project/nerfstudio).We appreciate the effort of the contributors to these repositories. Thanks for [@ruizhao26](https://github.com/ruizhao26) and [@Leozhangjiyuan](https://github.com/Leozhangjiyuan) for their help in building this project.
 
 ## 📑 Citation
 If you find our codes helpful to your research, please consider to use the following citation:
