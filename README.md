@@ -108,12 +108,41 @@ spike = sz.load_vidar_dat("data/scissor.dat",width = 400,height = 250,version='c
 ```
 🚀 Results on [examples/test_load_dat.py](examples/test_load_dat.py) show that the `cpp` version is more than 10 times faster than the `python` version.
 
-
 ## 📅 TODO
 - [ ] Provide the tutorials.
 - [ ] Support more training settings.
 - [ ] Support more spike-based image reconstruction methods and datasets. 
 - [ ] Support the overall pipeline for spike simulation. 
+
+## 🤗 Supports
+Run the following code to find our supported models, datasets and metrics:
+``` python
+import spikezoo as sz
+print(sz.get_models())
+print(sz.get_datasets())
+print(sz.get_metrics())
+```
+**Supported Models:**
+|  Models   | Source  
+|  ----  | ----  | 
+| `tfp`,`tfi` | Spike camera and its coding methods | 
+| `spk2imgnet`  | Spk2ImgNet: Learning to Reconstruct Dynamic Scene from Continuous Spike Stream | 
+| `wgse`  | Learning Temporal-Ordered Representation for Spike Streams Based on Discrete Wavelet Transforms | 
+| `ssml`  | Self-Supervised Mutual Learning for Dynamic Scene Reconstruction of Spiking Camera | 
+| `spikeformer`  | SpikeFormer: Image Reconstruction from the Sequence of Spike Camera Based on Transformer |
+| `ssir`  | Spike Camera Image Reconstruction Using Deep Spiking Neural Networks |
+| `bsf`  | Boosting Spike Camera Image Reconstruction from a Perspective of Dealing with Spike Fluctuations |
+| `stir`  | Spatio-Temporal Interactive Learning for Efficient Image Reconstruction of Spiking Cameras |
+| `spikeclip`  | Rethinking High-speed Image Reconstruction Framework with Spike Camera |
+
+**Supported Datasets:**
+|  Datasets   | Source  
+|  ----  | ----  | 
+| `reds_small`  | Spk2ImgNet: Learning to Reconstruct Dynamic Scene from Continuous Spike Stream | 
+| `uhsr`  | Recognizing Ultra-High-Speed Moving Objects with Bio-Inspired Spike Camera | 
+| `realworld`  | `recVidarReal2019`,`momVidarReal2021` in [SpikeCV](https://github.com/Zyj061/SpikeCV) | 
+| `szdata`  | SpikeReveal: Unlocking Temporal Sequences from Real Blurry Inputs with Spike Streams | 
+
 
 ## ✨‍ Acknowledgment
 Our code is built on the open-source projects of [SpikeCV](https://spikecv.github.io/), [IQA-Pytorch](https://github.com/chaofengc/IQA-PyTorch), [BasicSR](https://github.com/XPixelGroup/BasicSR) and [NeRFStudio](https://github.com/nerfstudio-project/nerfstudio).We appreciate the effort of the contributors to these repositories. Thanks for @ruizhao26 and @Leozhangjiyuan for their help in building this project.
