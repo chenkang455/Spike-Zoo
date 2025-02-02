@@ -11,7 +11,7 @@
 
 namespace py = pybind11;
 
-// 预计算查找表
+// 预计算查找表，用于快速转换输入数据中的每个字节到8个浮点数（0.0f 或 1.0f）
 static const std::array<std::array<float, 8>, 256> LOOKUP_TABLE = []() {
     std::array<std::array<float, 8>, 256> table{};
     for (int i = 0; i < 256; ++i) {
@@ -75,13 +75,13 @@ py::array_t<float> load_vidar_dat_cpp(const py::object& input, int height = 250,
     num_threads = std::max(1u, std::min(num_threads, static_cast<unsigned int>(total_frames / 10)));
     std::vector<std::thread> threads;
 
-    // 定义处理lambda
+    // 定义处理lambda表达式，负责将数据转换为所需格式
     auto process_frames = [&](size_t start_frame, size_t end_frame) {
         for (size_t frame_idx = start_frame; frame_idx < end_frame; ++frame_idx) {
             for (size_t pel = 0; pel < static_cast<size_t>(len_per_frame); ++pel) {
                 uint8_t spike = spike_data[frame_idx * len_per_frame + pel];
 
-                // 直接从预计算表中复制8个浮点数值
+                // 使用预计算的查找表转换数据
                 std::memcpy(
                     ptr + frame_idx * img_size + (pel * 8),
                     LOOKUP_TABLE[spike].data(),
