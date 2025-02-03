@@ -73,6 +73,10 @@ py::array_t<float> load_vidar_dat_cpp(const py::object& input, int height = 250,
     const int img_size = height * width;
     const int total_frames = buffer.size() / len_per_frame;
 
+    if (buffer.size() % len_per_frame != 0) {
+        throw std::runtime_error("File size does not match expected frame dimensions");
+    }
+
     // 创建输出numpy数组
     py::array_t<float> result({total_frames, height, width});
     auto buf = result.request();
