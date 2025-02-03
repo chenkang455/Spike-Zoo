@@ -24,18 +24,28 @@ static const std::array<std::array<float, 8>, 256> LOOKUP_TABLE = []() {
 
 std::vector<uint8_t> load_files(const std::vector<std::string>& filenames) {
     std::vector<uint8_t> combined_data;
+    size_t total_size = 0;
+
+    // 预计算总大小
     for (const auto& filename : filenames) {
-        // 打开文件
         std::ifstream file(filename, std::ios::binary | std::ios::ate);
         if (!file) throw std::runtime_error("Cannot open file: " + filename);
+        total_size += file.tellg();
+    }
+    combined_data.resize(total_size);
 
-        // 获取文件大小并读取数据
+    size_t offset = 0;
+    for (const auto& filename : filenames) {
+        std::ifstream file(filename, std::ios::binary);
+        if (!file) throw std::runtime_error("Cannot open file: " + filename);
+        
+        file.seekg(0, std::ios::end);
         size_t size = file.tellg();
         file.seekg(0);
-        combined_data.resize(combined_data.size() + size);
-        if (!file.read(reinterpret_cast<char*>(&combined_data[combined_data.size() - size]), size))
-            throw std::runtime_error("Read failed: " + filename);
+        file.read(reinterpret_cast<char*>(combined_data.data() + offset), size);
+        offset += size;
     }
+
     return combined_data;
 }
 
