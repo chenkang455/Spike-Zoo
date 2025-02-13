@@ -93,9 +93,9 @@ class BaseModel(nn.Module):
             if version != "local":
                 load_folder = os.path.dirname(os.path.abspath(__file__))
                 ckpt_name = f"{self.cfg.model_name}.{get_suffix(self.cfg.model_name,version)}"
-                ckpt_path = f"weights/{version}/{ckpt_name}"
+                ckpt_path = os.path.join("weights",version,ckpt_name)
                 ckpt_path = os.path.join(load_folder, ckpt_path)
-                ckpt_path_url = f"{self.cfg.base_url}/{get_url_version(version)}/{ckpt_name}"
+                ckpt_path_url = os.path.join(self.cfg.base_url,get_url_version(version),ckpt_name)
             elif version == "local":
                 ckpt_path = self.cfg.ckpt_path
 
