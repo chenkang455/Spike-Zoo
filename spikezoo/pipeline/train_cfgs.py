@@ -30,28 +30,6 @@ class REDS_BASE_TrainConfig(TrainPipelineConfig):
     scheduler_cfg: Optional[SchedulerConfig] = MultiStepSchedulerConfig(milestones=[400], gamma=0.2) # from wgse
     loss_weight_dict: Dict = field(default_factory=lambda: {"l1": 1})
 
-# @dataclass
-# class REDS_BASE_TrainConfig(TrainPipelineConfig):
-#     """Training setting for methods on the REDS-BASE dataset."""
-
-#     # parameters setting
-#     epochs: int = 700
-#     steps_per_save_imgs: int = 200
-#     steps_per_save_ckpt: int = 500
-#     steps_per_cal_metrics: int = 100
-#     metric_names: List[str] = field(default_factory=lambda: ["psnr", "ssim"])
-
-#     # dataloader setting
-#     bs_train: int = 8
-#     num_workers: int = 4
-#     pin_memory: bool = False
-
-#     # train setting - optimizer & scheduler & loss_dict
-#     optimizer_cfg: OptimizerConfig = AdamOptimizerConfig(lr=1e-4)
-#     scheduler_cfg: Optional[SchedulerConfig] = MultiStepSchedulerConfig(milestones=[400, 600], gamma=0.2) # from wgse
-#     loss_weight_dict: Dict = field(default_factory=lambda: {"l1": 1})
-
-
 # ! Train Config for each method on the official setting, not recommended to utilize their default parameters owing to the dataset setting.
 @dataclass
 class BSFTrainConfig(TrainPipelineConfig):

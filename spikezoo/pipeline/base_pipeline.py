@@ -56,7 +56,7 @@ class Pipeline:
 
     def _setup_model_data(self, model_cfg, dataset_cfg):
         """Model and Data setup."""
-        self.logger.info("Model and dataset is setting up...")
+        print("Model and dataset is setting up...")
         # model [1] build the model. [2] build the network.
         self.model: BaseModel = build_model_name(model_cfg) if isinstance(model_cfg, str) else build_model_cfg(model_cfg)
         self.model.build_network(mode="eval", version=self.cfg.version)
@@ -69,7 +69,7 @@ class Pipeline:
 
     def _setup_pipeline(self):
         """Pipeline setup."""
-        self.logger.info("Pipeline is setting up...")
+        print("Pipeline is setting up...")
         # save folder
         self.thistime = datetime.now().strftime("%Y-%m-%d_%H-%M-%S-%f")[:23]
         self.save_folder = Path(f"results") if len(self.cfg.save_folder) == 0 else self.cfg.save_folder
