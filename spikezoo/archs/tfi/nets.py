@@ -6,7 +6,7 @@ import torch
 
 
 class TFIModel(nn.Module):
-    def __init__(self, model_win_length):
+    def __init__(self, model_win_length = 41):
         super(TFIModel, self).__init__()
         self.window = model_win_length
         self.hald_window = model_win_length // 2

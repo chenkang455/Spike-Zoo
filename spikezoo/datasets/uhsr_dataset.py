@@ -4,8 +4,9 @@ from dataclasses import dataclass
 import numpy as np
 import torch
 
+
 @dataclass
-class UHSR_Config(BaseDatasetConfig):
+class UHSRConfig(BaseDatasetConfig):
     dataset_name: str = "uhsr"
     root_dir: Path = Path(__file__).parent.parent / Path("data/U-CALTECH")
     width: int = 224
@@ -29,7 +30,7 @@ class UHSR(BaseDataset):
         files = path.glob("**/*.npz")
         return sorted(files)
 
-    def load_spike(self,idx):
+    def load_spike(self, idx):
         spike_name = str(self.spike_list[idx])
         data = np.load(spike_name)
         spike = data["spk"].astype(np.float32)

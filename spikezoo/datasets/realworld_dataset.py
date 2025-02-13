@@ -4,7 +4,7 @@ from dataclasses import dataclass
 
 
 @dataclass
-class RealWorld_Config(BaseDatasetConfig):
+class RealWorldConfig(BaseDatasetConfig):
     dataset_name: str = "realworld"
     root_dir: Path = Path(__file__).parent.parent / Path("data/recVidarReal2019")
     width: int = 400
@@ -21,5 +21,3 @@ class RealWorld(BaseDataset):
     def prepare_data(self):
         self.spike_dir = self.cfg.root_dir
         self.spike_list = self.get_spike_files(self.spike_dir)
-        
-    

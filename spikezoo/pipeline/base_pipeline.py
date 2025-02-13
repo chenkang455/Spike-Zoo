@@ -18,24 +18,27 @@ from tqdm import tqdm
 from spikezoo.models import build_model_cfg, build_model_name, BaseModel, BaseModelConfig
 from spikezoo.datasets import build_dataset_cfg, build_dataset_name, BaseDataset, BaseDatasetConfig, build_dataloader
 from typing import Optional, Union, List
+import shutil
+from spikingjelly.clock_driven import functional
+import spikezoo as sz
 
 
 @dataclass
 class PipelineConfig:
-    "Evaluate metrics or not."
-    save_metric: bool = True
-    "Save recoverd images or not."
-    save_img: bool = True
-    "Normalizing recoverd images or not."
-    save_img_norm: bool = False
-    "Normalizing gt or not."
-    gt_img_norm: bool = False
+    "Loading weights from local or version on the url."
+    version: Literal["local", "v010", "v023"] = "local"
     "Save folder for the code running result."
     save_folder: str = ""
     "Saved experiment name."
     exp_name: str = ""
+    "Evaluate metrics or not."
+    save_metric: bool = True
     "Metric names for evaluation."
     metric_names: List[str] = field(default_factory=lambda: ["psnr", "ssim"])
+    "Save recoverd images or not."
+    save_img: bool = True
+    "Normalizing recoverd images and gt or not."
+    save_img_norm: bool = False
     "Different modes for the pipeline."
     _mode: Literal["single_mode", "multi_mode", "train_mode"] = "single_mode"
 
@@ -44,8 +47,8 @@ class Pipeline:
     def __init__(
         self,
         cfg: PipelineConfig,
-        model_cfg: Union[str, BaseModelConfig],
-        dataset_cfg: Union[str, BaseDatasetConfig],
+        model_cfg: Union[sz.METHOD, BaseModelConfig],
+        dataset_cfg: Union[sz.DATASET, BaseDatasetConfig],
     ):
         self.cfg = cfg
         self._setup_model_data(model_cfg, dataset_cfg)
@@ -53,9 +56,9 @@ class Pipeline:
 
     def _setup_model_data(self, model_cfg, dataset_cfg):
         """Model and Data setup."""
-        # model
+        # model [1] build the model. [2] build the network.
         self.model: BaseModel = build_model_name(model_cfg) if isinstance(model_cfg, str) else build_model_cfg(model_cfg)
-        self.model = self.model.eval()
+        self.model.build_network(mode="eval", version=self.cfg.version)
         torch.set_grad_enabled(False)
         # dataset
         self.dataset: BaseDataset = build_dataset_name(dataset_cfg) if isinstance(dataset_cfg, str) else build_dataset_cfg(dataset_cfg)
@@ -74,15 +77,19 @@ class Pipeline:
             if len(self.cfg.exp_name) == 0
             else self.save_folder / Path(f"{mode_name}/{self.cfg.exp_name}")
         )
-        save_folder = self.save_folder
-        os.makedirs(str(save_folder), exist_ok=True)
+        # remove and establish folder
+        save_folder = str(self.save_folder)
+        if os.path.exists(save_folder):
+            shutil.rmtree(save_folder)
+        os.makedirs(save_folder)
+        save_folder = Path(save_folder)
         # logger result
         self.logger = setup_logging(save_folder / Path("result.log"))
         self.logger.info(f"Info logs are saved on the {save_folder}/result.log")
         # pipeline config
         save_config(self.cfg, save_folder / Path("cfg_pipeline.log"))
         # model config
-        if self.cfg._mode == "single_mode":
+        if self.cfg._mode in ["single_mode", "train_mode"]:
             save_config(self.model.cfg, save_folder / Path("cfg_model.log"))
         elif self.cfg._mode == "multi_mode":
             for model in self.model_list:
@@ -90,28 +97,29 @@ class Pipeline:
         # dataset config
         save_config(self.dataset.cfg, save_folder / Path("cfg_dataset.log"))
 
-    def spk2img_from_dataset(self, idx=0):
-        """Func---Save the recoverd image and calculate the metric from the given dataset."""
+    def infer_from_dataset(self, idx=0):
+        """Function I---Save the recoverd image and calculate the metric from the given dataset."""
         # save folder
-        self.logger.info("*********************** spk2img_from_dataset ***********************")
-        save_folder = self.save_folder / Path(f"spk2img_from_dataset/{self.dataset.cfg.dataset_name}_dataset/{self.dataset.cfg.split}/{idx:06d}")
+        self.logger.info("*********************** infer_from_dataset ***********************")
+        save_folder = self.save_folder / Path(f"infer_from_dataset/{self.dataset.cfg.dataset_name}_dataset/{self.dataset.cfg.split}/{idx:06d}")
         os.makedirs(str(save_folder), exist_ok=True)
 
         # data process
+        # todo
         batch = self.dataset[idx]
-        spike, img = batch["spike"], batch["img"]
+        spike, img, rate = batch["spike"], batch["gt_img"], batch["rate"]
         spike = spike[None].to(self.device)
         if self.dataset.cfg.with_img == True:
             img = img[None].to(self.device)
         else:
             img = None
-        return self._spk2img(spike, img, save_folder)
+        return self.infer(spike, img, save_folder, rate)
 
-    def spk2img_from_file(self, file_path, height = -1, width  = -1, img_path=None, remove_head=False):
-        """Func---Save the recoverd image and calculate the metric from the given input file."""
+    def infer_from_file(self, file_path, height=-1, width=-1, img_path=None, rate=1, remove_head=False):
+        """Function II---Save the recoverd image and calculate the metric from the given input file."""
         # save folder
-        self.logger.info("*********************** spk2img_from_file ***********************")
-        save_folder = self.save_folder / Path(f"spk2img_from_file/{os.path.basename(file_path)}")
+        self.logger.info("*********************** infer_from_file ***********************")
+        save_folder = self.save_folder / Path(f"infer_from_file/{os.path.basename(file_path)}")
         os.makedirs(str(save_folder), exist_ok=True)
 
         # load spike from .dat
@@ -132,13 +140,13 @@ class Pipeline:
         else:
             img = img_path
         spike = torch.from_numpy(spike)[None].to(self.device)
-        return self._spk2img(spike, img, save_folder)
+        return self.infer(spike, img, save_folder, rate)
 
-    def spk2img_from_spk(self, spike, img=None):
-        """Func---Save the recoverd image and calculate the metric from the given spike stream."""
+    def infer_from_spk(self, spike, img=None, rate=1):
+        """Function III---Save the recoverd image and calculate the metric from the given spike stream."""
         # save folder
-        self.logger.info("*********************** spk2img_from_spk ***********************")
-        save_folder = self.save_folder / Path(f"spk2img_from_spk/{self.thistime}")
+        self.logger.info("*********************** infer_from_spk ***********************")
+        save_folder = self.save_folder / Path(f"infer_from_spk")
         os.makedirs(str(save_folder), exist_ok=True)
 
         # spike process
@@ -157,36 +165,40 @@ class Pipeline:
                 img = torch.from_numpy(img)[None, None].to(self.device)
             else:
                 raise RuntimeError("Not recognized image input type.")
-        return self._spk2img(spike, img, save_folder)
-
-    def save_imgs_from_dataset(self):
-        """Func---Save all images from the given dataset."""
-        for idx in range(len(self.dataset)):
-            self.spk2img_from_dataset(idx=idx)
+        return self.infer(spike, img, save_folder, rate)
 
     # TODO: To be overridden
+    def infer(self, spike, img, save_folder, rate):
+        """Function IV---Spike-to-image conversion interface, input data format: spike [bs,c,h,w] (0-1), img [bs,1,h,w] (0-1)"""
+        return self._infer_model(self.model, spike, img, save_folder, rate)
+
+    def save_imgs_from_dataset(self):
+        """Function V---Save all images from the given dataset."""
+        base_setting = self.cfg.save_metric
+        self.cfg.save_metric = False
+        for idx in range(len(self.dataset)):
+            self.infer_from_dataset(idx=idx)
+        self.cfg.save_metric = base_setting
+        
+    # TODO: To be overridden
     def cal_params(self):
-        """Func---Calculate the parameters/flops/latency of the given method."""
+        """Function VI---Calculate the parameters/flops/latency of the given method."""
         self._cal_prams_model(self.model)
 
     # TODO: To be overridden
     def cal_metrics(self):
-        """Func---Calculate the metric of the given method."""
-        self._cal_metrics_model(self.model)
+        """Function VII---Calculate the metric of the given method."""
+        return self._cal_metrics_model(self.model)
 
-    # TODO: To be overridden
-    def _spk2img(self, spike, img, save_folder):
-        """Spike-to-image: spike:[bs,c,h,w] (0-1), img:[bs,1,h,w] (0-1)"""
-        return self._spk2img_model(self.model, spike, img, save_folder)
-
-    def _spk2img_model(self, model, spike, img, save_folder):
+    def _infer_model(self, model, spike, img, save_folder, rate):
         """Spike-to-image from the given model."""
         # spike2image conversion
         model_name = model.cfg.model_name
-        recon_img = model(spike)
+        recon_img = model.spk2img(spike)
         recon_img_copy = recon_img.clone()
         # normalization
-        recon_img, img = self._post_process_img(model_name, recon_img, img)
+        recon_img, img = self._post_process_img(recon_img, model_name, rate), self._post_process_img(img, None, 1)
+        self._state_reset(model)
         # metric
         if self.cfg.save_metric == True:
             self.logger.info(f"----------------------Method: {model_name.upper()}----------------------")
@@ -209,19 +221,24 @@ class Pipeline:
             self.logger.info(f"Images are saved on the {save_folder}")
         return recon_img_copy
 
-    def _post_process_img(self, model_name, recon_img, gt_img):
+    def _post_process_img(self, recon_img, model_name, rate=1):
         """Post process the reconstructed image."""
-        # TFP and TFI algorithms are normalized automatically, others are normalized based on the self.cfg.use_norm
-        if model_name in ["tfp", "tfi", "spikeformer", "spikeclip"]:
+        # With no GT
+        if recon_img == None:
+            return None
+        # TFP, TFI, spikeclip algorithms are normalized automatically, others are normalized based on the self.cfg.use_norm
+        if model_name in ["tfp", "tfi", "spikeclip"] or self.cfg.save_img_norm == True:
             recon_img = (recon_img - recon_img.min()) / (recon_img.max() - recon_img.min())
-        elif self.cfg.save_img_norm == True:
-            recon_img = (recon_img - recon_img.min()) / (recon_img.max() - recon_img.min())
+        else:
+            recon_img = recon_img / rate
         recon_img = recon_img.clip(0, 1)
-        gt_img = (gt_img - gt_img.min()) / (gt_img.max() - gt_img.min()) if self.cfg.gt_img_norm == True and gt_img is not None else gt_img
-        return recon_img, gt_img
+        return recon_img
 
     def _cal_metrics_model(self, model: BaseModel):
         """Calculate the metrics for the given model."""
+        # metric state reset (since get_outputs_dict from the training state is utilized)
+        model_state = model.net.training
+        model.net.training = True
         # metrics construct
         model_name = model.cfg.model_name
         metrics_dict = {}
@@ -234,17 +251,19 @@ class Pipeline:
             batch = model.feed_to_device(batch)
             outputs = model.get_outputs_dict(batch)
             recon_img, img = model.get_paired_imgs(batch, outputs)
-            recon_img, img = self._post_process_img(model_name, recon_img, img)
+            recon_img, img = self._post_process_img(recon_img, model_name), self._post_process_img(img, "auto")
             for metric_name in metrics_dict.keys():
                 if metric_name in metric_pair_names:
                     metrics_dict[metric_name].update(cal_metric_pair(recon_img, img, metric_name))
                 elif metric_name in metric_single_names:
                     metrics_dict[metric_name].update(cal_metric_single(recon_img, metric_name))
-
+        self._state_reset(model)
+        model.net.training = model_state
         # metrics self.logger.info
         self.logger.info(f"----------------------Method: {model_name.upper()}----------------------")
         for metric_name in metrics_dict.keys():
             self.logger.info(f"{metric_name.upper()}: {metrics_dict[metric_name].avg}")
+        return metrics_dict
 
     def _cal_prams_model(self, model):
         """Calculate the parameters for the given model."""
@@ -256,7 +275,7 @@ class Pipeline:
         spike = torch.zeros((1, 200, 250, 400)).cuda()
         start_time = time.time()
         for _ in range(100):
-            model(spike)
+            model.spk2img(spike)
         latency = (time.time() - start_time) / 100
         # flop # todo thop bug for BSF
         flops, _ = profile((model), inputs=(spike,))
@@ -267,3 +286,8 @@ class Pipeline:
         )
         self.logger.info(f"----------------------Method: {model_name}----------------------")
         self.logger.info(re_msg)
+
+    def _state_reset(self, model):
+        """State reset for the snn-based method."""
+        if model.cfg.model_name == "ssir":
+            functional.reset_net(model.net)

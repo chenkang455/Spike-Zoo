@@ -3,7 +3,9 @@ from dataclasses import dataclass, field, asdict
 import requests
 from tqdm import tqdm
 import os
-
+import torch
+import numpy as np
+import random
 
 # log info
 def setup_logging(log_file):
@@ -36,9 +38,9 @@ def save_config(cfg, filename, mode="w"):
 def download_file(url, output_path):
     headers = {
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36",
-        "Accept": "*/*",  # 表示接受所有类型的响应
-        "Accept-Encoding": "gzip, deflate, br",  # 支持压缩格式
-        "Connection": "keep-alive"  # 保持连接
+        "Accept": "*/*",  
+        "Accept-Encoding": "gzip, deflate, br", 
+        "Connection": "keep-alive"  
     }
 
     try:
@@ -62,8 +64,31 @@ def download_file(url, output_path):
             raise RuntimeError(f"Files fail to download 😔😔😔. Try downloading it from {url} and move it to {output_path}.")
     
     except requests.exceptions.RequestException as e:
-        # If an error occurs, remove the partially downloaded file
         if os.path.exists(output_path):
             os.remove(output_path)
             print(f"Partial download failed. The incomplete file has been removed. 😔😔😔")
         raise RuntimeError(f"Files fail to download 😔😔😔. Try downloading it from {url} and move it to {output_path}.")
+    
+def check_file_exists(url):
+    response = requests.head(url)
+    if response.status_code == 200:
+        return True
+    else:
+        return False
+
+def getattr_case_insensitive(obj, name):
+    name = name.lower()
+    for attr in dir(obj):
+        if attr.lower() == name:
+            return getattr(obj, attr)
+    raise RuntimeError("No attr found!!")
+
+
+def set_random_seed(seed):
+    """Set random seeds."""
+    torch.manual_seed(seed)
+    torch.cuda.manual_seed_all(seed)
+    np.random.seed(seed)
+    random.seed(seed)
+    torch.backends.cudnn.deterministic = True
+    torch.cuda.manual_seed(seed)

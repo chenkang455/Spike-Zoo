@@ -56,6 +56,6 @@ class SSIR(BasicModel):
         out3 = self.pred3(x7)
 
         if self.training:
-            return [out3]
+            return out3
         else:
             return out3

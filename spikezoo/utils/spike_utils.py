@@ -2,23 +2,28 @@ import numpy as np
 import torch
 import torch.nn as nn
 import os
-from .vidar_loader import load_vidar_dat_cpp
 from typing import Literal
+import platform
+import cv2
+import imageio
 
-def load_vidar_dat(filename, height, width,remove_head=False, version:Literal['python','cpp'] = "python", out_format : Literal['array','tensor']="array",):
+_platform_check_done = False
+
+
+def load_vidar_dat(filename, height, width, remove_head=False, version: Literal["python", "cpp"] = "cpp", out_format: Literal["array", "tensor"] = "array"):
     """Load the spike stream from the .dat file."""
+    global _platform_check_done
     # Spike decode
-    if version == "python":
-        if isinstance(filename, str):
-            array = np.fromfile(filename, dtype=np.uint8)
-        elif isinstance(filename, (list, tuple)):
-            l = []
-            for name in filename:
-                a = np.fromfile(name, dtype=np.uint8)
-                l.append(a)
-            array = np.concatenate(l)
-        else:
-            raise NotImplementedError
+    if version == "cpp" and platform.system().lower() == "linux":
+        from .vidar_loader import load_vidar_dat_cpp
+
+        spikes = load_vidar_dat_cpp(filename, height, width)
+    else:
+        # todo double check
+        if version == "cpp" and platform.system().lower() != "linux" and _platform_check_done == False:
+            _platform_check_done = True
+            print("Cpp load version is only supported on the linux now. Auto transfer to the python version.")
+        array = np.fromfile(filename, dtype=np.uint8)
         len_per_frame = height * width // 8
         framecnt = len(array) // len_per_frame
         spikes = []
@@ -33,10 +38,6 @@ def load_vidar_dat(filename, height, width,remove_head=False, version:Literal['p
             spk = spk[:, :, :-16] if remove_head == True else spk
             spikes.append(spk)
         spikes = np.concatenate(spikes).astype(np.float32)
-    elif version == "cpp":
-        spikes = load_vidar_dat_cpp(filename, height, width)
-    else:
-        raise RuntimeError("Not recognized version.")
 
     # # Output format conversion
     format_dict = {"array": lambda x: x, "tensor": torch.from_numpy}
@@ -44,15 +45,14 @@ def load_vidar_dat(filename, height, width,remove_head=False, version:Literal['p
     return spikes
 
 
-def SpikeToRaw(save_path, SpikeSeq, filpud=True, delete_if_exists=True):
+def save_vidar_dat(save_path, SpikeSeq, filpud=True):
     """Save the spike sequence to the .dat file."""
-    if delete_if_exists:
-        if os.path.exists(save_path):
-            os.remove(save_path)
+    if os.path.exists(save_path):
+        os.remove(save_path)
     sfn, h, w = SpikeSeq.shape
     remainder = int((h * w) % 8)
     base = np.power(2, np.linspace(0, 7, 8))
-    fid = open(save_path, 'ab')
+    fid = open(save_path, "ab")
     for img_id in range(sfn):
         if filpud:
             spike = np.flipud(SpikeSeq[img_id, :, :])
@@ -61,20 +61,54 @@ def SpikeToRaw(save_path, SpikeSeq, filpud=True, delete_if_exists=True):
         if remainder == 0:
             spike = spike.flatten()
         else:
-            spike = np.concatenate([spike.flatten(), np.array([0]*(8-remainder))])
-        spike = spike.reshape([int(h*w/8), 8])
+            spike = np.concatenate([spike.flatten(), np.array([0] * (8 - remainder))])
+        spike = spike.reshape([int(h * w / 8), 8])
         data = spike * base
         data = np.sum(data, axis=1).astype(np.uint8)
         fid.write(data.tobytes())
     fid.close()
-    return
+
+
+def merge_vidar_dat(filename, dat_files, height, width, remove_head=False):
+    """Merge selected spike dat files."""
+    spikes = []
+    for dat_file in dat_files:
+        spike = load_vidar_dat(dat_file,height, width, remove_head)
+        spikes.append(spike)
+    spikes = np.concatenate(spikes, axis=0)
+    save_vidar_dat(filename, spikes)
+    return spikes
+
+def visual_vidar_dat(filename, spike, out_format: Literal["mp4", "gif"] = "gif", fps=15):
+    """Convert the spike stream to the video."""
+    _, height, width = spike.shape
+    if out_format == "mp4":
+        fourcc = cv2.VideoWriter_fourcc(*"mp4v")  # 或 'avc1'
+        mp4_video = cv2.VideoWriter(filename, fourcc, fps, (width, height))
+    elif out_format == "gif":
+        frames = []
+
+    for idx in range(len(spike)):
+        spk = spike[idx]
+        spk = (255 * spk).astype(np.uint8)
+        spk = spk[..., None].repeat(3, axis=-1)
+        if out_format == "mp4":
+            mp4_video.write(spk)
+        elif out_format == "gif":
+            frames.append(spk)
+
+    if out_format == "mp4":
+        mp4_video.release()
+    elif out_format == "gif":
+        imageio.mimsave(filename, frames, "GIF", fps=fps, loop=0)
+
 
 def video2spike_simulation(imgs, threshold=2.0):
     """Convert the images input to the spike stream."""
     imgs = np.array(imgs)
-    T,H, W = imgs.shape
+    T, H, W = imgs.shape
     spike = np.zeros([T, H, W], np.uint8)
-    integral = np.random.random(size=([H,W])) * threshold
+    integral = np.random.random(size=([H, W])) * threshold
     for t in range(0, T):
         integral += imgs[t]
         fire = (integral - threshold) >= 0
@@ -82,5 +116,3 @@ def video2spike_simulation(imgs, threshold=2.0):
         integral[fire_pos] -= threshold
         spike[t][fire_pos] = 1
     return spike
-
-

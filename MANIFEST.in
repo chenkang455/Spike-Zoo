@@ -1,5 +1,7 @@
 include requirements.txt
 recursive-include spikezoo/data/base *
+exclude spikezoo/models/spcsnet_model.py
 include spikezoo/utils/vidar_loader.cpython-39-x86_64-linux-gnu.so
 recursive-include spikezoo/archs *
 recursive-exclude spikezoo/archs/spcsnet * 
+exclude data * 

@@ -167,7 +167,7 @@ class FusionMaskV1(nn.Module):
 
 # current best model
 class SpikeNet(nn.Module):
-    def __init__(self, in_channels, features, out_channels, win_r, win_step):
+    def __init__(self, in_channels = 13, features = 64, out_channels = 1, win_r = 6, win_step = 7):
         super(SpikeNet, self).__init__()
         self.extractor = FeatureExtractor(
             in_channels=in_channels,

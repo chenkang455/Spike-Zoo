@@ -6,7 +6,7 @@ import numpy as np
 from spikezoo.utils.spike_utils import load_vidar_dat
 import re
 from dataclasses import dataclass, replace
-from typing import Literal,Union
+from typing import Literal, Union
 import warnings
 import torch
 from tqdm import tqdm
@@ -19,7 +19,7 @@ class BaseDatasetConfig:
     "Dataset name."
     dataset_name: str = "base"
     "Directory specifying location of data."
-    root_dir: Union[str,Path] = Path(__file__).parent.parent / Path("data/base")
+    root_dir: Union[str, Path] = Path(__file__).parent.parent / Path("data/base")
     "Image width."
     width: int = 400
     "Image height."
@@ -46,6 +46,8 @@ class BaseDatasetConfig:
     use_cache: bool = False
     "Crop size."
     crop_size: tuple = (-1, -1)
+    "Rate. (-1 denotes variant)"
+    rate: float = 1
 
     # post process
     def __post_init__(self):
@@ -53,6 +55,7 @@ class BaseDatasetConfig:
         self.root_dir = Path(self.root_dir) if isinstance(self.root_dir, str) else self.root_dir
         # todo try download
         assert self.root_dir.exists(), f"No files found in {self.root_dir} for the specified dataset `{self.dataset_name}`."
+
 
 # todo cache mechanism
 class BaseDataset(Dataset):
@@ -80,7 +83,11 @@ class BaseDataset(Dataset):
         if self.cfg.use_aug == True and self.cfg.split == "train":
             spike, img = self.augmentor(spike, img)
 
-        batch = {"spike": spike, "img": img}
+        # rate
+        rate = self.cfg.rate
+
+        # ! spike and gt_img names are necessary
+        batch = {"spike": spike, "gt_img": img, "rate": rate}
         return batch
 
     # todo: To be overridden

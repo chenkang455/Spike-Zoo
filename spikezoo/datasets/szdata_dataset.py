@@ -5,8 +5,9 @@ import cv2
 import torch
 import numpy as np
 
+# todo tobe evaluated
 @dataclass
-class SZData_Config(BaseDatasetConfig):
+class SZDataConfig(BaseDatasetConfig):
     dataset_name: str = "szdata"
     root_dir: Path = Path(__file__).parent.parent / Path("data/dataset")
     width: int = 400
@@ -21,17 +22,6 @@ class SZData(BaseDataset):
     def __init__(self, cfg: BaseDatasetConfig):
         super(SZData, self).__init__(cfg)
 
-    def get_img(self, idx):
-        if self.cfg.with_img:
-            spike_name = self.spike_list[idx]
-            img_name = str(spike_name).replace(self.cfg.spike_dir_name,self.cfg.img_dir_name).replace(".dat",".png")
-            img = cv2.imread(img_name)
-            img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-            img = (img / 255).astype(np.float32)
-            img = img[None]
-            img = torch.from_numpy(img)
-        else:
-            spike = self.get_spike(idx)
-            img = torch.mean(spike, dim=0, keepdim=True)
-        return img
-    
+    def prepare_data(self):
+        super().prepare_data()
+        self.img_list = [self.img_dir / Path(str(s.name).replace('.dat','.png')) for s in self.spike_list]

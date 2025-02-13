@@ -1,7 +1,12 @@
 import torch
 from dataclasses import dataclass, field
 from spikezoo.models.base_model import BaseModel, BaseModelConfig
-
+from spikezoo.pipeline import TrainPipelineConfig
+import torch.nn as nn
+import torch.optim as optim
+import torch.optim.lr_scheduler as lr_scheduler
+from typing import List
+from spikezoo.archs.spk2imgnet.nets import SpikeNet 
 
 @dataclass
 class Spk2ImgNetConfig(BaseModelConfig):
@@ -9,21 +14,10 @@ class Spk2ImgNetConfig(BaseModelConfig):
     model_name: str = "spk2imgnet"
     model_file_name: str = "nets"
     model_cls_name: str = "SpikeNet"
-    model_win_length: int = 41
+    model_length: int = 41
+    model_length_dict: dict = field(default_factory=lambda: {"v010": 41, "v023": 41})
     require_params: bool = True
-    ckpt_path: str = "weights/spk2imgnet.pth"
     light_correction: bool = False
-
-    # model params
-    model_params: dict = field(
-        default_factory=lambda: {
-            "in_channels": 13,
-            "features": 64,
-            "out_channels": 1,
-            "win_r": 6,
-            "win_step": 7,
-        }
-    )
 
 
 class Spk2ImgNet(BaseModel):
@@ -45,7 +39,7 @@ class Spk2ImgNet(BaseModel):
             image = image[:, :, :250, :]
         elif self.spike_size == (480, 854):
             image = image[:, :, :, :854]
-        # used on the REDS_small dataset.
+        # used on the REDS_BASE dataset.
         if self.cfg.light_correction == True:
             image = torch.clamp(image / 0.6, 0, 1)
         return image

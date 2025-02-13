@@ -3,7 +3,7 @@ import torch
 
 
 class TFPModel(nn.Module):
-    def __init__(self, model_win_length):
+    def __init__(self, model_win_length = 41):
         self.window = model_win_length
         super(TFPModel, self).__init__()
 

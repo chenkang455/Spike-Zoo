@@ -1,8 +1,14 @@
 spikezoo/data
+results/
 spikezoo/models/weights
 *.pt
 *.pth
 spikezoo/data
 spikezoo/archs/spcsnet
-test.py
-run.sh
+/test.py
+/run.sh
+logs/
+spikezoo/models/spcsnet_model.py
+data/raw_data/
+examples/train_reds_base/train_spcsnet.py
+TODO.md

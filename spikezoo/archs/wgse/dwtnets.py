@@ -94,15 +94,15 @@ class Dwt1dModule_Tcn(nn.Module):
 class Dwt1dResnetX_TCN(nn.Module):
     def __init__(
         self, 
-        wvlname='db1', 
-        J=3, 
-        yl_size=14, 
-        yh_size=[26, 18, 14], 
-        num_residual_blocks=2, 
+        wvlname='db8', 
+        J=5, 
+        yl_size=15, 
+        yh_size=[28, 21, 18, 16, 15], 
+        num_residual_blocks=3, 
         norm=None, 
         inc=41, 
         ks=3,
-        store_features=False
+        store_features=True
     ):
         super().__init__()
 

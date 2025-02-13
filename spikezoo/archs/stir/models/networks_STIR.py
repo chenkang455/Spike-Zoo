@@ -292,16 +292,21 @@ class STIRDecorder(nn.Module):#second and third levels
 
 ##############################Our Model####################################
 class STIR(BasicModel):
-    def __init__(self, hidd_chs=8, win_r=6, win_step=7):
+    def __init__(self, spike_dim = 61,hidd_chs=8, win_r=6, win_step=7):
         super().__init__()
 
         self.init_chs = [16, 24, 32, 64, 96]
         self.hidd_chs = hidd_chs
+        self.spike_dim = spike_dim
         self.attn_num_splits = 1
 
         self.N_group = 3  
-        
-        dim_tfp = 16
+        if spike_dim == 61:
+            self.resnet =  ResidualBlock(in_channles=21, num_channles=11, use_1x1conv=True)
+            dim_tfp = 16 # 5 + num_channels
+        elif spike_dim == 41:
+            self.resnet =  ResidualBlock(in_channles=15, num_channles=11, use_1x1conv=True)
+            dim_tfp = 15  # 4 + num_channels
         self.encoder = ImageEncoder(in_chs=dim_tfp, init_chs=self.init_chs)
         
         self.transformer = CrossTransformerBlock(dim=self.init_chs[-1], num_heads=4, ffn_expansion_factor=2.66, bias=False, LayerNorm_type='WithBias')
@@ -314,14 +319,16 @@ class STIR(BasicModel):
         self.win_r = win_r
         self.win_step = win_step
 
-        self.resnet =  ResidualBlock(in_channles=21, num_channles=11, use_1x1conv=True)
-
     def forward(self, x):
         b,_,h,w=x.size()
-        
-        block1 = x[:, 0  : 21, :, :]
-        block2 = x[:, 20 : 41, :, :]
-        block3 = x[:, 40 : 61, :, :]
+        if self.spike_dim == 61:
+            block1 = x[:, 0  : 21, :, :]
+            block2 = x[:, 20 : 41, :, :]
+            block3 = x[:, 40 : 61, :, :]
+        elif self.spike_dim == 41:
+            block1 = x[:, 0  : 15, :, :]
+            block2 = x[:, 13 : 28, :, :]
+            block3 = x[:, 26 : 41, :, :]
 
         repre1 = TFP(block1, channel_step=2)#C: 5
         repre2 = TFP(block2, channel_step=2)

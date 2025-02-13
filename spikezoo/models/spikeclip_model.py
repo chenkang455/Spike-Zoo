@@ -2,7 +2,8 @@ from dataclasses import dataclass
 from spikezoo.models.base_model import BaseModel, BaseModelConfig
 import torch
 import torch.nn.functional as F
-
+from dataclasses import field
+from spikezoo.archs.spikeclip.nets import LRN 
 
 @dataclass
 class SpikeCLIPConfig(BaseModelConfig):
@@ -10,9 +11,9 @@ class SpikeCLIPConfig(BaseModelConfig):
     model_name: str = "spikeclip"
     model_file_name: str = "nets"
     model_cls_name: str = "LRN"
-    model_win_length: int = 200
+    model_length: int = 200
+    model_length_dict: dict = field(default_factory=lambda: {"v010": 200, "v023": 200})
     require_params: bool = True
-    ckpt_path: str = "weights/spikeclip.pth"
 
 
 class SpikeCLIP(BaseModel):

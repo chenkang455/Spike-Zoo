@@ -272,18 +272,22 @@ class BSN(nn.Module):
             diff = W - H
             x0 = x0[:, :, (diff // 2):(diff // 2 + H), 0:W]
             
-        return x0,tfi_label,tfp_label   
+        return x0
 
 class DoubleNet(nn.Module):
     def __init__(self):
         super().__init__()
         self.nbsn = BSN(n_channels=41, n_output=1,blind=False)
-        # self.bsn = BSN(n_channels=41, n_output=1,blind=True)
+        self.bsn = BSN(n_channels=41, n_output=1,blind=True)
     
     def forward(self, x):  
-        out1,_,_ = self.nbsn(x)
-        
-        return out1
+        if self.training:
+            bsn_pred = self.bsn(x)
+            nbsn_pred = self.nbsn(x)
+            return bsn_pred,nbsn_pred
+        else:
+            nbsn_pred = self.nbsn(x)
+            return nbsn_pred
 
 if __name__ == '__main__':
     a=DoubleNet().cuda()

@@ -6,7 +6,7 @@ import torch.nn.functional as F
 
 import math
 
-from package_core.losses import *
+from ..package_core.package_core.losses import *
 
 def compute_l1_loss(img_list, gt):
     l1_loss = 0.0

@@ -2,11 +2,11 @@ import torch
 import torch.nn as nn
 
 class MODF(nn.Module):
-    def __init__(self, base_dim=64, act=nn.ReLU()):
+    def __init__(self, in_dim = 21, base_dim=64, act=nn.ReLU()):
         super().__init__()
         self.base_dim = base_dim
 
-        self.conv1 = self._make_layer(input_dim=21, hidden_dim=self.base_dim, output_dim=self.base_dim, act=act)
+        self.conv1 = self._make_layer(input_dim=in_dim, hidden_dim=self.base_dim, output_dim=self.base_dim, act=act)
         self.conv_for_others = nn.ModuleList([
             self._make_layer(input_dim=self.base_dim, hidden_dim=self.base_dim, output_dim=self.base_dim, act=act) for ii in range(3)
         ])

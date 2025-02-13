@@ -1,6 +1,12 @@
 import torch
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from spikezoo.models.base_model import BaseModel, BaseModelConfig
+from torch.optim import Adam
+import torch.optim.lr_scheduler as lr_scheduler
+import torch.nn as nn
+from spikezoo.pipeline import TrainPipelineConfig
+from typing import List
+from spikezoo.archs.bsf.models.bsf.bsf import BSF 
 
 
 @dataclass
@@ -9,9 +15,11 @@ class BSFConfig(BaseModelConfig):
     model_name: str = "bsf"
     model_file_name: str = "models.bsf.bsf"
     model_cls_name: str = "BSF"
-    model_win_length: int = 61
+    model_length: int = 61
+    model_length_dict: dict = field(default_factory=lambda: {"v010": 61, "v023": 41})
     require_params: bool = True
-    ckpt_path: str = "weights/bsf.pth"
+    model_params: dict = field(default_factory=lambda: {})
+    model_params_dict: dict = field(default_factory=lambda: {"v010": {"spike_dim": 61}, "v023": {"spike_dim": 41}})
 
 
 class BSF(BaseModel):

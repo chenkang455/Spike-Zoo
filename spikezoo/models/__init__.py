@@ -1,6 +1,7 @@
 import importlib
 import inspect
 from spikezoo.models.base_model import BaseModel,BaseModelConfig
+from spikezoo.utils.other_utils import getattr_case_insensitive
 import os
 from pathlib import Path
 
@@ -17,8 +18,9 @@ def build_model_cfg(cfg: BaseModelConfig):
     module_name = "spikezoo.models." + module_name
     module = importlib.import_module(module_name)
     # model,model_config
-    classes = sorted([name for name, obj in inspect.getmembers(module) if inspect.isclass(obj) and obj.__module__ == module.__name__])
-    model_cls: BaseModel = getattr(module, classes[0])
+    model_name = cfg.model_name
+    model_name = model_name + 'Model' if model_name == "base" else model_name
+    model_cls: BaseModel = getattr_case_insensitive(module,model_name)
     model = model_cls(cfg)
     return model
 
@@ -30,8 +32,8 @@ def build_model_name(model_name: str):
     module_name = "spikezoo.models." + module_name
     module = importlib.import_module(module_name)
     # model,model_config
-    classes = sorted([name for name, obj in inspect.getmembers(module) if inspect.isclass(obj) and obj.__module__ == module.__name__])
-    model_cls: BaseModel = getattr(module, classes[0])
-    model_cfg: BaseModelConfig = getattr(module, classes[1])()
+    model_name = model_name + 'Model' if model_name == "base" else model_name
+    model_cls: BaseModel = getattr_case_insensitive(module,model_name)
+    model_cfg: BaseModelConfig = getattr_case_insensitive(module, model_name + 'config')()
     model = model_cls(model_cfg)
     return model
