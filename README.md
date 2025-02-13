@@ -51,30 +51,31 @@ python setup.py develop
 ```
 
 ### 2. Inference 
-Reconstructing images from the spike input is super easy with Spike-Zoo. Try the following code of the single model:
+Reconstructing images from the spike is super easy with Spike-Zoo. Try the following code of the single model:
 ``` python
 from spikezoo.pipeline import Pipeline, PipelineConfig
 import spikezoo as sz
-from spikezoo.pipeline import Pipeline,PipelineConfig
 pipeline = Pipeline(
-    cfg=PipelineConfig(version="v023",save_folder="results"),
+    cfg=PipelineConfig(save_folder="results",version="v023"),
     model_cfg=sz.METHOD.BASE,
     dataset_cfg=sz.DATASET.BASE 
 )
 ```
-You can also run multiple models at once by changing the pipeline:
+You can also run multiple models at once by changing the pipeline (version parameter corresponds to our released different versions in [Releases](https://github.com/chenkang455/Spike-Zoo/releases)):
 ``` python
 import spikezoo as sz
 from spikezoo.pipeline import EnsemblePipeline, EnsemblePipelineConfig
 pipeline = EnsemblePipeline(
-    cfg=EnsemblePipelineConfig(version="v023",save_folder="results"),
+    cfg=EnsemblePipelineConfig(save_folder="results",version="v023"),
     model_cfg_list=[
         sz.METHOD.BASE,sz.METHOD.TFP,sz.METHOD.TFI,sz.METHOD.SPK2IMGNET,sz.METHOD.WGSE,
         sz.METHOD.SSML,sz.METHOD.BSF,sz.METHOD.STIR,sz.METHOD.SPIKECLIP,sz.METHOD.SSIR],
     dataset_cfg=sz.DATASET.BASE,
 )
 ```
-* Obtain the restoration metric and save the recovered image from the given spike:
+Having established our pipelines, we provide following functions to enjoy these spike-to-image models.
+
+* I. Obtain the restoration metric and save the recovered image from the given spike:
 ``` python
 # 1. spike-to-image from the given dataset
 pipeline.infer_from_dataset(idx = 0)
@@ -89,22 +90,22 @@ pipeline.infer_from_spk(spike)
 ```
 
 
-* Save all images from the given dataset.
+* II. Save all images from the given dataset.
 ``` python
 pipeline.save_imgs_from_dataset()
 ```
 
-* Calculate the metrics for the specified dataset.
+* III. Calculate the metrics for the specified dataset.
 ``` python
 pipeline.cal_metrics()
 ```
 
-* Calculate the parameters (params,flops,latency) based on the established pipeline.
+* IV. Calculate the parameters (params,flops,latency) based on the established pipeline.
 ``` python
 pipeline.cal_params()
 ```
 
-For detailed usage, welcome check [test_single.ipynb](examples/test_single.ipynb) and [test_ensemble.ipynb](examples/test_ensemble.ipynb).
+For detailed usage, welcome check [test_single.ipynb](examples/test/test_single.ipynb) and [test_ensemble.ipynb](examples/test/test_ensemble.ipynb).
 
 ### 3. Training
 We provide a user-friendly code for training our provided `base` model (modified from the `SpikeCLIP`) for the classic `REDS` dataset introduced in `Spk2ImgNet`:
@@ -123,10 +124,10 @@ We finish the training with one 4090 GPU in `2 minutes`, achieving `32.8dB` in P
 
 > 🌟 We encourage users to develop their models with simple modifications to our framework, and the tutorial will be released soon. 
 
-We retrain all supported methods except `SPIKECLIP` on this REDS dataset (training scripts are placed on [examples/train_reds_base](examples/train_reds_base) and evaluation script is placed on [examples/test/test_REDS_base.py](examples/test/test_REDS_base.py)), with our reported metrics as follows:
+We retrain all supported methods except `SPIKECLIP` on this REDS dataset (training scripts are placed on [examples/train_reds_base](examples/train_reds_base) and evaluation script is placed on [test_REDS_base.py](examples/test/test_REDS_base.py)), with our reported metrics as follows:
 
 | Method               | PSNR  | SSIM   | LPIPS   | NIQE    | BRISQUE  | PIQE  | Params (M) | FLOPs (G) | Latency (ms) |
-|----------------------|-------|--------|---------|---------|----------|-------|------------|-----------|--------------|
+|----------------------|:-------:|:--------:|:---------:|:---------:|:----------:|:-------:|:------------:|:-----------:|:--------------:|
 | `TFI`                | 16.503 | 0.454  | 0.382   | 7.289   | 43.17    | 49.12 | 0.00       | 0.00      | 3.60         |
 | `TFP`                | 24.287 | 0.644  | 0.274   | 8.197   | 48.48    | 38.38 | 0.00       | 0.00      | 0.03         |
 | `SPIKECLIP`          | 21.873 | 0.578  | 0.333   | 7.802   | 42.08    | 54.01 | 0.19       | 23.69     | 1.27         |
@@ -155,7 +156,7 @@ net.build_network(mode = "debug")
 recon_img = net(spike)
 print(recon_img.shape,recon_img.max(),recon_img.min())
 ```
-For detailed usage, welcome check [examples/test/test_model.ipynb](examples/test/test_model.ipynb).
+For detailed usage, welcome check [test_model.ipynb](examples/test/test_model.ipynb).
 
 ### 5. Spike Utility
 #### I. Faster spike loading interface
@@ -164,7 +165,7 @@ We provide a faster `load_vidar_dat` function implemented with `cpp` (by [@zeal-
 import spikezoo as sz
 spike = sz.load_vidar_dat("data/scissor.dat",width = 400,height = 250,version='cpp')
 ```
-🚀 Results on [examples/test_load_dat.py](examples/test_load_dat.py) show that the `cpp` version is more than 10 times faster than the `python` version.
+🚀 Results on [test_load_dat.py](examples/test_load_dat.py) show that the `cpp` version is more than 10 times faster than the `python` version.
 
 #### II. Spike simulation pipeline.
 We provide our overall spike simulation pipeline in [scripts](scripts/), try to modify the config in `run.sh` and run the command to start the simulation process:
@@ -173,7 +174,7 @@ bash run.sh
 ```
 
 #### III. Spike-related functions.
-For other spike-related functions, welcome check [spikezoo/utils/spike_utils.py](spikezoo/utils/spike_utils.py)
+For other spike-related functions, welcome check [spike_utils.py](spikezoo/utils/spike_utils.py)
 
 ## 📅 TODO
 - [x] Support the overall pipeline for spike simulation. 
