@@ -1,13 +1,9 @@
 <p align="center">
-    <br>
-    <img src="imgs/spike-zoo.png" width="400"/>
-    <br>
+    <img src="imgs/spike-zoo.png" width="350"/>
 <p>
-
 <h5 align="center">
 
 [![GitHub repo stars](https://img.shields.io/github/stars/chenkang455/Spike-Zoo?style=flat&logo=github&logoColor=whitesmoke&label=Stars)](https://github.com/chenkang455/Spike-Zoo/stargazers) [![GitHub Issues](https://img.shields.io/github/issues/chenkang455/Spike-Zoo?style=flat&logo=github&logoColor=whitesmoke&label=Stars)](https://github.com/chenkang455/Spike-Zoo/issues) <a href="https://badge.fury.io/py/spikezoo"><img src="https://badge.fury.io/py/spikezoo.svg" alt="PyPI version"></a> [![License](https://img.shields.io/badge/License-MIT-yellow)](https://github.com/chenkang455/Spike-Zoo)
- 
 <p>
 
 <!-- <h2 align="center"> 
