@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Spike-Zoo documentation &mdash; Spike-Zoo v0.2 文档</title>
+  <title>Spike-Zoo 介绍 &mdash; Spike-Zoo v0.2 文档</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
 
@@ -43,7 +43,10 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="导航菜单">
               <!-- Local TOC -->
               <div class="local-toc"><ul>
-<li><a class="reference internal" href="#">Spike-Zoo documentation</a></li>
+<li><a class="reference internal" href="#">Spike-Zoo 介绍</a><ul>
+<li><a class="reference internal" href="#id1">安装</a></li>
+</ul>
+</li>
 </ul>
 </div>
         </div>
@@ -60,7 +63,7 @@
           <div role="navigation" aria-label="页面导航">
   <ul class="wy-breadcrumbs">
       <li><a href="#" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">Spike-Zoo documentation</li>
+      <li class="breadcrumb-item active">Spike-Zoo 介绍</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/index.rst.txt" rel="nofollow"> 查看页面源码</a>
       </li>
@@ -70,10 +73,40 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="spike-zoo-documentation">
-<h1>Spike-Zoo documentation<a class="headerlink" href="#spike-zoo-documentation" title="Link to this heading"></a></h1>
-<div class="toctree-wrapper compound">
+  <section id="spike-zoo">
+<h1>Spike-Zoo 介绍<a class="headerlink" href="#spike-zoo" title="Link to this heading"></a></h1>
+<p>⚡ <a class="reference external" href="https://github.com/chenkang455/Spike-Zoo">Spike-Zoo</a> 是一个旨在辅助开发脉冲相机图像重构网络的框架。
+主要特点包括：</p>
+<ul class="simple">
+<li><p>使用预训练权重进行多个重构模型的快速推理。</p></li>
+<li><p>支持训练自定义设计的脉冲图像重构网络。</p></li>
+<li><p>提供处理脉冲数据的各类函数。</p></li>
+</ul>
+<section id="id1">
+<h2>安装<a class="headerlink" href="#id1" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>从 <code class="docutils literal notranslate"><span class="pre">pypi</span></code> 直接安装最新的稳定版本：</p></li>
+</ul>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">pip install spikezoo</span>
+</pre></div>
 </div>
+<ul class="simple">
+<li><p>从 <code class="docutils literal notranslate"><span class="pre">github</span></code> 安装最新开发版本：</p></li>
+</ul>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">git clone https://github.com/chenkang455/Spike-Zoo</span>
+<span class="go">cd Spike-Zoo</span>
+<span class="go">python setup.py install</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>如果想基于Spike-Zoo开发自己的脉冲重构网络,建议通过如下方式安装,以方便对网络以及训练脚本进行实时更改</p></li>
+</ul>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">git clone https://github.com/chenkang455/Spike-Zoo</span>
+<span class="go">cd Spike-Zoo</span>
+<span class="go">python setup.py setup</span>
+</pre></div>
+</div>
+</section>
 </section>
 
 
