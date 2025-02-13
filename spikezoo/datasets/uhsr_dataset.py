@@ -4,7 +4,6 @@ from dataclasses import dataclass
 import numpy as np
 import torch
 
-
 @dataclass
 class UHSRConfig(BaseDatasetConfig):
     dataset_name: str = "uhsr"
@@ -16,7 +15,7 @@ class UHSRConfig(BaseDatasetConfig):
     spike_length_test: int = 200
     spike_dir_name: str = "spike"
     img_dir_name: str = ""
-
+    rate: float = 1
 
 class UHSR(BaseDataset):
     def __init__(self, cfg: BaseDatasetConfig):

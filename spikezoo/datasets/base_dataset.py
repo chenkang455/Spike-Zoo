@@ -47,7 +47,7 @@ class BaseDatasetConfig:
     "Crop size."
     crop_size: tuple = (-1, -1)
     "Rate. (-1 denotes variant)"
-    rate: float = 1
+    rate: float = 0.6
 
     # post process
     def __post_init__(self):

@@ -12,6 +12,8 @@ class RealWorldConfig(BaseDatasetConfig):
     with_img: bool = False
     spike_length_train: int = -1
     spike_length_test: int = -1
+    rate: float = 1
+    
 
 
 class RealWorld(BaseDataset):

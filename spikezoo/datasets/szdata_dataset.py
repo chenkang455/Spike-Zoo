@@ -17,6 +17,7 @@ class SZDataConfig(BaseDatasetConfig):
     spike_length_test: int = -1
     spike_dir_name: str = "spike_data"
     img_dir_name: str = "sharp_data"
+    rate: float = 1
 
 class SZData(BaseDataset):
     def __init__(self, cfg: BaseDatasetConfig):
