@@ -1,6 +1,6 @@
 <p align="center">
     <br>
-    <img src="imgs/spike-zoo.png" width="1000"/>
+    <img src="imgs/spike-zoo.png" width="500"/>
     <br>
 <p>
 
