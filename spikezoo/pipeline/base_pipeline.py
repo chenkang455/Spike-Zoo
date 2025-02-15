@@ -34,7 +34,7 @@ class PipelineConfig:
     "Evaluate metrics or not."
     save_metric: bool = True
     "Metric names for evaluation."
-    metric_names: List[str] = field(default_factory=lambda: ["psnr", "ssim"])
+    metric_names: List[str] = field(default_factory=lambda: ["psnr", "ssim","niqe","brisque"])
     "Save recoverd images or not."
     save_img: bool = True
     "Normalizing recoverd images and gt or not."

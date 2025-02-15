@@ -2,9 +2,9 @@
 =======================
 在运行测试案例之前，需要首先了解一下Spike-Zoo的代码主要包含：
 
-1. Dataset: 定义不同数据集统一的输入接口，包含获取脉冲输入和清晰图数据等代码。
-2. Model: 对各种脉冲重构算法进行封装，包含脉冲输入预处理、算法构建以及重构图像后处理等代码。
-3. Pipeline: 对数据和模型进行封装，包含推理过程中指标计算、图像保存以及模型训练等代码。
+- Dataset: 定义不同数据集统一的输入接口，包含获取脉冲输入和清晰图数据等代码。
+- Model: 对各种脉冲重构算法进行封装，包含脉冲输入预处理、算法构建以及重构图像后处理等代码。
+- Pipeline: 对数据和模型进行封装，包含推理过程中指标计算、图像保存以及模型训练等代码。
 
 
 推理
@@ -47,26 +47,104 @@ dataset config 指定了需要加载的数据集，和模型类似，这里提�
     )
 
 集成模型的管线构建方式和单一模型的管线构建方式基本一致，只是需要同时指定多个模型的参数。
+
 功能
 ^^^^^^^^^^^^
 
 单一模型管线和集成模型管线所对应的功能完全一致，只是在管线构建上有所不同。这里，我们的 pipeline 提供了如下功能：
 
-- 针对单段脉冲流，进行图像重构并计算重构图像的性能指标。
-我们提供三种接口来获取单段脉冲流：
+1. 针对单段脉冲流，进行图像重构并计算重构图像的性能指标。我们提供三种接口来获取单段脉冲流：
 
-    - 从数据集中获取
+    - 从数据集中获取（默认对应的测试集）
     .. code-block:: python
 
         pipeline.infer_from_dataset(idx=0)
+
+    结果会保存在对应输出路径的 ``infer_from_dataset`` 文件夹下。
 
     - 从给定的 .dat 文件中获取
     .. code-block:: python
 
         pipeline.infer_from_file(file_path='data/scissor.dat', width=400, height=250)
 
+    结果会保存在对应输出路径的 ``infer_from_file`` 文件夹下。
+
     - 直接给定输入脉冲
     .. code-block:: python
 
         spike = sz.load_vidar_dat("data/scissor.dat", width=400, height=250)
         pipeline.infer_from_spk(spike)
+    
+    结果会保存在对应输出路径的 ``infer_from_file`` 文件夹下。
+
+2. 保存给定数据集的所有图片（默认对应的测试集）
+.. code-block:: python
+
+    pipeline.save_imgs_from_dataset()
+
+结果会保存在对应输出路径的 ``infer_from_dataset`` 文件夹下。
+
+3. 计算在给定数据集的指标（默认对应的测试集）
+.. code-block:: python
+
+    pipeline.cal_metrics()
+
+结果会保存在对应输出路径的 ``result.log`` 文件夹下。
+
+4. 计算模型大小、计算复杂度以及推理平均时间
+.. code-block:: python
+
+    pipeline.cal_params()
+
+结果会保存在对应输出路径的 ``result.log`` 文件夹下。
+
+训练
+-----------
+
+训练管线的构建和推理管线一样，需要配置管线参数、数据参数和模型参数三部分。考虑到训练过程中往往会涉及更加精细化地调整，
+我们通过实例化Config参数的形式来传入数据参数和模型参数。这里，我们使用REDS数据集和提供的基础模型构建训练管线如下：
+
+.. code-block:: python
+
+    from spikezoo.pipeline import TrainPipelineConfig, TrainPipeline
+    from spikezoo.datasets.reds_base_dataset import REDS_BASEConfig
+    from spikezoo.models.base_model import BaseModelConfig
+    pipeline = TrainPipeline(
+        cfg=TrainPipelineConfig(save_folder="results", epochs = 10),
+        dataset_cfg=REDS_BASEConfig(root_dir = "spikezoo/data/REDS_BASE"),
+        model_cfg=BaseModelConfig(),
+    )
+
+在构建完训练管线后，通过如下代码直接开始训练：
+
+.. code-block:: python
+
+    pipeline.train()
+
+模型直接使用
+-----------
+除了通过管线对模型进行封装以外，我们也提供模型的直接使用方式：
+
+.. code-block:: python
+
+    import spikezoo as sz
+    from spikezoo.models.base_model import BaseModel, BaseModelConfig
+    # input data
+    spike = sz.load_vidar_dat("data/data.dat", width=400, height=250, out_format="tensor")
+    spike = spike[None].cuda()
+    print(f"Input spike shape: {spike.shape}")
+    # net
+    net = BaseModel(BaseModelConfig(model_params={"inDim": 41}))
+    net.build_network(mode = "debug")
+    # process
+    recon_img = net(spike)
+    print(recon_img.shape,recon_img.max(),recon_img.min())
+
+脉冲函数库
+-----------
+
+.. code-block:: python
+
+    import spikezoo as sz
+    spike = sz.load_vidar_dat("data/scissor.dat",width = 400,height = 250,version='cpp')
+

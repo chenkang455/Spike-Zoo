@@ -1,0 +1,103 @@
+数据集
+=======================
+
+Spike-Zoo目前包含Spk2ImgNet论文中发布的REDS数据集（命名为reds_base数据集），UHSR数据集和其他真实场景（realworld）数据集。
+BASE 数据集是REDS_BASE数据集的子集，以存储在对应路径当中，无需额外下载。
+
+数据格式
+-----------
+数据集的代码包含参数配置（BaseDatasetConfig）和数据类（BaseDataset）两部分。后续所有类别均直接在该基类上继承即可。
+
+数据集的组织形式，以BASE数据集为例。
+
+.. code-block:: python
+
+    base
+    ├── test
+    │   ├── gt
+    │   └── spike
+    └── train
+        ├── gt
+        └── spike
+
+数据集参数配置代码如下所示：
+
+.. code-block:: python
+
+    @dataclass
+    class BaseDatasetConfig:
+        # ------------- Not Recommended to Change -------------
+        "Dataset name."
+        dataset_name: str = "base"
+        "Directory specifying location of data."
+        root_dir: Union[str, Path] = Path(__file__).parent.parent / Path("data/base")
+        "Image width."
+        width: int = 400
+        "Image height."
+        height: int = 250
+        "Spike paried with the image or not."
+        with_img: bool = True
+        "Dataset spike length for the train data."
+        spike_length_train: int = -1
+        "Dataset spike length for the test data."
+        spike_length_test: int = -1
+        "Dataset spike length for the instantiation dataclass."
+        spike_length: int = -1
+        "Dir name for the spike."
+        spike_dir_name: str = "spike"
+        "Dir name for the image."
+        img_dir_name: str = "gt"
+
+        # ------------- Config -------------
+        "Dataset split: train/test. Default set as the 'test' for evaluation."
+        split: Literal["train", "test"] = "test"
+        "Use the data augumentation technique or not."
+        use_aug: bool = False
+        "Use cache mechanism."
+        use_cache: bool = False
+        "Crop size."
+        crop_size: tuple = (-1, -1)
+        "Rate. (-1 denotes variant)"
+        rate: float = 0.6
+
+        # post process
+        def __post_init__(self):
+            self.spike_length = self.spike_length_train if self.split == "train" else self.spike_length_test
+            self.root_dir = Path(self.root_dir) if isinstance(self.root_dir, str) else self.root_dir
+            # todo try download
+            assert self.root_dir.exists(), f"No files found in {self.root_dir} for the specified dataset `{self.dataset_name}`."
+            
+参数解释如下：
+
+- ``dataset_name`` : 数据集的名称，如 ``'base'``, ``'reds_base'`` 和 ``'uhsr'``。
+- ``root_dir`` : 数据集的根路径。
+- ``width`` : 输入脉冲的宽度。
+- ``height`` : 输入脉冲的高度。
+- ``with_img`` : 输入数据是否包含GT清晰图，真实数据集一般设置为False。
+- ``spike_length_train`` : 训练集中输入脉冲的长度，在BASE中是41。（如果设置为-1则表示对输出的脉冲不做任何裁剪，可能会带来高显存问题。）
+- ``spike_length_test`` : 测试集中输入脉冲的长度，在BASE中是301。
+- ``spike_length``: 表示实例化数据集的脉冲长度，在 ``__post__init`` 中赋值。
+- ``spike_dir_name`` : 用于存储脉冲数据文件夹的名字，在BASE数据集中是spike。
+- ``img_dir_name`` : 用于存储清晰图数据文件夹的名字，在BASE数据集中是gt。
+- ``split`` : 表示该数据集是分类，训练集还是测试集。
+- ``use_aug`` : 表示是否使用数据增强技术。
+- ``use_cache`` : 表示是否使用数据缓存技术，在数据IO较大且GPU利用率较低时开启可以增加训练速度，但是会带来高RAM占用。
+- ``crop_size`` : 训练时如果使用数据增强技术，裁剪的尺寸大小，默认(-1，-1)不裁剪。
+- ``rate`` : 表示脉冲转化系数，在REDS_BASE数据集中设置默认为0.6。
+
+配置完数据集参数后，即可通过如下方式实例化数据集：
+
+.. code-block:: python
+
+    from spikezoo.datasets import BaseDataset,BaseDatasetConfig
+    cfg = BaseDatasetConfig()
+    dataset = BaseDataset(cfg)
+    batch = dataset[0]
+    for key,val in batch.items():
+        print(key,val)
+
+每一个 batch, 会包含输入脉冲 spike、监督图像信号 gt_img 以及脉冲转化系数 rate，作为后续pipeline处理的接口。
+
+
+
+
