@@ -80,7 +80,6 @@ pipeline.infer_from_dataset(idx = 0)
 pipeline.infer_from_file(file_path = 'data/scissor.dat',width = 400,height=250)
 
 # 3. spike-to-image from the given spike
-import spikezoo as sz
 spike = sz.load_vidar_dat("data/scissor.dat",width = 400,height = 250)
 pipeline.infer_from_spk(spike)
 ```

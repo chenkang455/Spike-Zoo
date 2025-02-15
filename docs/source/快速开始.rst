@@ -1,0 +1,72 @@
+快速开始
+=======================
+在运行测试案例之前，需要首先了解一下Spike-Zoo的代码主要包含：
+
+1. Dataset: 定义不同数据集统一的输入接口，包含获取脉冲输入和清晰图数据等代码。
+2. Model: 对各种脉冲重构算法进行封装，包含脉冲输入预处理、算法构建以及重构图像后处理等代码。
+3. Pipeline: 对数据和模型进行封装，包含推理过程中指标计算、图像保存以及模型训练等代码。
+
+
+推理
+-----------
+管线构建
+^^^^^^^^^^^
+
+在进行推理之前，我们需要先构建处理管线，这里，Spike-Zoo提供单一模型和集成模型两种管线构建方式（集成模型在推理时将多个模型串行推理，方便对比不同模型的性能）。
+
+构建单一模型管线：
+
+.. code-block:: python
+
+    from spikezoo.pipeline import Pipeline, PipelineConfig
+    import spikezoo as sz
+    pipeline = Pipeline(
+        cfg=PipelineConfig(save_folder="results",version="v023"),
+        model_cfg=sz.METHOD.BASE,
+        dataset_cfg=sz.DATASET.BASE 
+    )
+
+Pipeline 的构建包含 pipeline config ， model config 和 dataset config 三部分。
+这里，pipeline config 指定了结果保存的路径，以及加载预训练模型的版本。
+method config 指定了需要加载的模型，这里提供两种加载方式：一种是如例子所示直接指定，另外一种是实例化对应的model config以支持更精细的需求。
+在Spike-Zoo内，我们内置了一个参数量极小的BASE模型（从SpikeCLIP中修改得到）。
+dataset config 指定了需要加载的数据集，和模型类似，这里提供如例子直接指定以及从dataset config实例化两种方式来加载。
+
+构建集成模型管线：
+
+.. code-block:: python
+
+    import spikezoo as sz
+    from spikezoo.pipeline import EnsemblePipeline, EnsemblePipelineConfig
+    pipeline = EnsemblePipeline(
+        cfg=EnsemblePipelineConfig(save_folder="results",version="v023"),
+        model_cfg_list=[
+            sz.METHOD.BASE,sz.METHOD.TFP,sz.METHOD.TFI,sz.METHOD.SPK2IMGNET,sz.METHOD.WGSE,
+            sz.METHOD.SSML,sz.METHOD.BSF,sz.METHOD.STIR,sz.METHOD.SPIKECLIP,sz.METHOD.SSIR],
+        dataset_cfg=sz.DATASET.BASE,
+    )
+
+集成模型的管线构建方式和单一模型的管线构建方式基本一致，只是需要同时指定多个模型的参数。
+功能
+^^^^^^^^^^^^
+
+单一模型管线和集成模型管线所对应的功能完全一致，只是在管线构建上有所不同。这里，我们的 pipeline 提供了如下功能：
+
+- 针对单段脉冲流，进行图像重构并计算重构图像的性能指标。
+我们提供三种接口来获取单段脉冲流：
+
+    - 从数据集中获取
+    .. code-block:: python
+
+        pipeline.infer_from_dataset(idx=0)
+
+    - 从给定的 .dat 文件中获取
+    .. code-block:: python
+
+        pipeline.infer_from_file(file_path='data/scissor.dat', width=400, height=250)
+
+    - 直接给定输入脉冲
+    .. code-block:: python
+
+        spike = sz.load_vidar_dat("data/scissor.dat", width=400, height=250)
+        pipeline.infer_from_spk(spike)
