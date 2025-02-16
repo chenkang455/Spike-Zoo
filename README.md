@@ -214,7 +214,7 @@ If you find our codes helpful to your research, please consider to use the follo
 ```
 @misc{spikezoo,
   title={{Spike-Zoo}: Spike-Zoo: A Toolbox for Spike-to-Image Reconstruction},
-  author={Kang Chen and Zhiyuan Ye},
+  author={Kang Chen and Zhiyuan Ye and Tiejun Huang and Zhaofei Yu},
   year={2025},
   howpublished = "[Online]. Available: \url{https://github.com/chenkang455/Spike-Zoo}"
 }
