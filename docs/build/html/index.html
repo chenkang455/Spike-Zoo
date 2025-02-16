@@ -9,6 +9,7 @@
   <title>Spike-Zoo 介绍 &mdash; Spike-Zoo v0.2 文档</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/css/custom.css" />
 
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
@@ -19,14 +20,15 @@
       <script src="_static/translations.js?v=beaddf03"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="索引" href="genindex.html" />
-    <link rel="search" title="搜索" href="search.html" /> 
+    <link rel="search" title="搜索" href="search.html" />
+    <link rel="next" title="快速开始" href="%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search" >
+        <div class="wy-side-nav-search"  style="background: linear-gradientlinear-gradient(to right, blueviolet 15%, limegreen 50%, royalblue 80%)" >
 
           
           
@@ -41,25 +43,36 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="导航菜单">
-              <!-- Local TOC -->
-              <div class="local-toc"><ul>
-<li><a class="reference internal" href="#">Spike-Zoo 介绍</a><ul>
-<li><a class="reference internal" href="#id1">安装</a></li>
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B.html">快速开始</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B.html#id2">推理</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B.html#id3">管线构建</a></li>
+<li class="toctree-l3"><a class="reference internal" href="%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B.html#id4">功能</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B.html#id5">训练</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B.html#id6">模型直接使用</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B.html#id7">脉冲函数库</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="%E6%95%B0%E6%8D%AE%E9%9B%86.html">数据集</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="%E6%95%B0%E6%8D%AE%E9%9B%86.html#id2">数据格式</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E6%95%B0%E6%8D%AE%E9%9B%86.html#id3">构建自己的数据集</a></li>
 </ul>
 </li>
 </ul>
-</div>
+
         </div>
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="移动版导航菜单" >
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="移动版导航菜单"  style="background: linear-gradientlinear-gradient(to right, blueviolet 15%, limegreen 50%, royalblue 80%)" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="#">Spike-Zoo</a>
       </nav>
 
       <div class="wy-nav-content">
-        <div class="rst-content">
+        <div class="rst-content style-external-links">
           <div role="navigation" aria-label="页面导航">
   <ul class="wy-breadcrumbs">
       <li><a href="#" class="icon icon-home" aria-label="Home"></a></li>
@@ -67,7 +80,9 @@
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/index.rst.txt" rel="nofollow"> 查看页面源码</a>
       </li>
-  </ul>
+  </ul><div class="rst-breadcrumbs-buttons" role="navigation" aria-label="顺序式页面导航">
+        <a href="%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B.html" class="btn btn-neutral float-right" title="快速开始" accesskey="n">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+  </div>
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
@@ -75,13 +90,13 @@
              
   <section id="spike-zoo">
 <h1>Spike-Zoo 介绍<a class="headerlink" href="#spike-zoo" title="Link to this heading"></a></h1>
-<p>⚡ <a class="reference external" href="https://github.com/chenkang455/Spike-Zoo">Spike-Zoo</a> 是一个旨在辅助开发脉冲相机图像重构网络的框架。
-主要特点包括：</p>
-<ul class="simple">
-<li><p>使用预训练权重进行多个重构模型的快速推理。</p></li>
-<li><p>支持训练自定义设计的脉冲图像重构网络。</p></li>
-<li><p>提供处理脉冲数据的各类函数。</p></li>
-</ul>
+<p>⚡ <a class="reference external" href="https://github.com/chenkang455/Spike-Zoo">Spike-Zoo</a> 是一个针对脉冲相机 (Spike Camera) 图像重构网络进行推理和训练的框架。
+支持：</p>
+<ol class="arabic simple">
+<li><p>使用预训练权重进行多个重构模型的快速 <strong>推理</strong>。</p></li>
+<li><p><strong>训练</strong> 自定义设计的脉冲图像重构网络。</p></li>
+<li><p>提供处理脉冲数据的各类 <strong>函数</strong>。</p></li>
+</ol>
 <section id="id1">
 <h2>安装<a class="headerlink" href="#id1" title="Link to this heading"></a></h2>
 <ul class="simple">
@@ -99,20 +114,57 @@
 </pre></div>
 </div>
 <ul class="simple">
-<li><p>如果想基于Spike-Zoo开发自己的脉冲重构网络,建议通过如下方式安装,以方便对网络以及训练脚本进行实时更改</p></li>
+<li><p>基于 <code class="docutils literal notranslate"><span class="pre">develop</span></code> 模式安装，方便调试训练自定义网络。</p></li>
 </ul>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">git clone https://github.com/chenkang455/Spike-Zoo</span>
 <span class="go">cd Spike-Zoo</span>
 <span class="go">python setup.py setup</span>
 </pre></div>
 </div>
+<div class="admonition note">
+<p class="admonition-title">备注</p>
+<p>有任何BUG、需求或新的脉冲重构方法，欢迎提出 <code class="docutils literal notranslate"><span class="pre">issue</span></code> 或 <code class="docutils literal notranslate"><span class="pre">Pull</span> <span class="pre">Request</span></code>。</p>
+</div>
+</section>
+<section id="id2">
+<h2>使用教程<a class="headerlink" href="#id2" title="Link to this heading"></a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B.html">快速开始</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B.html#id2">推理</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B.html#id5">训练</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B.html#id6">模型直接使用</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B.html#id7">脉冲函数库</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="%E6%95%B0%E6%8D%AE%E9%9B%86.html">数据集</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="%E6%95%B0%E6%8D%AE%E9%9B%86.html#id2">数据格式</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E6%95%B0%E6%8D%AE%E9%9B%86.html#id3">构建自己的数据集</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="id3">
+<h2>致谢<a class="headerlink" href="#id3" title="Link to this heading"></a></h2>
+<p>我们的代码基于以下开源项目的构建。感谢这些项目的贡献者：</p>
+<ul class="simple">
+<li><p><strong>SpikeCV</strong>: <a class="reference external" href="https://spikecv.github.io/">https://spikecv.github.io/</a></p></li>
+<li><p><strong>IQA-PyTorch</strong>: <a class="reference external" href="https://github.com/chaofengc/IQA-PyTorch">https://github.com/chaofengc/IQA-PyTorch</a></p></li>
+<li><p><strong>BasicSR</strong>: <a class="reference external" href="https://github.com/XPixelGroup/BasicSR">https://github.com/XPixelGroup/BasicSR</a></p></li>
+<li><p><strong>NeRFStudio</strong>: <a class="reference external" href="https://github.com/nerfstudio-project/nerfstudio">https://github.com/nerfstudio-project/nerfstudio</a></p></li>
+</ul>
+<p>同时，感谢 <a class="reference external" href="https://github.com/ruizhao26">rui zhao</a> 、<a class="reference external" href="https://github.com/Leozhangjiyuan">jiyuan zhang</a> 以及 <a class="reference external" href="https://github.com/hnmizuho">shiyan chen</a>
+对我们项目的帮助。</p>
 </section>
 </section>
 
 
            </div>
           </div>
-          <footer>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="页脚">
+        <a href="%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B.html" class="btn btn-neutral float-right" title="快速开始" accesskey="n" rel="next">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
 
   <hr/>
 
@@ -132,7 +184,7 @@
   </div>
   <script>
       jQuery(function () {
-          SphinxRtdTheme.Navigation.enable(true);
+          SphinxRtdTheme.Navigation.enable(false);
       });
   </script> 
 

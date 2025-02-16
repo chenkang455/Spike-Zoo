@@ -1,0 +1,263 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>快速开始 &mdash; Spike-Zoo v0.2 文档</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/css/custom.css" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=e0f13565"></script>
+      <script src="_static/doctools.js?v=9a2dae69"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/translations.js?v=beaddf03"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="genindex.html" />
+    <link rel="search" title="搜索" href="search.html" />
+    <link rel="next" title="数据集" href="%E6%95%B0%E6%8D%AE%E9%9B%86.html" />
+    <link rel="prev" title="Spike-Zoo 介绍" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: linear-gradientlinear-gradient(to right, blueviolet 15%, limegreen 50%, royalblue 80%)" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Spike-Zoo
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="搜索文档" aria-label="搜索文档" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="导航菜单">
+              <ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">快速开始</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id2">推理</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id3">管线构建</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id4">功能</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id5">训练</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id6">模型直接使用</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id7">脉冲函数库</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="%E6%95%B0%E6%8D%AE%E9%9B%86.html">数据集</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="%E6%95%B0%E6%8D%AE%E9%9B%86.html#id2">数据格式</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E6%95%B0%E6%8D%AE%E9%9B%86.html#id3">构建自己的数据集</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="移动版导航菜单"  style="background: linear-gradientlinear-gradient(to right, blueviolet 15%, limegreen 50%, royalblue 80%)" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Spike-Zoo</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content style-external-links">
+          <div role="navigation" aria-label="页面导航">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">快速开始</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/快速开始.rst.txt" rel="nofollow"> 查看页面源码</a>
+      </li>
+  </ul><div class="rst-breadcrumbs-buttons" role="navigation" aria-label="顺序式页面导航">
+        <a href="index.html" class="btn btn-neutral float-left" title="Spike-Zoo 介绍" accesskey="p"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="%E6%95%B0%E6%8D%AE%E9%9B%86.html" class="btn btn-neutral float-right" title="数据集" accesskey="n">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+  </div>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="id1">
+<h1>快速开始<a class="headerlink" href="#id1" title="Link to this heading"></a></h1>
+<p>在运行测试案例之前，需要首先了解一下Spike-Zoo的代码主要包含：</p>
+<ul class="simple">
+<li><p>Dataset: 定义不同数据集统一的输入接口，包含获取脉冲输入和清晰图数据等代码。</p></li>
+<li><p>Model: 对各种脉冲重构算法进行封装，包含脉冲输入预处理、算法构建以及重构图像后处理等代码。</p></li>
+<li><p>Pipeline: 对数据和模型进行封装，包含推理过程中指标计算、图像保存以及模型训练等代码。</p></li>
+</ul>
+<section id="id2">
+<h2>推理<a class="headerlink" href="#id2" title="Link to this heading"></a></h2>
+<section id="id3">
+<h3>管线构建<a class="headerlink" href="#id3" title="Link to this heading"></a></h3>
+<p>在进行推理之前，我们需要先构建处理管线，这里，Spike-Zoo提供单一模型和集成模型两种管线构建方式（集成模型在推理时将多个模型串行推理，方便对比不同模型的性能）。</p>
+<p>构建单一模型管线：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">spikezoo.pipeline</span><span class="w"> </span><span class="kn">import</span> <span class="n">Pipeline</span><span class="p">,</span> <span class="n">PipelineConfig</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">spikezoo</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sz</span>
+<span class="n">pipeline</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">(</span>
+    <span class="n">cfg</span><span class="o">=</span><span class="n">PipelineConfig</span><span class="p">(</span><span class="n">save_folder</span><span class="o">=</span><span class="s2">&quot;results&quot;</span><span class="p">,</span><span class="n">version</span><span class="o">=</span><span class="s2">&quot;v023&quot;</span><span class="p">),</span>
+    <span class="n">model_cfg</span><span class="o">=</span><span class="n">sz</span><span class="o">.</span><span class="n">METHOD</span><span class="o">.</span><span class="n">BASE</span><span class="p">,</span>
+    <span class="n">dataset_cfg</span><span class="o">=</span><span class="n">sz</span><span class="o">.</span><span class="n">DATASET</span><span class="o">.</span><span class="n">BASE</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Pipeline 的构建包含 pipeline config ， model config 和 dataset config 三部分。
+这里，pipeline config 指定了结果保存的路径，以及加载预训练模型的版本。
+method config 指定了需要加载的模型，这里提供两种加载方式：一种是如例子所示直接指定，另外一种是实例化对应的model config以支持更精细的需求。
+在Spike-Zoo内，我们内置了一个参数量极小的BASE模型（从SpikeCLIP中修改得到）。
+dataset config 指定了需要加载的数据集，和模型类似，这里提供如例子直接指定以及从dataset config实例化两种方式来加载。</p>
+<p>构建集成模型管线：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">spikezoo</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sz</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">spikezoo.pipeline</span><span class="w"> </span><span class="kn">import</span> <span class="n">EnsemblePipeline</span><span class="p">,</span> <span class="n">EnsemblePipelineConfig</span>
+<span class="n">pipeline</span> <span class="o">=</span> <span class="n">EnsemblePipeline</span><span class="p">(</span>
+    <span class="n">cfg</span><span class="o">=</span><span class="n">EnsemblePipelineConfig</span><span class="p">(</span><span class="n">save_folder</span><span class="o">=</span><span class="s2">&quot;results&quot;</span><span class="p">,</span><span class="n">version</span><span class="o">=</span><span class="s2">&quot;v023&quot;</span><span class="p">),</span>
+    <span class="n">model_cfg_list</span><span class="o">=</span><span class="p">[</span>
+        <span class="n">sz</span><span class="o">.</span><span class="n">METHOD</span><span class="o">.</span><span class="n">BASE</span><span class="p">,</span><span class="n">sz</span><span class="o">.</span><span class="n">METHOD</span><span class="o">.</span><span class="n">TFP</span><span class="p">,</span><span class="n">sz</span><span class="o">.</span><span class="n">METHOD</span><span class="o">.</span><span class="n">TFI</span><span class="p">,</span><span class="n">sz</span><span class="o">.</span><span class="n">METHOD</span><span class="o">.</span><span class="n">SPK2IMGNET</span><span class="p">,</span><span class="n">sz</span><span class="o">.</span><span class="n">METHOD</span><span class="o">.</span><span class="n">WGSE</span><span class="p">,</span>
+        <span class="n">sz</span><span class="o">.</span><span class="n">METHOD</span><span class="o">.</span><span class="n">SSML</span><span class="p">,</span><span class="n">sz</span><span class="o">.</span><span class="n">METHOD</span><span class="o">.</span><span class="n">BSF</span><span class="p">,</span><span class="n">sz</span><span class="o">.</span><span class="n">METHOD</span><span class="o">.</span><span class="n">STIR</span><span class="p">,</span><span class="n">sz</span><span class="o">.</span><span class="n">METHOD</span><span class="o">.</span><span class="n">SPIKECLIP</span><span class="p">,</span><span class="n">sz</span><span class="o">.</span><span class="n">METHOD</span><span class="o">.</span><span class="n">SSIR</span><span class="p">],</span>
+    <span class="n">dataset_cfg</span><span class="o">=</span><span class="n">sz</span><span class="o">.</span><span class="n">DATASET</span><span class="o">.</span><span class="n">BASE</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>集成模型的管线构建方式和单一模型的管线构建方式基本一致，只是需要同时指定多个模型的参数。</p>
+</section>
+<section id="id4">
+<h3>功能<a class="headerlink" href="#id4" title="Link to this heading"></a></h3>
+<p>单一模型管线和集成模型管线所对应的功能完全一致，只是在管线构建上有所不同。这里，我们的 pipeline 提供了如下功能：</p>
+<ol class="arabic">
+<li><p>针对单段脉冲流，进行图像重构并计算重构图像的性能指标。我们提供三种接口来获取单段脉冲流：</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>从数据集中获取（默认对应的测试集）</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pipeline</span><span class="o">.</span><span class="n">infer_from_dataset</span><span class="p">(</span><span class="n">idx</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>结果会保存在对应输出路径的 <code class="docutils literal notranslate"><span class="pre">infer_from_dataset</span></code> 文件夹下。</p>
+<ul class="simple">
+<li><p>从给定的 .dat 文件中获取</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pipeline</span><span class="o">.</span><span class="n">infer_from_file</span><span class="p">(</span><span class="n">file_path</span><span class="o">=</span><span class="s1">&#39;data/scissor.dat&#39;</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">250</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>结果会保存在对应输出路径的 <code class="docutils literal notranslate"><span class="pre">infer_from_file</span></code> 文件夹下。</p>
+<ul class="simple">
+<li><p>直接给定输入脉冲</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">spike</span> <span class="o">=</span> <span class="n">sz</span><span class="o">.</span><span class="n">load_vidar_dat</span><span class="p">(</span><span class="s2">&quot;data/scissor.dat&quot;</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">250</span><span class="p">)</span>
+<span class="n">pipeline</span><span class="o">.</span><span class="n">infer_from_spk</span><span class="p">(</span><span class="n">spike</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>结果会保存在对应输出路径的 <code class="docutils literal notranslate"><span class="pre">infer_from_file</span></code> 文件夹下。</p>
+</div></blockquote>
+</li>
+</ol>
+<p>2. 保存给定数据集的所有图片（默认对应的测试集）
+.. code-block:: python</p>
+<blockquote>
+<div><p>pipeline.save_imgs_from_dataset()</p>
+</div></blockquote>
+<p>结果会保存在对应输出路径的 <code class="docutils literal notranslate"><span class="pre">infer_from_dataset</span></code> 文件夹下。</p>
+<p>3. 计算在给定数据集的指标（默认对应的测试集）
+.. code-block:: python</p>
+<blockquote>
+<div><p>pipeline.cal_metrics()</p>
+</div></blockquote>
+<p>结果会保存在对应输出路径的 <code class="docutils literal notranslate"><span class="pre">result.log</span></code> 文件夹下。</p>
+<p>4. 计算模型大小、计算复杂度以及推理平均时间
+.. code-block:: python</p>
+<blockquote>
+<div><p>pipeline.cal_params()</p>
+</div></blockquote>
+<p>结果会保存在对应输出路径的 <code class="docutils literal notranslate"><span class="pre">result.log</span></code> 文件夹下。</p>
+</section>
+</section>
+<section id="id5">
+<h2>训练<a class="headerlink" href="#id5" title="Link to this heading"></a></h2>
+<p>训练管线的构建和推理管线一样，需要配置管线参数、数据参数和模型参数三部分。考虑到训练过程中往往会涉及更加精细化地调整，
+我们通过实例化Config参数的形式来传入数据参数和模型参数。这里，我们使用REDS数据集和提供的基础模型构建训练管线如下：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">spikezoo.pipeline</span><span class="w"> </span><span class="kn">import</span> <span class="n">TrainPipelineConfig</span><span class="p">,</span> <span class="n">TrainPipeline</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">spikezoo.datasets.reds_base_dataset</span><span class="w"> </span><span class="kn">import</span> <span class="n">REDS_BASEConfig</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">spikezoo.models.base_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModelConfig</span>
+<span class="n">pipeline</span> <span class="o">=</span> <span class="n">TrainPipeline</span><span class="p">(</span>
+    <span class="n">cfg</span><span class="o">=</span><span class="n">TrainPipelineConfig</span><span class="p">(</span><span class="n">save_folder</span><span class="o">=</span><span class="s2">&quot;results&quot;</span><span class="p">,</span> <span class="n">epochs</span> <span class="o">=</span> <span class="mi">10</span><span class="p">),</span>
+    <span class="n">dataset_cfg</span><span class="o">=</span><span class="n">REDS_BASEConfig</span><span class="p">(</span><span class="n">root_dir</span> <span class="o">=</span> <span class="s2">&quot;spikezoo/data/REDS_BASE&quot;</span><span class="p">),</span>
+    <span class="n">model_cfg</span><span class="o">=</span><span class="n">BaseModelConfig</span><span class="p">(),</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>在构建完训练管线后，通过如下代码直接开始训练：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pipeline</span><span class="o">.</span><span class="n">train</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="id6">
+<h2>模型直接使用<a class="headerlink" href="#id6" title="Link to this heading"></a></h2>
+<p>除了通过管线对模型进行封装以外，我们也提供模型的直接使用方式：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">spikezoo</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sz</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">spikezoo.models.base_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span><span class="p">,</span> <span class="n">BaseModelConfig</span>
+<span class="c1"># input data</span>
+<span class="n">spike</span> <span class="o">=</span> <span class="n">sz</span><span class="o">.</span><span class="n">load_vidar_dat</span><span class="p">(</span><span class="s2">&quot;data/data.dat&quot;</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">250</span><span class="p">,</span> <span class="n">out_format</span><span class="o">=</span><span class="s2">&quot;tensor&quot;</span><span class="p">)</span>
+<span class="n">spike</span> <span class="o">=</span> <span class="n">spike</span><span class="p">[</span><span class="kc">None</span><span class="p">]</span><span class="o">.</span><span class="n">cuda</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Input spike shape: </span><span class="si">{</span><span class="n">spike</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="c1"># net</span>
+<span class="n">net</span> <span class="o">=</span> <span class="n">BaseModel</span><span class="p">(</span><span class="n">BaseModelConfig</span><span class="p">(</span><span class="n">model_params</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;inDim&quot;</span><span class="p">:</span> <span class="mi">41</span><span class="p">}))</span>
+<span class="n">net</span><span class="o">.</span><span class="n">build_network</span><span class="p">(</span><span class="n">mode</span> <span class="o">=</span> <span class="s2">&quot;debug&quot;</span><span class="p">)</span>
+<span class="c1"># process</span>
+<span class="n">recon_img</span> <span class="o">=</span> <span class="n">net</span><span class="p">(</span><span class="n">spike</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">recon_img</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span><span class="n">recon_img</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span><span class="n">recon_img</span><span class="o">.</span><span class="n">min</span><span class="p">())</span>
+</pre></div>
+</div>
+</section>
+<section id="id7">
+<h2>脉冲函数库<a class="headerlink" href="#id7" title="Link to this heading"></a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">spikezoo</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sz</span>
+<span class="n">spike</span> <span class="o">=</span> <span class="n">sz</span><span class="o">.</span><span class="n">load_vidar_dat</span><span class="p">(</span><span class="s2">&quot;data/scissor.dat&quot;</span><span class="p">,</span><span class="n">width</span> <span class="o">=</span> <span class="mi">400</span><span class="p">,</span><span class="n">height</span> <span class="o">=</span> <span class="mi">250</span><span class="p">,</span><span class="n">version</span><span class="o">=</span><span class="s1">&#39;cpp&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="页脚">
+        <a href="index.html" class="btn btn-neutral float-left" title="Spike-Zoo 介绍" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="%E6%95%B0%E6%8D%AE%E9%9B%86.html" class="btn btn-neutral float-right" title="数据集" accesskey="n" rel="next">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2025, Kang Chen。</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用的 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a> 开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(false);
+      });
+  </script> 
+
+</body>
+</html>

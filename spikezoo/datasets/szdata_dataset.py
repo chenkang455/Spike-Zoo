@@ -22,7 +22,3 @@ class SZDataConfig(BaseDatasetConfig):
 class SZData(BaseDataset):
     def __init__(self, cfg: BaseDatasetConfig):
         super(SZData, self).__init__(cfg)
-
-    def prepare_data(self):
-        super().prepare_data()
-        self.img_list = [self.img_dir / Path(str(s.name).replace('.dat','.png')) for s in self.spike_list]

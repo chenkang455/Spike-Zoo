@@ -1,0 +1,260 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>数据集 &mdash; Spike-Zoo v0.2 文档</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/css/custom.css" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=e0f13565"></script>
+      <script src="_static/doctools.js?v=9a2dae69"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/translations.js?v=beaddf03"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="genindex.html" />
+    <link rel="search" title="搜索" href="search.html" />
+    <link rel="next" title="&lt;no title&gt;" href="%E6%A8%A1%E5%9E%8B.html" />
+    <link rel="prev" title="快速开始" href="%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: linear-gradientlinear-gradient(to right, blueviolet 15%, limegreen 50%, royalblue 80%)" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Spike-Zoo
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="搜索文档" aria-label="搜索文档" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="导航菜单">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B.html">快速开始</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B.html#id2">推理</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B.html#id3">管线构建</a></li>
+<li class="toctree-l3"><a class="reference internal" href="%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B.html#id4">功能</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B.html#id5">训练</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B.html#id6">模型直接使用</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B.html#id7">脉冲函数库</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">数据集</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id2">数据格式</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id3">构建自己的数据集</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="移动版导航菜单"  style="background: linear-gradientlinear-gradient(to right, blueviolet 15%, limegreen 50%, royalblue 80%)" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Spike-Zoo</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content style-external-links">
+          <div role="navigation" aria-label="页面导航">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">数据集</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/数据集.rst.txt" rel="nofollow"> 查看页面源码</a>
+      </li>
+  </ul><div class="rst-breadcrumbs-buttons" role="navigation" aria-label="顺序式页面导航">
+        <a href="%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B.html" class="btn btn-neutral float-left" title="快速开始" accesskey="p"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="%E6%A8%A1%E5%9E%8B.html" class="btn btn-neutral float-right" title="&lt;no title&gt;" accesskey="n">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+  </div>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="id1">
+<h1>数据集<a class="headerlink" href="#id1" title="Link to this heading"></a></h1>
+<p>Spike-Zoo目前包含Spk2ImgNet论文中发布的REDS数据集（命名为reds_base数据集），UHSR数据集和其他真实场景（realworld）数据集。
+BASE 数据集是REDS_BASE数据集的子集，以存储在对应路径当中，无需额外下载。</p>
+<section id="id2">
+<h2>数据格式<a class="headerlink" href="#id2" title="Link to this heading"></a></h2>
+<p>数据集的代码包含参数配置（BaseDatasetConfig）和数据类（BaseDataset）两部分。后续所有类别均直接在该基类上继承即可。</p>
+<p>数据集的组织形式，以BASE数据集为例。</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">base</span>
+<span class="err">├──</span> <span class="n">test</span>
+<span class="err">│</span>   <span class="err">├──</span> <span class="n">gt</span>
+<span class="err">│</span>   <span class="err">└──</span> <span class="n">spike</span>
+<span class="err">└──</span> <span class="n">train</span>
+    <span class="err">├──</span> <span class="n">gt</span>
+    <span class="err">└──</span> <span class="n">spike</span>
+</pre></div>
+</div>
+<p>数据集参数配置代码如下所示：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">BaseDatasetConfig</span><span class="p">:</span>
+    <span class="c1"># ------------- Not Recommended to Change -------------</span>
+    <span class="s2">&quot;Dataset name.&quot;</span>
+    <span class="n">dataset_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;base&quot;</span>
+    <span class="s2">&quot;Directory specifying location of data.&quot;</span>
+    <span class="n">root_dir</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">]</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;data/base&quot;</span><span class="p">)</span>
+    <span class="s2">&quot;Image width.&quot;</span>
+    <span class="n">width</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">400</span>
+    <span class="s2">&quot;Image height.&quot;</span>
+    <span class="n">height</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">250</span>
+    <span class="s2">&quot;Spike paried with the image or not.&quot;</span>
+    <span class="n">with_img</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="s2">&quot;Dataset spike length for the train data.&quot;</span>
+    <span class="n">spike_length_train</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+    <span class="s2">&quot;Dataset spike length for the test data.&quot;</span>
+    <span class="n">spike_length_test</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+    <span class="s2">&quot;Dir name for the spike.&quot;</span>
+    <span class="n">spike_dir_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;spike&quot;</span>
+    <span class="s2">&quot;Dir name for the image.&quot;</span>
+    <span class="n">img_dir_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;gt&quot;</span>
+
+    <span class="c1"># ------------- Config -------------</span>
+    <span class="s2">&quot;Dataset split: train/test. Default set as the &#39;test&#39; for evaluation.&quot;</span>
+    <span class="n">split</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;train&quot;</span><span class="p">,</span> <span class="s2">&quot;test&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;test&quot;</span>
+    <span class="s2">&quot;Use the data augumentation technique or not.&quot;</span>
+    <span class="n">use_aug</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="s2">&quot;Use cache mechanism.&quot;</span>
+    <span class="n">use_cache</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="s2">&quot;Crop size.&quot;</span>
+    <span class="n">crop_size</span><span class="p">:</span> <span class="nb">tuple</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="s2">&quot;Rate. (-1 denotes variant)&quot;</span>
+    <span class="n">rate</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.6</span>
+
+    <span class="c1"># post process</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spike_length</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">spike_length_train</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">split</span> <span class="o">==</span> <span class="s2">&quot;train&quot;</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">spike_length_test</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">root_dir</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">root_dir</span><span class="p">)</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">root_dir</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">root_dir</span>
+        <span class="c1"># todo try download</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">root_dir</span><span class="o">.</span><span class="n">exists</span><span class="p">(),</span> <span class="sa">f</span><span class="s2">&quot;No files found in </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">root_dir</span><span class="si">}</span><span class="s2"> for the specified dataset `</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">dataset_name</span><span class="si">}</span><span class="s2">`.&quot;</span>
+</pre></div>
+</div>
+<p>参数解释如下：</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">dataset_name</span></code> : 数据集的名称，如 <code class="docutils literal notranslate"><span class="pre">'base'</span></code>, <code class="docutils literal notranslate"><span class="pre">'reds_base'</span></code> 和 <code class="docutils literal notranslate"><span class="pre">'uhsr'</span></code>。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">root_dir</span></code> : 数据集的根路径。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">width</span></code> : 输入脉冲的宽度。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">height</span></code> : 输入脉冲的高度。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">with_img</span></code> : 输入数据是否包含GT清晰图，真实数据集一般设置为False。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">spike_length_train</span></code> : 训练集中输入脉冲的长度，在BASE中是41。（如果设置为-1则表示对输出的脉冲不做任何裁剪，可能会带来高显存问题。）</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">spike_length_test</span></code> : 测试集中输入脉冲的长度，在BASE中是301。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">spike_length</span></code>: 表示实例化数据集的脉冲长度，在 <code class="docutils literal notranslate"><span class="pre">__post__init</span></code> 中自动赋值。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">spike_dir_name</span></code> : 用于存储脉冲数据文件夹的名字，在BASE数据集中是spike。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">img_dir_name</span></code> : 用于存储清晰图数据文件夹的名字，在BASE数据集中是gt。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">split</span></code> : 表示该数据集是分类，训练集还是测试集。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">use_aug</span></code> : 表示是否使用数据增强技术。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">use_cache</span></code> : 表示是否使用数据缓存技术，在数据IO较大且GPU利用率较低时开启可以增加训练速度，但是会带来高RAM占用。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">crop_size</span></code> : 训练时如果使用数据增强技术，裁剪的尺寸大小，默认(-1，-1)不裁剪。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">rate</span></code> : 表示脉冲转化系数，在REDS_BASE数据集中设置默认为0.6。</p></li>
+</ul>
+<p>配置完数据集参数后，即可通过如下方式实例化数据集：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">spikezoo.datasets</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseDataset</span><span class="p">,</span><span class="n">BaseDatasetConfig</span>
+<span class="n">cfg</span> <span class="o">=</span> <span class="n">BaseDatasetConfig</span><span class="p">()</span>
+<span class="n">dataset</span> <span class="o">=</span> <span class="n">BaseDataset</span><span class="p">(</span><span class="n">cfg</span><span class="p">)</span>
+<span class="n">batch</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="k">for</span> <span class="n">key</span><span class="p">,</span><span class="n">val</span> <span class="ow">in</span> <span class="n">batch</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">key</span><span class="p">,</span><span class="n">val</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>数据集的输出是一个batch, 该batch会包含输入脉冲 <code class="docutils literal notranslate"><span class="pre">spike</span></code>、监督图像信号 <code class="docutils literal notranslate"><span class="pre">gt_img</span></code> 以及脉冲转化系数 <code class="docutils literal notranslate"><span class="pre">rate</span></code>，作为后续pipeline处理的接口。</p>
+</section>
+<section id="id3">
+<h2>构建自己的数据集<a class="headerlink" href="#id3" title="Link to this heading"></a></h2>
+<p>我们以Spike-Zoo标准仿真管线得到的数据集为例，解释如何在已有基类数据集基础上开发自己的数据集。</p>
+<p>数据集的格式如下所示</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">root</span>
+<span class="err">├──</span> <span class="n">test</span>
+<span class="err">│</span>   <span class="err">├──</span> <span class="n">sharp_data</span>
+<span class="err">│</span>   <span class="err">└──</span> <span class="n">spike_data</span>
+<span class="err">└──</span> <span class="n">train</span>
+    <span class="err">├──</span> <span class="n">sharp_data</span>
+    <span class="err">└──</span> <span class="n">spike_data</span>
+</pre></div>
+</div>
+<p>代码见 <code class="docutils literal notranslate"><span class="pre">spikezoo/datasets/szdata_dataset.py</span></code> 我们可以构建对应的配置类为：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">SZDataConfig</span><span class="p">(</span><span class="n">BaseDatasetConfig</span><span class="p">):</span>
+    <span class="c1"># 数据集名称，和文件名保持一致</span>
+    <span class="n">dataset_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;szdata&quot;</span>
+    <span class="c1"># 设定路径</span>
+    <span class="n">root_dir</span><span class="p">:</span> <span class="n">Path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;data/dataset&quot;</span><span class="p">)</span>
+    <span class="c1"># 宽度为400</span>
+    <span class="n">width</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">400</span>
+    <span class="c1"># 高度为250</span>
+    <span class="n">height</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">250</span>
+    <span class="c1"># 包含成对清晰图</span>
+    <span class="n">with_img</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="c1"># 默认长度输入</span>
+    <span class="n">spike_length_train</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+    <span class="c1"># 默认长度输入</span>
+    <span class="n">spike_length_test</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+    <span class="c1"># 储存脉冲数据的文件夹名称为 &#39;spike_data&#39;</span>
+    <span class="n">spike_dir_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;spike_data&quot;</span>
+    <span class="c1"># 储存清晰图数据的文件夹名称为 &#39;sharp_data&#39;</span>
+    <span class="n">img_dir_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;sharp_data&quot;</span>
+    <span class="c1"># 设置为1</span>
+    <span class="n">rate</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">1</span>
+</pre></div>
+</div>
+<p>针对数据集基类，直接继承BASE类数据集即可。</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">SZData</span><span class="p">(</span><span class="n">BaseDataset</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cfg</span><span class="p">:</span> <span class="n">BaseDatasetConfig</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">SZData</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">cfg</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="页脚">
+        <a href="%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B.html" class="btn btn-neutral float-left" title="快速开始" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="%E6%A8%A1%E5%9E%8B.html" class="btn btn-neutral float-right" title="&lt;no title&gt;" accesskey="n" rel="next">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2025, Kang Chen。</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用的 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a> 开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(false);
+      });
+  </script> 
+
+</body>
+</html>

@@ -10,5 +10,10 @@ spikezoo/archs/spcsnet
 logs/
 spikezoo/models/spcsnet_model.py
 data/raw_data/
+data/blur_data/
+data/sharp_data/
+data/spike_data/
+
+
 examples/train_reds_base/train_spcsnet.py
 TODO.md

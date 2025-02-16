@@ -13,7 +13,7 @@ num_inter=7
 # Number of images before interpolation to synthesize one spike stream / blurry frame
 num_blur=13
 # Additional spike out of the exposure period. Designed for the reblur loss.
-num_add=20
+num_add=0
 # Number set to reduce the spike frames.
 num_omit=1
 # How much to resize the image for simulating .dat files.

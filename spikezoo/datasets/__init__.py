@@ -15,7 +15,7 @@ dataset_list = [file.replace("_dataset.py", "") for file in files_list if file.e
 def build_dataset_cfg(cfg: BaseDatasetConfig, split: Literal["train", "test"] = "test"):
     """Build the dataset from the given dataset config."""
     # build new cfg according to split
-    cfg = replace(cfg, split=split, spike_length=cfg.spike_length_train if split == "train" else cfg.spike_length_test)
+    cfg = replace(cfg, split=split)
     # dataset module
     module_name = cfg.dataset_name + "_dataset"
     assert cfg.dataset_name in dataset_list, f"Given dataset {cfg.dataset_name} not in our dataset list {dataset_list}."

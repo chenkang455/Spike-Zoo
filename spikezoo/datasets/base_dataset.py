@@ -30,13 +30,13 @@ class BaseDatasetConfig:
     spike_length_train: int = -1
     "Dataset spike length for the test data."
     spike_length_test: int = -1
-    "Dataset spike length for the instantiation dataclass."
-    spike_length: int = -1
     "Dir name for the spike."
     spike_dir_name: str = "spike"
     "Dir name for the image."
     img_dir_name: str = "gt"
-
+    "Rate. (-1 denotes variant)"
+    rate: float = 0.6
+    
     # ------------- Config -------------
     "Dataset split: train/test. Default set as the 'test' for evaluation."
     split: Literal["train", "test"] = "test"
@@ -46,8 +46,7 @@ class BaseDatasetConfig:
     use_cache: bool = False
     "Crop size."
     crop_size: tuple = (-1, -1)
-    "Rate. (-1 denotes variant)"
-    rate: float = 0.6
+
 
     # post process
     def __post_init__(self):
