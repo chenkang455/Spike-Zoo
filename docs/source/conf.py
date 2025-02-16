@@ -17,7 +17,6 @@ release = 'v0.2'
 extensions = [
     'sphinx_rtd_theme',
     'sphinx.ext.autodoc',   # 启用自动化文档生成
-    'sphinx_autodoc_typehints'  # 如果需要自动显示类型提示
 ]
 
 
