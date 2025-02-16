@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>&lt;no title&gt; &mdash; Spike-Zoo v0.2 文档</title>
+  <title>模型 &mdash; Spike-Zoo v0.2 文档</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="_static/css/custom.css" />
@@ -15,13 +15,13 @@
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
       <script src="_static/documentation_options.js?v=e0f13565"></script>
-      <script src="_static/doctools.js?v=9a2dae69"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
       <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
       <script src="_static/translations.js?v=beaddf03"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="索引" href="genindex.html" />
     <link rel="search" title="搜索" href="search.html" />
-    <link rel="next" title="&lt;no title&gt;" href="%E5%A4%84%E7%90%86%E7%AE%A1%E7%BA%BF.html" />
+    <link rel="next" title="处理管线" href="%E5%A4%84%E7%90%86%E7%AE%A1%E7%BA%BF.html" />
     <link rel="prev" title="数据集" href="%E6%95%B0%E6%8D%AE%E9%9B%86.html" /> 
 </head>
 
@@ -44,7 +44,7 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="导航菜单">
-              <ul>
+              <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B.html">快速开始</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B.html#id2">推理</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B.html#id3">管线构建</a></li>
@@ -52,13 +52,36 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B.html#id5">训练</a></li>
-<li class="toctree-l2"><a class="reference internal" href="%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B.html#id6">模型直接使用</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B.html#id6">模型基本用法</a></li>
 <li class="toctree-l2"><a class="reference internal" href="%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B.html#id7">脉冲函数库</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="%E6%95%B0%E6%8D%AE%E9%9B%86.html">数据集</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="%E6%95%B0%E6%8D%AE%E9%9B%86.html#id2">数据格式</a></li>
 <li class="toctree-l2"><a class="reference internal" href="%E6%95%B0%E6%8D%AE%E9%9B%86.html#id3">构建自己的数据集</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">模型</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id2">参数配置</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id3">模型构建</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#model-use">基本使用</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id5">构建自定义模型</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="%E5%A4%84%E7%90%86%E7%AE%A1%E7%BA%BF.html">处理管线</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="%E5%A4%84%E7%90%86%E7%AE%A1%E7%BA%BF.html#id2">推理管线</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="%E5%A4%84%E7%90%86%E7%AE%A1%E7%BA%BF.html#eval-config">参数配置</a></li>
+<li class="toctree-l3"><a class="reference internal" href="%E5%A4%84%E7%90%86%E7%AE%A1%E7%BA%BF.html#eval-initial">实例化</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="%E5%A4%84%E7%90%86%E7%AE%A1%E7%BA%BF.html#id5">训练</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="%E5%87%BD%E6%95%B0%E5%BA%93.html">函数库</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="%E5%87%BD%E6%95%B0%E5%BA%93.html#spikezoo-utils-package">spikezoo.utils package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="%E5%87%BD%E6%95%B0%E5%BA%93.html#load_vidar_dat"><code class="docutils literal notranslate"><span class="pre">load_vidar_dat()</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -77,26 +100,205 @@
           <div role="navigation" aria-label="页面导航">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">&lt;no title&gt;</li>
+      <li class="breadcrumb-item active">模型</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/模型.rst.txt" rel="nofollow"> 查看页面源码</a>
       </li>
   </ul><div class="rst-breadcrumbs-buttons" role="navigation" aria-label="顺序式页面导航">
         <a href="%E6%95%B0%E6%8D%AE%E9%9B%86.html" class="btn btn-neutral float-left" title="数据集" accesskey="p"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
-        <a href="%E5%A4%84%E7%90%86%E7%AE%A1%E7%BA%BF.html" class="btn btn-neutral float-right" title="&lt;no title&gt;" accesskey="n">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="%E5%A4%84%E7%90%86%E7%AE%A1%E7%BA%BF.html" class="btn btn-neutral float-right" title="处理管线" accesskey="n">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
   </div>
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  
+  <section id="id1">
+<h1>模型<a class="headerlink" href="#id1" title="Link to this heading"></a></h1>
+<p>Spike-Zoo的模型是对网络架构的封装，以实现对模型输入脉冲的预处理、输出图像的后处理并赋予
+模型保存和损失函数计算等训练特性。</p>
+<p>具体而言，如果有一个网络已设计好的脉冲重构网络，可以将其放置在archs文件夹下并通过model将其进一步封装。</p>
+<section id="id2">
+<h2>参数配置<a class="headerlink" href="#id2" title="Link to this heading"></a></h2>
+<p>类似地，模型的配置参数如下：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">BaseModelConfig</span><span class="p">:</span>
+    <span class="c1"># ------------- Not Recommended to Change -------------</span>
+    <span class="s2">&quot;Registerd model name.&quot;</span>
+    <span class="n">model_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;base&quot;</span>
+    <span class="s2">&quot;File name of the specified model.&quot;</span>
+    <span class="n">model_file_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;nets&quot;</span>
+    <span class="s2">&quot;Class name of the specified model in spikezoo/archs/base/</span><span class="si">{model_file_name}</span><span class="s2">.py.&quot;</span>
+    <span class="n">model_cls_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;BaseNet&quot;</span>
+    <span class="s2">&quot;Spike input length. (local mode)&quot;</span>
+    <span class="n">model_length</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">41</span>
+    <span class="s2">&quot;Spike input length for different versions.&quot;</span>
+    <span class="n">model_length_dict</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;v010&quot;</span><span class="p">:</span> <span class="mi">41</span><span class="p">,</span> <span class="s2">&quot;v023&quot;</span><span class="p">:</span> <span class="mi">41</span><span class="p">})</span>
+    <span class="s2">&quot;Model require model parameters or not.&quot;</span>
+    <span class="n">require_params</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="s2">&quot;Model parameters. (local mode)&quot;</span>
+    <span class="n">model_params</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="p">{})</span>
+    <span class="s2">&quot;Model parameters for different versions.&quot;</span>
+    <span class="n">model_params_dict</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;v010&quot;</span><span class="p">:</span> <span class="p">{},</span> <span class="s2">&quot;v023&quot;</span><span class="p">:</span> <span class="p">{}})</span>
+    <span class="c1"># ------------- Config -------------</span>
+    <span class="s2">&quot;Load ckpt path. Used on the local mode.&quot;</span>
+    <span class="n">ckpt_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="s2">&quot;Load pretrained weights or not. (default false, set to true during the evaluation mode.)&quot;</span>
+    <span class="n">load_state</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="s2">&quot;Multi-GPU setting.&quot;</span>
+    <span class="n">multi_gpu</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="s2">&quot;Base url.&quot;</span>
+    <span class="n">base_url</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;https://github.com/chenkang455/Spike-Zoo/releases/download&quot;</span>
+</pre></div>
+</div>
+<p>参数解释如下：</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">model_name</span></code> : 模型的名称，如 <code class="docutils literal notranslate"><span class="pre">'base'</span></code>, <code class="docutils literal notranslate"><span class="pre">'spk2imgnet'</span></code> 和 <code class="docutils literal notranslate"><span class="pre">'spikeclip'</span></code>。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">model_file_name</span></code> : 保存模型架构的python文件名称，如spikezoo/archs/base/nets.py。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">model_cls_name</span></code> : 模型的类名称，如spikezoo/archs/base/nets.py当中的BaseNet。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">model_length</span></code> : 模型输入脉冲的长度，以将输入脉冲长度裁减为模型输入长度。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">model_length_dict</span></code> : 包含不同发行版本的输入脉冲长度。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">require_params</span></code> : 模型是否需要参数学习。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">model_params</span></code> : 模型的参数字典，用于实例化archs内的网络。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">model_params_dict</span></code>: 包含不同发行版本的模型参数字典。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ckpt_path</span></code> : 加载模型预训练权重的路径。（在local模式下使用）</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">load_state</span></code> : 是否加载预训练模型。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">multi_gpu</span></code> : 是否使用多GPU训练模式。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">base_url</span></code> : 存储不同发行版本网络权重的网络地址。</p></li>
+</ul>
+</section>
+<section id="id3">
+<h2>模型构建<a class="headerlink" href="#id3" title="Link to this heading"></a></h2>
+<p>BaseModel当中包含不同的函数，其代码如下所示：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">BaseModel</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="c1"># 模型实例化</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cfg</span><span class="p">:</span> <span class="n">BaseModelConfig</span><span class="p">):</span>
+    <span class="c1"># 模型推理接口，给定输入脉冲，输出重构图像</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spike</span><span class="p">):</span>
+    <span class="c1"># 脉冲转图像基本函数，被训练和推理输出的接口分别调用</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">spk2img</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spike</span><span class="p">):</span>
+    <span class="c1"># 网络构建函数，加载模型并选择是否加载参数</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">build_network</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">mode</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;debug&quot;</span><span class="p">,</span> <span class="s2">&quot;train&quot;</span><span class="p">,</span> <span class="s2">&quot;eval&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;debug&quot;</span><span class="p">,</span>
+        <span class="n">version</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;local&quot;</span><span class="p">,</span> <span class="s2">&quot;v010&quot;</span><span class="p">,</span> <span class="s2">&quot;v023&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;local&quot;</span><span class="p">,</span>
+    <span class="p">):</span>
+    <span class="c1"># 网络保存</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">save_network</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">save_path</span><span class="p">):</span>
+    <span class="c1"># 输入脉冲长度裁剪</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">crop_spike_length</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spike</span><span class="p">):</span>
+    <span class="c1"># 输入脉冲预处理（图像尺寸，脉冲表征等）</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">preprocess_spike</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spike</span><span class="p">):</span>
+    <span class="c1"># 输出图像后处理（图像尺寸、脉冲转化系数亮度矫正等）</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">postprocess_img</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">image</span><span class="p">):</span>
+    <span class="c1"># 获得训练输出outputs字典（训练阶段可能会有多个输出，但推理阶段仅只有重构图像单个输出）</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_outputs_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch</span><span class="p">):</span>
+    <span class="c1"># 获得需要保存的图像字典</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_visual_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch</span><span class="p">,</span> <span class="n">outputs</span><span class="p">):</span>
+    <span class="c1"># 根据输出outputs和输入batch计算损失</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_loss_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">outputs</span><span class="p">,</span> <span class="n">batch</span><span class="p">,</span> <span class="n">loss_weight_dict</span><span class="p">):</span>
+    <span class="c1"># 损失函数定义</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_loss_func</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;l1&quot;</span><span class="p">,</span> <span class="s2">&quot;l2&quot;</span><span class="p">]):</span>
+    <span class="c1"># 获得用于计算图像恢复性能指标的重构图像和真实清晰图像</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_paired_imgs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch</span><span class="p">,</span> <span class="n">outputs</span><span class="p">):</span>
+    <span class="c1"># 将输入数据送入设备当中</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">feed_to_device</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch</span><span class="p">):</span>
+</pre></div>
+</div>
+</section>
+<section id="model-use">
+<span id="id4"></span><h2>基本使用<a class="headerlink" href="#model-use" title="Link to this heading"></a></h2>
+<p>模型可以在pipeline管线中和dataset结合以实现针对数据集的推理和训练，也可以单独使用</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">spikezoo</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sz</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">spikezoo.models.base_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span><span class="p">,</span> <span class="n">BaseModelConfig</span>
+<span class="c1"># input data</span>
+<span class="n">spike</span> <span class="o">=</span> <span class="n">sz</span><span class="o">.</span><span class="n">load_vidar_dat</span><span class="p">(</span><span class="s2">&quot;data/data.dat&quot;</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">250</span><span class="p">,</span> <span class="n">out_format</span><span class="o">=</span><span class="s2">&quot;tensor&quot;</span><span class="p">)</span>
+<span class="n">spike</span> <span class="o">=</span> <span class="n">spike</span><span class="p">[</span><span class="kc">None</span><span class="p">]</span><span class="o">.</span><span class="n">cuda</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Input spike shape: </span><span class="si">{</span><span class="n">spike</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="c1"># net</span>
+<span class="n">net</span> <span class="o">=</span> <span class="n">BaseModel</span><span class="p">(</span><span class="n">BaseModelConfig</span><span class="p">(</span><span class="n">model_params</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;inDim&quot;</span><span class="p">:</span> <span class="mi">41</span><span class="p">}))</span>
+<span class="n">net</span><span class="o">.</span><span class="n">build_network</span><span class="p">(</span><span class="n">mode</span> <span class="o">=</span> <span class="s2">&quot;debug&quot;</span><span class="p">)</span>
+<span class="c1"># process</span>
+<span class="n">recon_img</span> <span class="o">=</span> <span class="n">net</span><span class="p">(</span><span class="n">spike</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">recon_img</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span><span class="n">recon_img</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span><span class="n">recon_img</span><span class="o">.</span><span class="n">min</span><span class="p">())</span>
+</pre></div>
+</div>
+<p>这里，模型的实例化方式是将配置参数直接传入BaseModel当中，后续在构建网络build_network的时候，
+有几种组合方式。</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># 1. 构建网络并设置为推理状态，是否加载权重由config参数决定</span>
+<span class="n">net</span><span class="o">.</span><span class="n">build_network</span><span class="p">(</span><span class="n">mode</span> <span class="o">=</span> <span class="s2">&quot;debug&quot;</span><span class="p">)</span>
+<span class="c1"># 2. 构建网络并设置为训练状态，是否加载权重由config参数决定</span>
+<span class="n">net</span><span class="o">.</span><span class="n">build_network</span><span class="p">(</span><span class="n">mode</span> <span class="o">=</span> <span class="s2">&quot;train&quot;</span><span class="p">)</span>
+<span class="c1"># 3. 构建网络并设置为推理状态，自动加载本地config参数中指定的预训练权重</span>
+<span class="n">net</span><span class="o">.</span><span class="n">build_network</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s2">&quot;eval&quot;</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="s2">&quot;local&quot;</span><span class="p">)</span>
+<span class="c1"># 4. 构建网络并设置为推理状态，自动加载发行版的预训练权重</span>
+<span class="n">net</span><span class="o">.</span><span class="n">build_network</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s2">&quot;eval&quot;</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="s2">&quot;v023&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="id5">
+<h2>构建自定义模型<a class="headerlink" href="#id5" title="Link to this heading"></a></h2>
+<p>这里，我们以STIR为例，来介绍如何将自定义构建网络进行封装。
+首先将STIR的官方仓库clone下来并放置spikezoo/archs/stir路径下。
+接着找到定义STIR网络的文件，即spikezoo/archs/stir/models/networks_STIR.py。其中实例化类的名称为STIR。</p>
+<p>接着创建对应的模型文件为stir_model.py，对应配置参数为：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">STIRConfig</span><span class="p">(</span><span class="n">BaseModelConfig</span><span class="p">):</span>
+    <span class="c1"># 名称定义为stir，和stir_model.py保持一致。</span>
+    <span class="n">model_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;stir&quot;</span>
+    <span class="c1"># 位于archs 路径下的models.networks_STIR</span>
+    <span class="n">model_file_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;models.networks_STIR&quot;</span>
+    <span class="c1"># 模型类名称为STIR</span>
+    <span class="n">model_cls_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;STIR&quot;</span>
+    <span class="c1"># 模型输入长度</span>
+    <span class="n">model_length</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">61</span>
+    <span class="c1"># 需要参数</span>
+    <span class="n">require_params</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="c1"># 使用模型默认参数</span>
+    <span class="n">model_params</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="p">{})</span>
+</pre></div>
+</div>
+<p>接着构建其对应的model文件，由于STIR存在多个下采样和上采样模块，故需要对脉冲输入尺寸进行预处理，同时STIR在训练时输出包含多个输出，
+需要重写基类对应的函数。</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">STIR</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cfg</span><span class="p">:</span> <span class="n">BaseModelConfig</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">STIR</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">cfg</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">preprocess_spike</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spike</span><span class="p">):</span>
+        <span class="n">spike</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">crop_spike_length</span><span class="p">(</span><span class="n">spike</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">spike_size</span> <span class="o">==</span> <span class="p">(</span><span class="mi">250</span><span class="p">,</span> <span class="mi">400</span><span class="p">):</span>
+            <span class="n">spike</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">([</span><span class="n">spike</span><span class="p">,</span> <span class="n">spike</span><span class="p">[:,</span> <span class="p">:,</span> <span class="o">-</span><span class="mi">6</span><span class="p">:]],</span> <span class="n">dim</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">spike_size</span> <span class="o">==</span> <span class="p">(</span><span class="mi">480</span><span class="p">,</span> <span class="mi">854</span><span class="p">):</span>
+            <span class="n">spike</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">([</span><span class="n">spike</span><span class="p">,</span> <span class="n">spike</span><span class="p">[:,</span> <span class="p">:,</span> <span class="p">:,</span> <span class="o">-</span><span class="mi">10</span><span class="p">:]],</span> <span class="n">dim</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">spike</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">postprocess_img</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">image</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">spike_size</span> <span class="o">==</span> <span class="p">(</span><span class="mi">250</span><span class="p">,</span> <span class="mi">400</span><span class="p">):</span>
+            <span class="n">image</span> <span class="o">=</span> <span class="n">image</span><span class="p">[:,</span> <span class="p">:,</span> <span class="p">:</span><span class="mi">250</span><span class="p">,</span> <span class="p">:]</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">spike_size</span> <span class="o">==</span> <span class="p">(</span><span class="mi">480</span><span class="p">,</span> <span class="mi">854</span><span class="p">):</span>
+            <span class="n">image</span> <span class="o">=</span> <span class="n">image</span><span class="p">[:,</span> <span class="p">:,</span> <span class="p">:,</span> <span class="p">:</span><span class="mi">854</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">image</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_outputs_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch</span><span class="p">):</span>
+        <span class="n">spike</span> <span class="o">=</span> <span class="n">batch</span><span class="p">[</span><span class="s2">&quot;spike&quot;</span><span class="p">]</span>
+        <span class="n">rate</span> <span class="o">=</span> <span class="n">batch</span><span class="p">[</span><span class="s2">&quot;rate&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">float</span><span class="p">()</span>
+        <span class="n">outputs</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">spike</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">preprocess_spike</span><span class="p">(</span><span class="n">spike</span><span class="p">)</span>
+        <span class="n">img_pred_0</span><span class="p">,</span> <span class="n">Fs_lv_0</span><span class="p">,</span> <span class="n">Fs_lv_1</span><span class="p">,</span> <span class="n">Fs_lv_2</span><span class="p">,</span> <span class="n">Fs_lv_3</span><span class="p">,</span> <span class="n">Fs_lv_4</span><span class="p">,</span> <span class="n">Est</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="p">(</span><span class="n">spike</span><span class="p">)</span>
+        <span class="n">img_pred_0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">postprocess_img</span><span class="p">(</span><span class="n">img_pred_0</span><span class="p">)</span>
+        <span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;recon_img&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">img_pred_0</span> <span class="o">/</span> <span class="n">rate</span>
+        <span class="k">return</span> <span class="n">outputs</span>
+</pre></div>
+</div>
+</section>
+</section>
+
 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="页脚">
         <a href="%E6%95%B0%E6%8D%AE%E9%9B%86.html" class="btn btn-neutral float-left" title="数据集" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
-        <a href="%E5%A4%84%E7%90%86%E7%AE%A1%E7%BA%BF.html" class="btn btn-neutral float-right" title="&lt;no title&gt;" accesskey="n" rel="next">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="%E5%A4%84%E7%90%86%E7%AE%A1%E7%BA%BF.html" class="btn btn-neutral float-right" title="处理管线" accesskey="n" rel="next">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

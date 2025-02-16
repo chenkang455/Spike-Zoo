@@ -1,7 +1,4 @@
-函数库
-=======================
-
-spikezoo.utils package
+spikezoo.utils 
 -------------------
 
 .. py:function:: load_vidar_dat(filename, height, width,remove_head=False,version: Literal["python", "cpp"] = "cpp", out_format: Literal["array", "tensor"] = "array")

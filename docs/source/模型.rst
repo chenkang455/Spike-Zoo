@@ -1,0 +1,193 @@
+模型
+=======================
+
+Spike-Zoo的模型是对网络架构的封装，以实现对模型输入脉冲的预处理、输出图像的后处理并赋予
+模型保存和损失函数计算等训练特性。
+
+具体而言，如果有一个网络已设计好的脉冲重构网络，可以将其放置在archs文件夹下并通过model将其进一步封装。
+
+参数配置
+----------------
+类似地，模型的配置参数如下：
+
+.. code-block:: python
+
+    @dataclass
+    class BaseModelConfig:
+        # ------------- Not Recommended to Change -------------
+        "Registerd model name."
+        model_name: str = "base"
+        "File name of the specified model."
+        model_file_name: str = "nets"
+        "Class name of the specified model in spikezoo/archs/base/{model_file_name}.py."
+        model_cls_name: str = "BaseNet"
+        "Spike input length. (local mode)"
+        model_length: int = 41
+        "Spike input length for different versions."
+        model_length_dict: dict = field(default_factory=lambda: {"v010": 41, "v023": 41})
+        "Model require model parameters or not."
+        require_params: bool = True
+        "Model parameters. (local mode)"
+        model_params: dict = field(default_factory=lambda: {})
+        "Model parameters for different versions."
+        model_params_dict: dict = field(default_factory=lambda: {"v010": {}, "v023": {}})
+        # ------------- Config -------------
+        "Load ckpt path. Used on the local mode."
+        ckpt_path: str = ""
+        "Load pretrained weights or not. (default false, set to true during the evaluation mode.)"
+        load_state: bool = False
+        "Multi-GPU setting."
+        multi_gpu: bool = False
+        "Base url."
+        base_url: str = "https://github.com/chenkang455/Spike-Zoo/releases/download"
+
+参数解释如下：
+
+- ``model_name`` : 模型的名称，如 ``'base'``, ``'spk2imgnet'`` 和 ``'spikeclip'``。
+- ``model_file_name`` : 保存模型架构的python文件名称，如spikezoo/archs/base/nets.py。
+- ``model_cls_name`` : 模型的类名称，如spikezoo/archs/base/nets.py当中的BaseNet。
+- ``model_length`` : 模型输入脉冲的长度，以将输入脉冲长度裁减为模型输入长度。
+- ``model_length_dict`` : 包含不同发行版本的输入脉冲长度。
+- ``require_params`` : 模型是否需要参数学习。
+- ``model_params`` : 模型的参数字典，用于实例化archs内的网络。
+- ``model_params_dict``: 包含不同发行版本的模型参数字典。 
+- ``ckpt_path`` : 加载模型预训练权重的路径。（在local模式下使用）
+- ``load_state`` : 是否加载预训练模型。
+- ``multi_gpu`` : 是否使用多GPU训练模式。
+- ``base_url`` : 存储不同发行版本网络权重的网络地址。
+
+模型构建
+----------------
+BaseModel当中包含不同的函数，其代码如下所示：
+
+.. code-block:: python
+
+    class BaseModel(nn.Module):
+        # 模型实例化
+        def __init__(self, cfg: BaseModelConfig):
+        # 模型推理接口，给定输入脉冲，输出重构图像
+        def forward(self, spike):
+        # 脉冲转图像基本函数，被训练和推理输出的接口分别调用
+        def spk2img(self, spike):
+        # 网络构建函数，加载模型并选择是否加载参数
+        def build_network(
+            self,
+            mode: Literal["debug", "train", "eval"] = "debug",
+            version: Literal["local", "v010", "v023"] = "local",
+        ):
+        # 网络保存
+        def save_network(self, save_path):
+        # 输入脉冲长度裁剪
+        def crop_spike_length(self, spike):
+        # 输入脉冲预处理（图像尺寸，脉冲表征等）
+        def preprocess_spike(self, spike):
+        # 输出图像后处理（图像尺寸、脉冲转化系数亮度矫正等）
+        def postprocess_img(self, image):
+        # 获得训练输出outputs字典（训练阶段可能会有多个输出，但推理阶段仅只有重构图像单个输出）
+        def get_outputs_dict(self, batch):
+        # 获得需要保存的图像字典
+        def get_visual_dict(self, batch, outputs):
+        # 根据输出outputs和输入batch计算损失
+        def get_loss_dict(self, outputs, batch, loss_weight_dict):
+        # 损失函数定义
+        def get_loss_func(self, name: Literal["l1", "l2"]):
+        # 获得用于计算图像恢复性能指标的重构图像和真实清晰图像
+        def get_paired_imgs(self, batch, outputs):
+        # 将输入数据送入设备当中
+        def feed_to_device(self, batch):
+
+
+.. _model_use:
+
+基本使用
+----------------
+模型可以在pipeline管线中和dataset结合以实现针对数据集的推理和训练，也可以单独使用
+
+.. code-block:: python
+
+    import spikezoo as sz
+    from spikezoo.models.base_model import BaseModel, BaseModelConfig
+    # input data
+    spike = sz.load_vidar_dat("data/data.dat", width=400, height=250, out_format="tensor")
+    spike = spike[None].cuda()
+    print(f"Input spike shape: {spike.shape}")
+    # net
+    net = BaseModel(BaseModelConfig(model_params={"inDim": 41}))
+    net.build_network(mode = "debug")
+    # process
+    recon_img = net(spike)
+    print(recon_img.shape,recon_img.max(),recon_img.min())
+
+这里，模型的实例化方式是将配置参数直接传入BaseModel当中，后续在构建网络build_network的时候，
+有几种组合方式。
+
+.. code-block:: python
+
+    # 1. 构建网络并设置为推理状态，是否加载权重由config参数决定
+    net.build_network(mode = "debug")
+    # 2. 构建网络并设置为训练状态，是否加载权重由config参数决定
+    net.build_network(mode = "train")
+    # 3. 构建网络并设置为推理状态，自动加载本地config参数中指定的预训练权重
+    net.build_network(mode="eval", version="local")
+    # 4. 构建网络并设置为推理状态，自动加载发行版的预训练权重
+    net.build_network(mode="eval", version="v023")
+
+
+构建自定义模型
+----------------
+这里，我们以STIR为例，来介绍如何将自定义构建网络进行封装。
+首先将STIR的官方仓库clone下来并放置spikezoo/archs/stir路径下。
+接着找到定义STIR网络的文件，即spikezoo/archs/stir/models/networks_STIR.py。其中实例化类的名称为STIR。
+
+接着创建对应的模型文件为stir_model.py，对应配置参数为：
+
+.. code-block:: python
+
+    @dataclass
+    class STIRConfig(BaseModelConfig):
+        # 名称定义为stir，和stir_model.py保持一致。
+        model_name: str = "stir"
+        # 位于archs 路径下的models.networks_STIR
+        model_file_name: str = "models.networks_STIR"
+        # 模型类名称为STIR
+        model_cls_name: str = "STIR"
+        # 模型输入长度
+        model_length: int = 61
+        # 需要参数
+        require_params: bool = True
+        # 使用模型默认参数
+        model_params: dict = field(default_factory=lambda: {})
+
+接着构建其对应的model文件，由于STIR存在多个下采样和上采样模块，故需要对脉冲输入尺寸进行预处理，同时STIR在训练时输出包含多个输出，
+需要重写基类对应的函数。
+
+.. code-block:: python
+
+    class STIR(BaseModel):
+        def __init__(self, cfg: BaseModelConfig):
+            super(STIR, self).__init__(cfg)
+
+        def preprocess_spike(self, spike):
+            spike = self.crop_spike_length(spike)
+            if self.spike_size == (250, 400):
+                spike = torch.cat([spike, spike[:, :, -6:]], dim=2)
+            elif self.spike_size == (480, 854):
+                spike = torch.cat([spike, spike[:, :, :, -10:]], dim=3)
+            return spike
+
+        def postprocess_img(self, image):
+            if self.spike_size == (250, 400):
+                image = image[:, :, :250, :]
+            elif self.spike_size == (480, 854):
+                image = image[:, :, :, :854]
+            return image
+
+        def get_outputs_dict(self, batch):
+            spike = batch["spike"]
+            rate = batch["rate"].view(-1, 1, 1, 1).float()
+            outputs = {}
+            spike = self.preprocess_spike(spike)
+            img_pred_0, Fs_lv_0, Fs_lv_1, Fs_lv_2, Fs_lv_3, Fs_lv_4, Est = self.net(spike)
+            img_pred_0 = self.postprocess_img(img_pred_0)
+            outputs["recon_img"] = img_pred_0 / rate
+            return outputs

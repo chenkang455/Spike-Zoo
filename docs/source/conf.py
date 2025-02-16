@@ -15,7 +15,9 @@ release = 'v0.2'
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
 extensions = [
-    'sphinx_rtd_theme'
+    'sphinx_rtd_theme',
+    'sphinx.ext.autodoc',   # 启用自动化文档生成
+    'sphinx_autodoc_typehints'  # 如果需要自动显示类型提示
 ]
 
 

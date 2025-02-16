@@ -5,12 +5,12 @@ Spike-Zoo目前包含Spk2ImgNet论文中发布的REDS数据集（命名为reds_b
 BASE 数据集是REDS_BASE数据集的子集，以存储在对应路径当中，无需额外下载。
 
 数据格式
------------
+----------------
 数据集的代码包含参数配置（BaseDatasetConfig）和数据类（BaseDataset）两部分。后续所有类别均直接在该基类上继承即可。
 
 数据集的组织形式，以BASE数据集为例。
 
-.. code-block:: python
+.. code-block:: console
 
     base
     ├── test
@@ -26,7 +26,7 @@ BASE 数据集是REDS_BASE数据集的子集，以存储在对应路径当中，
 
     @dataclass
     class BaseDatasetConfig:
-        # ------------- Not Recommended to Change -------------
+        # ------------------ Not Recommended to Change ------------------
         "Dataset name."
         dataset_name: str = "base"
         "Directory specifying location of data."
@@ -46,7 +46,7 @@ BASE 数据集是REDS_BASE数据集的子集，以存储在对应路径当中，
         "Dir name for the image."
         img_dir_name: str = "gt"
 
-        # ------------- Config -------------
+        # ------------------ Config ------------------
         "Dataset split: train/test. Default set as the 'test' for evaluation."
         split: Literal["train", "test"] = "test"
         "Use the data augumentation technique or not."
@@ -98,12 +98,12 @@ BASE 数据集是REDS_BASE数据集的子集，以存储在对应路径当中，
 
 
 构建自己的数据集
------------
+----------------
 我们以Spike-Zoo标准仿真管线得到的数据集为例，解释如何在已有基类数据集基础上开发自己的数据集。
 
 数据集的格式如下所示
 
-.. code-block:: python
+.. code-block:: console
 
     root
     ├── test
@@ -140,7 +140,7 @@ BASE 数据集是REDS_BASE数据集的子集，以存储在对应路径当中，
         # 设置为1
         rate: float = 1
 
-针对数据集基类，直接继承BASE类数据集即可。
+针对数据集类别，由于数据获取逻辑一致，直接继承BASE类数据集即可。
 
 .. code-block:: python
 

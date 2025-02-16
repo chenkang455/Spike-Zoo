@@ -15,14 +15,14 @@
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
       <script src="_static/documentation_options.js?v=e0f13565"></script>
-      <script src="_static/doctools.js?v=9a2dae69"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
       <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
       <script src="_static/translations.js?v=beaddf03"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="索引" href="genindex.html" />
     <link rel="search" title="搜索" href="search.html" />
     <link rel="next" title="&lt;no title&gt;" href="%E4%BD%BF%E7%94%A8%E4%BE%8B%E5%AD%90.html" />
-    <link rel="prev" title="&lt;no title&gt;" href="%E5%87%BD%E6%95%B0%E5%BA%93.html" /> 
+    <link rel="prev" title="函数库" href="%E5%87%BD%E6%95%B0%E5%BA%93.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -52,13 +52,36 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B.html#id5">训练</a></li>
-<li class="toctree-l2"><a class="reference internal" href="%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B.html#id6">模型直接使用</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B.html#id6">模型基本用法</a></li>
 <li class="toctree-l2"><a class="reference internal" href="%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B.html#id7">脉冲函数库</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="%E6%95%B0%E6%8D%AE%E9%9B%86.html">数据集</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="%E6%95%B0%E6%8D%AE%E9%9B%86.html#id2">数据格式</a></li>
 <li class="toctree-l2"><a class="reference internal" href="%E6%95%B0%E6%8D%AE%E9%9B%86.html#id3">构建自己的数据集</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="%E6%A8%A1%E5%9E%8B.html">模型</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="%E6%A8%A1%E5%9E%8B.html#id2">参数配置</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E6%A8%A1%E5%9E%8B.html#id3">模型构建</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E6%A8%A1%E5%9E%8B.html#model-use">基本使用</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E6%A8%A1%E5%9E%8B.html#id5">构建自定义模型</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="%E5%A4%84%E7%90%86%E7%AE%A1%E7%BA%BF.html">处理管线</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="%E5%A4%84%E7%90%86%E7%AE%A1%E7%BA%BF.html#id2">推理管线</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="%E5%A4%84%E7%90%86%E7%AE%A1%E7%BA%BF.html#eval-config">参数配置</a></li>
+<li class="toctree-l3"><a class="reference internal" href="%E5%A4%84%E7%90%86%E7%AE%A1%E7%BA%BF.html#eval-initial">实例化</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="%E5%A4%84%E7%90%86%E7%AE%A1%E7%BA%BF.html#id5">训练</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="%E5%87%BD%E6%95%B0%E5%BA%93.html">函数库</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="%E5%87%BD%E6%95%B0%E5%BA%93.html#spikezoo-utils-package">spikezoo.utils package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="%E5%87%BD%E6%95%B0%E5%BA%93.html#load_vidar_dat"><code class="docutils literal notranslate"><span class="pre">load_vidar_dat()</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -82,7 +105,7 @@
             <a href="_sources/脉冲仿真.rst.txt" rel="nofollow"> 查看页面源码</a>
       </li>
   </ul><div class="rst-breadcrumbs-buttons" role="navigation" aria-label="顺序式页面导航">
-        <a href="%E5%87%BD%E6%95%B0%E5%BA%93.html" class="btn btn-neutral float-left" title="&lt;no title&gt;" accesskey="p"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="%E5%87%BD%E6%95%B0%E5%BA%93.html" class="btn btn-neutral float-left" title="函数库" accesskey="p"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
         <a href="%E4%BD%BF%E7%94%A8%E4%BE%8B%E5%AD%90.html" class="btn btn-neutral float-right" title="&lt;no title&gt;" accesskey="n">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
   </div>
   <hr/>
@@ -95,7 +118,7 @@
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="页脚">
-        <a href="%E5%87%BD%E6%95%B0%E5%BA%93.html" class="btn btn-neutral float-left" title="&lt;no title&gt;" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="%E5%87%BD%E6%95%B0%E5%BA%93.html" class="btn btn-neutral float-left" title="函数库" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
         <a href="%E4%BD%BF%E7%94%A8%E4%BE%8B%E5%AD%90.html" class="btn btn-neutral float-right" title="&lt;no title&gt;" accesskey="n" rel="next">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 

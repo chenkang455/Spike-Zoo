@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Spike-Zoo 介绍 &mdash; Spike-Zoo v0.2 文档</title>
+  <title>Spike-Zoo 文档 &mdash; Spike-Zoo v0.2 文档</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="_static/css/custom.css" />
@@ -15,7 +15,7 @@
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
       <script src="_static/documentation_options.js?v=e0f13565"></script>
-      <script src="_static/doctools.js?v=9a2dae69"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
       <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
       <script src="_static/translations.js?v=beaddf03"></script>
     <script src="_static/js/theme.js"></script>
@@ -51,13 +51,35 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B.html#id5">训练</a></li>
-<li class="toctree-l2"><a class="reference internal" href="%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B.html#id6">模型直接使用</a></li>
-<li class="toctree-l2"><a class="reference internal" href="%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B.html#id7">脉冲函数库</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B.html#id6">模型基本用法</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="%E6%95%B0%E6%8D%AE%E9%9B%86.html">数据集</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="%E6%95%B0%E6%8D%AE%E9%9B%86.html#id2">数据格式</a></li>
 <li class="toctree-l2"><a class="reference internal" href="%E6%95%B0%E6%8D%AE%E9%9B%86.html#id3">构建自己的数据集</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="%E6%A8%A1%E5%9E%8B.html">模型</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="%E6%A8%A1%E5%9E%8B.html#id2">参数配置</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E6%A8%A1%E5%9E%8B.html#id3">模型构建</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E6%A8%A1%E5%9E%8B.html#model-use">基本使用</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E6%A8%A1%E5%9E%8B.html#id5">构建自定义模型</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="%E5%A4%84%E7%90%86%E7%AE%A1%E7%BA%BF.html">处理管线</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="%E5%A4%84%E7%90%86%E7%AE%A1%E7%BA%BF.html#id2">推理管线</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="%E5%A4%84%E7%90%86%E7%AE%A1%E7%BA%BF.html#eval-config">参数配置</a></li>
+<li class="toctree-l3"><a class="reference internal" href="%E5%A4%84%E7%90%86%E7%AE%A1%E7%BA%BF.html#eval-initial">实例化</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="%E5%A4%84%E7%90%86%E7%AE%A1%E7%BA%BF.html#id5">训练</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">APIs</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="spikezoo.utils.html">spikezoo.utils</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="spikezoo.utils.html#load_vidar_dat"><code class="docutils literal notranslate"><span class="pre">load_vidar_dat()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -76,7 +98,7 @@
           <div role="navigation" aria-label="页面导航">
   <ul class="wy-breadcrumbs">
       <li><a href="#" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">Spike-Zoo 介绍</li>
+      <li class="breadcrumb-item active">Spike-Zoo 文档</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/index.rst.txt" rel="nofollow"> 查看页面源码</a>
       </li>
@@ -89,24 +111,23 @@
            <div itemprop="articleBody">
              
   <section id="spike-zoo">
-<h1>Spike-Zoo 介绍<a class="headerlink" href="#spike-zoo" title="Link to this heading"></a></h1>
-<p>⚡ <a class="reference external" href="https://github.com/chenkang455/Spike-Zoo">Spike-Zoo</a> 是一个针对脉冲相机 (Spike Camera) 图像重构网络进行推理和训练的框架。
-支持：</p>
+<h1>Spike-Zoo 文档<a class="headerlink" href="#spike-zoo" title="Link to this heading"></a></h1>
+<p>⚡ <a class="reference external" href="https://github.com/chenkang455/Spike-Zoo">Spike-Zoo</a> 是一个用于脉冲相机（Spike Camera）图像重构网络的推理和训练框架，主要功能包括：</p>
 <ol class="arabic simple">
-<li><p>使用预训练权重进行多个重构模型的快速 <strong>推理</strong>。</p></li>
+<li><p>使用预训练权重，快速进行多个重构模型的 <strong>推理</strong>。</p></li>
 <li><p><strong>训练</strong> 自定义设计的脉冲图像重构网络。</p></li>
-<li><p>提供处理脉冲数据的各类 <strong>函数</strong>。</p></li>
+<li><p>提供多种处理脉冲数据的 <strong>函数</strong>。</p></li>
 </ol>
 <section id="id1">
 <h2>安装<a class="headerlink" href="#id1" title="Link to this heading"></a></h2>
 <ul class="simple">
-<li><p>从 <code class="docutils literal notranslate"><span class="pre">pypi</span></code> 直接安装最新的稳定版本：</p></li>
+<li><p>从 <code class="docutils literal notranslate"><span class="pre">pypi</span></code> 安装最新的稳定版本：</p></li>
 </ul>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">pip install spikezoo</span>
 </pre></div>
 </div>
 <ul class="simple">
-<li><p>从 <code class="docutils literal notranslate"><span class="pre">github</span></code> 安装最新开发版本：</p></li>
+<li><p>从 <code class="docutils literal notranslate"><span class="pre">github</span></code> 安装最新的开发版本：</p></li>
 </ul>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">git clone https://github.com/chenkang455/Spike-Zoo</span>
 <span class="go">cd Spike-Zoo</span>
@@ -114,16 +135,16 @@
 </pre></div>
 </div>
 <ul class="simple">
-<li><p>基于 <code class="docutils literal notranslate"><span class="pre">develop</span></code> 模式安装，方便调试训练自定义网络。</p></li>
+<li><p>使用 <code class="docutils literal notranslate"><span class="pre">develop</span></code> 模式安装，便于调试和训练自定义网络：</p></li>
 </ul>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">git clone https://github.com/chenkang455/Spike-Zoo</span>
 <span class="go">cd Spike-Zoo</span>
-<span class="go">python setup.py setup</span>
+<span class="go">python setup.py develop</span>
 </pre></div>
 </div>
 <div class="admonition note">
 <p class="admonition-title">备注</p>
-<p>有任何BUG、需求或新的脉冲重构方法，欢迎提出 <code class="docutils literal notranslate"><span class="pre">issue</span></code> 或 <code class="docutils literal notranslate"><span class="pre">Pull</span> <span class="pre">Request</span></code>。</p>
+<p>如有任何问题或需求，欢迎提出 <code class="docutils literal notranslate"><span class="pre">issue</span></code>。也欢迎通过 <code class="docutils literal notranslate"><span class="pre">Pull</span> <span class="pre">Request</span></code> 将自定义方法加入到 Spike-Zoo 中。</p>
 </div>
 </section>
 <section id="id2">
@@ -133,13 +154,24 @@
 <li class="toctree-l1"><a class="reference internal" href="%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B.html">快速开始</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B.html#id2">推理</a></li>
 <li class="toctree-l2"><a class="reference internal" href="%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B.html#id5">训练</a></li>
-<li class="toctree-l2"><a class="reference internal" href="%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B.html#id6">模型直接使用</a></li>
-<li class="toctree-l2"><a class="reference internal" href="%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B.html#id7">脉冲函数库</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B.html#id6">模型基本用法</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="%E6%95%B0%E6%8D%AE%E9%9B%86.html">数据集</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="%E6%95%B0%E6%8D%AE%E9%9B%86.html#id2">数据格式</a></li>
 <li class="toctree-l2"><a class="reference internal" href="%E6%95%B0%E6%8D%AE%E9%9B%86.html#id3">构建自己的数据集</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="%E6%A8%A1%E5%9E%8B.html">模型</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="%E6%A8%A1%E5%9E%8B.html#id2">参数配置</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E6%A8%A1%E5%9E%8B.html#id3">模型构建</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E6%A8%A1%E5%9E%8B.html#model-use">基本使用</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E6%A8%A1%E5%9E%8B.html#id5">构建自定义模型</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="%E5%A4%84%E7%90%86%E7%AE%A1%E7%BA%BF.html">处理管线</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="%E5%A4%84%E7%90%86%E7%AE%A1%E7%BA%BF.html#id2">推理管线</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E5%A4%84%E7%90%86%E7%AE%A1%E7%BA%BF.html#id5">训练</a></li>
 </ul>
 </li>
 </ul>
@@ -156,6 +188,26 @@
 </ul>
 <p>同时，感谢 <a class="reference external" href="https://github.com/ruizhao26">rui zhao</a> 、<a class="reference external" href="https://github.com/Leozhangjiyuan">jiyuan zhang</a> 以及 <a class="reference external" href="https://github.com/hnmizuho">shiyan chen</a>
 对我们项目的帮助。</p>
+</section>
+<section id="id4">
+<h2>引用<a class="headerlink" href="#id4" title="Link to this heading"></a></h2>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">@misc{spikezoo,</span>
+<span class="go">title={{Spike-Zoo}: Spike-Zoo: A Toolbox for Spike-to-Image Reconstruction},</span>
+<span class="go">author={Kang Chen and Zhiyuan Ye and Tiejun Huang and Zhaofei Yu},</span>
+<span class="go">year={2025},</span>
+<span class="go">howpublished = &quot;[Online]. Available: \url{https://github.com/chenkang455/Spike-Zoo}&quot;</span>
+<span class="go">}</span>
+</pre></div>
+</div>
+<div class="toctree-wrapper compound" id="apis">
+<p class="caption" role="heading"><span class="caption-text">APIs</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="spikezoo.utils.html">spikezoo.utils</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="spikezoo.utils.html#load_vidar_dat"><code class="docutils literal notranslate"><span class="pre">load_vidar_dat()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</div>
 </section>
 </section>
 

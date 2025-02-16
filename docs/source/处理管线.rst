@@ -1,0 +1,214 @@
+处理管线
+=======================
+处理管线的作用是对模型和数据集进行封装，以实现单个模型推理、训练和多个模型的推理。
+
+
+推理管线
+----------------
+
+.. _eval_config:
+
+参数配置
+^^^^^^^^^^^
+
+单一模型管线参数配置如下：
+
+.. code-block:: python
+
+    @dataclass
+    class PipelineConfig:
+        "Loading weights from local or version on the url."
+        version: Literal["local", "v010", "v023"] = "local"
+        "Save folder for the code running result."
+        save_folder: str = ""
+        "Saved experiment name."
+        exp_name: str = ""
+        "Evaluate metrics or not."
+        save_metric: bool = True
+        "Metric names for evaluation."
+        metric_names: List[str] = field(default_factory=lambda: ["psnr", "ssim","niqe","brisque"])
+        "Save recoverd images or not."
+        save_img: bool = True
+        "Normalizing recoverd images and gt or not."
+        save_img_norm: bool = False
+        "Different modes for the pipeline."
+        _mode: Literal["single_mode", "multi_mode", "train_mode"] = "single_mode"
+
+参数解释如下：
+
+- ``version`` : 指定从本地路径还是发行版加载权重。
+- ``save_folder`` : 输出日志和保存图片的路径。
+- ``exp_name`` : 实验名称。（未赋值则为当前时间戳）
+- ``save_metric`` : 是否保存指标输出。
+- ``metric_names`` : 选取输出的指标。
+- ``save_img`` : 是否保存图片。
+- ``save_img_norm`` : 是否归一化保存的图片。
+- ``_mode`` : 指定管线所处的模式为 ``single_mode`` (私有变量)。
+
+集成模型管线参数配置如下：
+
+.. code-block:: python
+
+    @dataclass
+    class EnsemblePipelineConfig(PipelineConfig):
+        _mode: Literal["single_mode", "multi_mode", "train_mode"] = "multi_mode"
+
+参数解释如下：
+
+- ``_mode`` : 指定管线所处的模式为 ``multi_mode`` 。(私有变量)。
+
+.. _eval_initial:
+
+实例化
+^^^^^^^^^^^
+
+**单一模型管线** 的构建代码如下：
+
+.. code-block:: python
+
+    class Pipeline:
+        def __init__(
+            self,
+            cfg: PipelineConfig,
+            model_cfg: Union[sz.METHOD, BaseModelConfig],
+            dataset_cfg: Union[sz.DATASET, BaseDatasetConfig],
+        ):
+            self.cfg = cfg
+            self._setup_model_data(model_cfg, dataset_cfg)
+            self._setup_pipeline()
+
+针对模型和数据，我们提供两种参数初始化方式。
+
+- 默认参数初始化
+
+.. code-block:: python
+
+    from spikezoo.pipeline import Pipeline, PipelineConfig
+    import spikezoo as sz
+    pipeline = Pipeline(
+        cfg=PipelineConfig(save_folder="results",version="v023"),
+        model_cfg=sz.METHOD.BASE,
+        dataset_cfg=sz.DATASET.BASE 
+    )
+
+- 自定义参数初始化 (推荐)
+
+.. code-block:: python
+
+    from spikezoo.pipeline import Pipeline, PipelineConfig
+    from spikezoo.models.base_model import BaseModelConfig
+    from spikezoo.datasets.base_dataset import BaseDatasetConfig
+    import spikezoo as sz
+    # 方式一、从发行版v023中加载预训练权重
+    pipeline = Pipeline(
+        cfg=PipelineConfig(save_folder="results",version="v023"),
+        model_cfg=BaseModelConfig(),
+        dataset_cfg=BaseDatasetConfig()
+    )
+    # 方式二、从本地路径直接加载预训练权重
+    pipeline = Pipeline(
+        cfg=PipelineConfig(save_folder="results",version="local"),
+        model_cfg=BaseModelConfig(ckpt_path="spikezoo/models/weights/v023/base.pth"),
+        dataset_cfg=BaseDatasetConfig(root_dir="spikezoo/data/base")
+    )   
+
+**集成模型管线** 的构建代码如下：
+
+.. code-block:: python
+
+    class EnsemblePipeline(Pipeline):
+        def __init__(
+            self,
+            cfg: PipelineConfig,
+            model_cfg_list: Union[List[sz.METHOD], List[BaseModelConfig]],
+            dataset_cfg: Union[sz.DATASET, BaseDatasetConfig],
+        ):
+            self.cfg = cfg
+            self._setup_model_data(model_cfg_list, dataset_cfg)
+            self._setup_pipeline()
+
+- 默认参数初始化
+
+.. code-block:: python
+
+    import spikezoo as sz
+    from spikezoo.pipeline import EnsemblePipeline, EnsemblePipelineConfig
+    pipeline = EnsemblePipeline(
+        cfg=EnsemblePipelineConfig(save_folder="results",version="v023"),
+        model_cfg_list=[
+            sz.METHOD.BASE,sz.METHOD.TFP,sz.METHOD.TFI,sz.METHOD.SPK2IMGNET,sz.METHOD.WGSE,
+            sz.METHOD.SSML,sz.METHOD.BSF,sz.METHOD.STIR,sz.METHOD.SPIKECLIP,sz.METHOD.SSIR],
+        dataset_cfg=sz.DATASET.BASE,
+    )
+
+- 自定义参数初始化 (推荐)
+
+.. code-block:: python
+
+    import spikezoo as sz
+    from spikezoo.datasets.base_dataset import BaseDatasetConfig
+    from spikezoo.pipeline import EnsemblePipeline, EnsemblePipelineConfig
+    from spikezoo.models import BaseModelConfig,TFPConfig,TFIConfig,Spk2ImgNetConfig,WGSEConfig,SSMLConfig,BSFConfig,STIRConfig,SpikeCLIPConfig,SSIRConfig
+    pipeline = EnsemblePipeline(
+        cfg=EnsemblePipelineConfig(save_folder="results",version="v023"),
+        model_cfg_list=[
+            BaseModelConfig(),TFPConfig(),TFIConfig(),Spk2ImgNetConfig(),WGSEConfig(),
+            SSMLConfig(),BSFConfig(),STIRConfig(),SpikeCLIPConfig(),SSIRConfig()],
+        dataset_cfg=BaseDatasetConfig(),
+    )
+
+训练
+----------------
+训练管线在推理管线的基础上，引入了控制训练过程中所使用的优化器、损失函数等超参。
+
+.. code-block:: python
+
+    @dataclass
+    class TrainPipelineConfig(PipelineConfig):
+        # parameters setting
+        "Training epochs."
+        epochs: int = 1000
+        "Steps per to save images."
+        steps_per_save_imgs: int = 200
+        "Steps per to save model weights."
+        steps_per_save_ckpt: int = 500
+        "Steps per to calculate the metrics."
+        steps_per_cal_metrics: int = 100
+        "Step for gradient accumulation. (for snn methods)"
+        steps_grad_accumulation: int = 4
+        "Pipeline mode."
+        _mode: Literal["single_mode", "multi_mode", "train_mode"] = "train_mode"
+        "Use tensorboard or not"
+        use_tensorboard: bool = True
+        "Random seed."
+        seed: int = 521
+        # dataloader setting
+        "Batch size for the train dataloader."
+        bs_train: int = 8
+        "Num_workers for the train dataloader."
+        num_workers: int = 4
+        "Pin_memory true or false for the train dataloader."
+        pin_memory: bool = False
+
+        # train setting - optimizer & scheduler & loss_dict
+        "Optimizer config."
+        optimizer_cfg: OptimizerConfig = AdamOptimizerConfig(lr=1e-3)
+        "Scheduler config."
+        scheduler_cfg: Optional[SchedulerConfig] = None
+        "Loss dict {loss_name,weight}."
+        loss_weight_dict: Dict[Literal["l1", "l2"], float] = field(default_factory=lambda: {"l1": 1})
+
+- ``epochs`` : 训练轮次。
+- ``steps_per_save_imgs`` : 每间隔多少个epoch保存重构图片。
+- ``steps_per_save_ckpt`` : 每间隔多少个epoch保存重构模型权重。
+- ``steps_per_cal_metrics`` : 每间隔多少个epoch保存重构指标。
+- ``steps_grad_accumulation`` : 累计多少个batch的梯度（针对SNN方法）。
+- ``_mode`` : 指定管线模式。
+- ``use_tensorboard`` : 是否使用tensorboard记录输出结果。
+- ``seed`` : 随机种子。
+- ``bs_train`` : 训练过程中的batch Size设置。
+- ``num_workers`` : 训练过程中的num workers设置。
+- ``pin_memory`` : 是否使用pin_memory。
+- ``optimizer_cfg`` : 优化器设置。
+- ``scheduler_cfg`` : 调度器设置。
+- ``loss_weight_dict`` : 损失函数字典设置。
