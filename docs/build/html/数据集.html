@@ -47,15 +47,23 @@
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B.html">快速开始</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">数据集</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#id2">参数配置</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#id3">数据加载类</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#id4">实例化</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#id5">自定义数据集开发</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#dataset-prepare">数据来源</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#base">1. <code class="docutils literal notranslate"><span class="pre">BASE</span></code> 数据集</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#reds-base">2. <code class="docutils literal notranslate"><span class="pre">REDS_BASE</span></code> 数据集</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#uhsr">3. <code class="docutils literal notranslate"><span class="pre">UHSR</span></code> 数据集</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id7">参数配置</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id8">数据加载类</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id9">实例化</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id10">自定义数据集开发</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="%E6%A8%A1%E5%9E%8B.html">模型</a></li>
 <li class="toctree-l1"><a class="reference internal" href="%E5%A4%84%E7%90%86%E7%AE%A1%E7%BA%BF.html">处理管线</a></li>
 <li class="toctree-l1"><a class="reference internal" href="%E5%8F%91%E8%A1%8C%E7%89%88%E6%9C%AC%E4%BB%8B%E7%BB%8D.html">发行版本介绍</a></li>
+<li class="toctree-l1"><a class="reference internal" href="%E4%BD%BF%E7%94%A8%E4%BE%8B%E5%AD%90.html">使用示例</a></li>
+<li class="toctree-l1"><a class="reference internal" href="%E6%94%AF%E6%8C%81%E8%8C%83%E5%9B%B4.html">支持范围</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">APIs</span></p>
 <ul>
@@ -88,11 +96,25 @@
              
   <section id="id1">
 <h1>数据集<a class="headerlink" href="#id1" title="Link to this heading"></a></h1>
-<p>Spike-Zoo当前支持 <code class="docutils literal notranslate"><span class="pre">Spk2ImgNet</span></code> 论文发布的 <code class="docutils literal notranslate"><span class="pre">REDS_BASE</span></code> 和 <code class="docutils literal notranslate"><span class="pre">UHSR</span></code> 数据集。其中 <code class="docutils literal notranslate"><span class="pre">BASE</span></code> 数据集作为 <code class="docutils literal notranslate"><span class="pre">REDS_BASE</span></code> 的子集，
-已预置于 <code class="docutils literal notranslate"><span class="pre">spikezoo/data/base</span></code> 目录，无需额外下载。</p>
-<section id="id2">
-<h2>参数配置<a class="headerlink" href="#id2" title="Link to this heading"></a></h2>
-<p>以 <code class="docutils literal notranslate"><span class="pre">BASE</span></code> 数据集为例，目录结构如下：</p>
+<p>数据文件存储在 <code class="docutils literal notranslate"><span class="pre">spikezoo/data/</span></code> 路径下，组织形式如下：</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">spikezoo</span>
+<span class="go">├── data</span>
+<span class="go">|   ├── base</span>
+<span class="go">|   ├── reds_base</span>
+<span class="go">|   └── u_caltech</span>
+<span class="go">├── archs</span>
+<span class="go">...</span>
+<span class="go">└── utils</span>
+</pre></div>
+</div>
+<section id="dataset-prepare">
+<span id="id2"></span><h2>数据来源<a class="headerlink" href="#dataset-prepare" title="Link to this heading"></a></h2>
+<section id="base">
+<h3>1. <code class="docutils literal notranslate"><span class="pre">BASE</span></code> 数据集<a class="headerlink" href="#base" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><strong>介绍:</strong> 从 <code class="docutils literal notranslate"><span class="pre">REDS_BASE</span></code> 数据集中选取部分数据构建的小数据集。</p></li>
+<li><p><strong>地址:</strong> 已内置于 Spike-Zoo 仓库当中。</p></li>
+</ul>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">base</span>
 <span class="go">├── test</span>
 <span class="go">│   ├── gt</span>
@@ -102,7 +124,39 @@
 <span class="go">    └── spike</span>
 </pre></div>
 </div>
-<p>数据集配置类定义如下：</p>
+</section>
+<section id="reds-base">
+<h3>2. <code class="docutils literal notranslate"><span class="pre">REDS_BASE</span></code> 数据集<a class="headerlink" href="#reds-base" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><strong>介绍:</strong> 由 <a class="reference external" href="https://github.com/Vspacer/Spk2ImgNet">Spk2ImgNet</a> 基于REDS数据集仿真生成的脉冲-清晰图成对数据集。</p></li>
+<li><p><strong>地址:</strong>  训练集: <a class="reference external" href="https://drive.google.com/file/d/1ozR2-fNmU10gA_TCYUfJN-ahV6e_8Ke7/view">下载地址</a> | 测试集: <a class="reference external" href="https://drive.google.com/file/d/12q0yJ7V9KtF_y-ZcCn2B-q0zFP8ysdv3/view">下载地址</a></p></li>
+</ul>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">reds_base</span>
+<span class="go">├── test</span>
+<span class="go">│   ├── gt</span>
+<span class="go">│   └── spike</span>
+<span class="go">└── train</span>
+<span class="go">    ├── gt</span>
+<span class="go">    └── spike</span>
+</pre></div>
+</div>
+</section>
+<section id="uhsr">
+<h3>3. <code class="docutils literal notranslate"><span class="pre">UHSR</span></code> 数据集<a class="headerlink" href="#uhsr" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><strong>介绍:</strong> 真实拍摄脉数据集 <a class="reference external" href="https://github.com/Evin-X/UHSR">UHSR</a> ，包括 <code class="docutils literal notranslate"><span class="pre">U-CALTECH</span></code> 和 <code class="docutils literal notranslate"><span class="pre">U-CIFAR</span></code> 两部分。（使用该数据集旨在探索不同模型在暗光场景下的泛化性）</p></li>
+<li><p><strong>地址:</strong>  <a class="reference external" href="https://pan.baidu.com/share/init?surl=Qcu4OVHakE6VZfIpjS9vlQ&amp;pwd=asin">百度网盘地址</a></p></li>
+</ul>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">u_caltech</span>
+<span class="go">├── test</span>
+<span class="go">└── train</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="id7">
+<h2>参数配置<a class="headerlink" href="#id7" title="Link to this heading"></a></h2>
+<p>以 <code class="docutils literal notranslate"><span class="pre">BASE</span></code> 数据集为例，配置类定义如下：</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@dataclass</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">BaseDatasetConfig</span><span class="p">:</span>
     <span class="c1"># ------------------ Not Recommended to Change ------------------</span>
@@ -164,8 +218,8 @@
 <li><p><code class="docutils literal notranslate"><span class="pre">rate</span></code> : 表示脉冲转化系数，在 REDS_BASE 数据集中默认设置为 0.6。</p></li>
 </ul>
 </section>
-<section id="id3">
-<h2>数据加载类<a class="headerlink" href="#id3" title="Link to this heading"></a></h2>
+<section id="id8">
+<h2>数据加载类<a class="headerlink" href="#id8" title="Link to this heading"></a></h2>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">BaseDataset</span><span class="p">(</span><span class="n">Dataset</span><span class="p">):</span>
     <span class="c1"># 初始化数据集实例</span>
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cfg</span><span class="p">:</span> <span class="n">BaseDatasetConfig</span><span class="p">):</span>
@@ -190,8 +244,8 @@
 </pre></div>
 </div>
 </section>
-<section id="id4">
-<h2>实例化<a class="headerlink" href="#id4" title="Link to this heading"></a></h2>
+<section id="id9">
+<h2>实例化<a class="headerlink" href="#id9" title="Link to this heading"></a></h2>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">spikezoo.datasets</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseDataset</span><span class="p">,</span><span class="n">BaseDatasetConfig</span>
 <span class="n">cfg</span> <span class="o">=</span> <span class="n">BaseDatasetConfig</span><span class="p">()</span>
 <span class="n">dataset</span> <span class="o">=</span> <span class="n">BaseDataset</span><span class="p">(</span><span class="n">cfg</span><span class="p">)</span>
@@ -207,8 +261,8 @@
 <li><p><code class="docutils literal notranslate"><span class="pre">rate</span></code> : 脉冲转化系数标量</p></li>
 </ul>
 </section>
-<section id="id5">
-<h2>自定义数据集开发<a class="headerlink" href="#id5" title="Link to this heading"></a></h2>
+<section id="id10">
+<h2>自定义数据集开发<a class="headerlink" href="#id10" title="Link to this heading"></a></h2>
 <p>以下以Spike-Zoo标准仿真生成的数据集为例，说明如何扩展基础数据集类：</p>
 <p><strong>目录结构要求：</strong></p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">root</span>

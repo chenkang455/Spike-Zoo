@@ -235,7 +235,7 @@
     from spikezoo.models.base_model import BaseModelConfig
     pipeline = TrainPipeline(
         cfg=TrainPipelineConfig(save_folder="results", epochs = 10),
-        dataset_cfg=REDS_BASEConfig(root_dir = "spikezoo/data/REDS_BASE"),
+        dataset_cfg=REDS_BASEConfig(root_dir = "spikezoo/data/reds_base"),
         model_cfg=BaseModelConfig(),
     )
     pipeline.train()
@@ -280,7 +280,7 @@
 
     pipeline = TrainPipeline(
         cfg=REDS_BASE_TrainConfig(save_folder="results", exp_name="base"),
-        dataset_cfg=REDS_BASEConfig(root_dir="spikezoo/data/REDS_BASE", use_aug=True, crop_size=(128, 128)),
+        dataset_cfg=REDS_BASEConfig(root_dir="spikezoo/data/reds_base", use_aug=True, crop_size=(128, 128)),
         model_cfg=BaseModelConfig(),
     )
     pipeline.train()

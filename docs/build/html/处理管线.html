@@ -21,7 +21,7 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="索引" href="genindex.html" />
     <link rel="search" title="搜索" href="search.html" />
-    <link rel="next" title="&lt;no title&gt;" href="%E8%84%89%E5%86%B2%E4%BB%BF%E7%9C%9F.html" />
+    <link rel="next" title="发行版本介绍" href="%E5%8F%91%E8%A1%8C%E7%89%88%E6%9C%AC%E4%BB%8B%E7%BB%8D.html" />
     <link rel="prev" title="模型" href="%E6%A8%A1%E5%9E%8B.html" /> 
 </head>
 
@@ -61,6 +61,9 @@
 </li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="%E5%8F%91%E8%A1%8C%E7%89%88%E6%9C%AC%E4%BB%8B%E7%BB%8D.html">发行版本介绍</a></li>
+<li class="toctree-l1"><a class="reference internal" href="%E4%BD%BF%E7%94%A8%E4%BE%8B%E5%AD%90.html">使用示例</a></li>
+<li class="toctree-l1"><a class="reference internal" href="%E6%94%AF%E6%8C%81%E8%8C%83%E5%9B%B4.html">支持范围</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">APIs</span></p>
 <ul>
@@ -303,7 +306,7 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">spikezoo.models.base_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModelConfig</span>
 <span class="n">pipeline</span> <span class="o">=</span> <span class="n">TrainPipeline</span><span class="p">(</span>
     <span class="n">cfg</span><span class="o">=</span><span class="n">TrainPipelineConfig</span><span class="p">(</span><span class="n">save_folder</span><span class="o">=</span><span class="s2">&quot;results&quot;</span><span class="p">,</span> <span class="n">epochs</span> <span class="o">=</span> <span class="mi">10</span><span class="p">),</span>
-    <span class="n">dataset_cfg</span><span class="o">=</span><span class="n">REDS_BASEConfig</span><span class="p">(</span><span class="n">root_dir</span> <span class="o">=</span> <span class="s2">&quot;spikezoo/data/REDS_BASE&quot;</span><span class="p">),</span>
+    <span class="n">dataset_cfg</span><span class="o">=</span><span class="n">REDS_BASEConfig</span><span class="p">(</span><span class="n">root_dir</span> <span class="o">=</span> <span class="s2">&quot;spikezoo/data/reds_base&quot;</span><span class="p">),</span>
     <span class="n">model_cfg</span><span class="o">=</span><span class="n">BaseModelConfig</span><span class="p">(),</span>
 <span class="p">)</span>
 <span class="n">pipeline</span><span class="o">.</span><span class="n">train</span><span class="p">()</span>
@@ -346,7 +349,7 @@
 
 <span class="n">pipeline</span> <span class="o">=</span> <span class="n">TrainPipeline</span><span class="p">(</span>
     <span class="n">cfg</span><span class="o">=</span><span class="n">REDS_BASE_TrainConfig</span><span class="p">(</span><span class="n">save_folder</span><span class="o">=</span><span class="s2">&quot;results&quot;</span><span class="p">,</span> <span class="n">exp_name</span><span class="o">=</span><span class="s2">&quot;base&quot;</span><span class="p">),</span>
-    <span class="n">dataset_cfg</span><span class="o">=</span><span class="n">REDS_BASEConfig</span><span class="p">(</span><span class="n">root_dir</span><span class="o">=</span><span class="s2">&quot;spikezoo/data/REDS_BASE&quot;</span><span class="p">,</span> <span class="n">use_aug</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">crop_size</span><span class="o">=</span><span class="p">(</span><span class="mi">128</span><span class="p">,</span> <span class="mi">128</span><span class="p">)),</span>
+    <span class="n">dataset_cfg</span><span class="o">=</span><span class="n">REDS_BASEConfig</span><span class="p">(</span><span class="n">root_dir</span><span class="o">=</span><span class="s2">&quot;spikezoo/data/reds_base&quot;</span><span class="p">,</span> <span class="n">use_aug</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">crop_size</span><span class="o">=</span><span class="p">(</span><span class="mi">128</span><span class="p">,</span> <span class="mi">128</span><span class="p">)),</span>
     <span class="n">model_cfg</span><span class="o">=</span><span class="n">BaseModelConfig</span><span class="p">(),</span>
 <span class="p">)</span>
 <span class="n">pipeline</span><span class="o">.</span><span class="n">train</span><span class="p">()</span>
@@ -367,7 +370,7 @@
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="页脚">
         <a href="%E6%A8%A1%E5%9E%8B.html" class="btn btn-neutral float-left" title="模型" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
-        <a href="%E8%84%89%E5%86%B2%E4%BB%BF%E7%9C%9F.html" class="btn btn-neutral float-right" title="&lt;no title&gt;" accesskey="n" rel="next">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="%E5%8F%91%E8%A1%8C%E7%89%88%E6%9C%AC%E4%BB%8B%E7%BB%8D.html" class="btn btn-neutral float-right" title="发行版本介绍" accesskey="n" rel="next">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

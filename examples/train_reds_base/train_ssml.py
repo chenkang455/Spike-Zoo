@@ -23,7 +23,7 @@ pipeline = TrainPipeline(
         loss_weight_dict={"l2": 1},
         save_img_norm=False, 
     ),
-    dataset_cfg=REDS_BASEConfig(root_dir="spikezoo/data/REDS_BASE", use_aug=True, crop_size=(40, 40)),
+    dataset_cfg=REDS_BASEConfig(root_dir="spikezoo/data/reds_base", use_aug=True, crop_size=(40, 40)),
     model_cfg=SSMLConfig(tfp_label_length=7),
 )
 pipeline.train()
@@ -43,6 +43,6 @@ pipeline.train()
 #         save_img_norm=False,
 #         scheduler_cfg=None,
 #     ),
-#     dataset_cfg=REDS_BASEConfig(root_dir="spikezoo/data/REDS_BASE", use_aug=True, crop_size=(128, 128)),
+#     dataset_cfg=REDS_BASEConfig(root_dir="spikezoo/data/reds_base", use_aug=True, crop_size=(128, 128)),
 #     model_cfg=SSMLConfig(tfp_label_length = 7),
 # )

@@ -8,7 +8,7 @@ import re
 @dataclass
 class REDS_BASEConfig(BaseDatasetConfig):
     dataset_name: str = "reds_base"
-    root_dir: Path = Path(__file__).parent.parent / Path("data/REDS_BASE")
+    root_dir: Path = Path(__file__).parent.parent / Path("data/reds_base")
     width: int = 400
     height: int = 250
     with_img: bool = True

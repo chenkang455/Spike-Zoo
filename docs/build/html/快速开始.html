@@ -59,6 +59,8 @@
 <li class="toctree-l1"><a class="reference internal" href="%E6%A8%A1%E5%9E%8B.html">模型</a></li>
 <li class="toctree-l1"><a class="reference internal" href="%E5%A4%84%E7%90%86%E7%AE%A1%E7%BA%BF.html">处理管线</a></li>
 <li class="toctree-l1"><a class="reference internal" href="%E5%8F%91%E8%A1%8C%E7%89%88%E6%9C%AC%E4%BB%8B%E7%BB%8D.html">发行版本介绍</a></li>
+<li class="toctree-l1"><a class="reference internal" href="%E4%BD%BF%E7%94%A8%E4%BE%8B%E5%AD%90.html">使用示例</a></li>
+<li class="toctree-l1"><a class="reference internal" href="%E6%94%AF%E6%8C%81%E8%8C%83%E5%9B%B4.html">支持范围</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">APIs</span></p>
 <ul>
@@ -207,7 +209,7 @@
 <section id="id5">
 <h2>训练流程<a class="headerlink" href="#id5" title="Link to this heading"></a></h2>
 <ol class="arabic simple">
-<li><p>下载 <code class="docutils literal notranslate"><span class="pre">REDS_BASE</span></code> 数据集并放置在 <code class="docutils literal notranslate"><span class="pre">spikezoo/data/REDS_BASE</span></code> 路径下。</p></li>
+<li><p>下载 <code class="docutils literal notranslate"><span class="pre">REDS_BASE</span></code> 数据集并放置在 <code class="docutils literal notranslate"><span class="pre">spikezoo/data/reds_base</span></code> 路径下，参考 <a class="reference internal" href="%E6%95%B0%E6%8D%AE%E9%9B%86.html#dataset-prepare"><span class="std std-ref">数据来源</span></a> 。</p></li>
 <li><p>构建训练管线代码，基于 <code class="docutils literal notranslate"><span class="pre">BASE</span></code> 模型开始训练：</p></li>
 </ol>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">spikezoo.pipeline</span><span class="w"> </span><span class="kn">import</span> <span class="n">TrainPipelineConfig</span><span class="p">,</span> <span class="n">TrainPipeline</span>
@@ -215,7 +217,7 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">spikezoo.models.base_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModelConfig</span>
 <span class="n">pipeline</span> <span class="o">=</span> <span class="n">TrainPipeline</span><span class="p">(</span>
     <span class="n">cfg</span><span class="o">=</span><span class="n">TrainPipelineConfig</span><span class="p">(</span><span class="n">save_folder</span><span class="o">=</span><span class="s2">&quot;results&quot;</span><span class="p">,</span> <span class="n">epochs</span> <span class="o">=</span> <span class="mi">10</span><span class="p">),</span>
-    <span class="n">dataset_cfg</span><span class="o">=</span><span class="n">REDS_BASEConfig</span><span class="p">(</span><span class="n">root_dir</span> <span class="o">=</span> <span class="s2">&quot;spikezoo/data/REDS_BASE&quot;</span><span class="p">),</span>
+    <span class="n">dataset_cfg</span><span class="o">=</span><span class="n">REDS_BASEConfig</span><span class="p">(</span><span class="n">root_dir</span> <span class="o">=</span> <span class="s2">&quot;spikezoo/data/reds_base&quot;</span><span class="p">),</span>
     <span class="n">model_cfg</span><span class="o">=</span><span class="n">BaseModelConfig</span><span class="p">(),</span>
 <span class="p">)</span>
 <span class="n">pipeline</span><span class="o">.</span><span class="n">train</span><span class="p">()</span>
@@ -243,7 +245,7 @@
 <span class="nb">print</span><span class="p">(</span><span class="n">recon_img</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">recon_img</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span> <span class="n">recon_img</span><span class="o">.</span><span class="n">min</span><span class="p">())</span>
 </pre></div>
 </div>
-<p>更多高级用法详见 <a class="reference internal" href="%E6%A8%A1%E5%9E%8B.html#model-use"><span class="std std-ref">基本使用</span></a> 。</p>
+<p>更多高级用法详见 <a class="reference internal" href="%E6%A8%A1%E5%9E%8B.html#model-use"><span class="std std-ref">实例化</span></a> 。</p>
 </section>
 </section>
 

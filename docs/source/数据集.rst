@@ -1,13 +1,30 @@
 数据集
 =======================
 
-Spike-Zoo当前支持 ``Spk2ImgNet`` 论文发布的 ``REDS_BASE`` 和 ``UHSR`` 数据集。其中 ``BASE`` 数据集作为 ``REDS_BASE`` 的子集，
-已预置于 ``spikezoo/data/base`` 目录，无需额外下载。
 
-参数配置
+数据文件存储在 ``spikezoo/data/`` 路径下，组织形式如下：
+
+.. code-block:: console
+
+    spikezoo
+    ├── data
+    |   ├── base
+    |   ├── reds_base
+    |   └── u_caltech
+    ├── archs
+    ...
+    └── utils
+
+.. _dataset_prepare:
+
+数据来源
 ----------------
 
-以 ``BASE`` 数据集为例，目录结构如下：
+1. ``BASE`` 数据集 
+^^^^^^^^^^^^^
+
+- **介绍:** 从 ``REDS_BASE`` 数据集中选取部分数据构建的小数据集。
+- **地址:** 已内置于 Spike-Zoo 仓库当中。
 
 .. code-block:: console
 
@@ -19,7 +36,40 @@ Spike-Zoo当前支持 ``Spk2ImgNet`` 论文发布的 ``REDS_BASE`` 和 ``UHSR`` 
         ├── gt
         └── spike
 
-数据集配置类定义如下：
+2. ``REDS_BASE`` 数据集 
+^^^^^^^^^^^^^
+
+- **介绍:** 由 `Spk2ImgNet <https://github.com/Vspacer/Spk2ImgNet>`_ 基于REDS数据集仿真生成的脉冲-清晰图成对数据集。
+- **地址:**  训练集: `下载地址 <https://drive.google.com/file/d/1ozR2-fNmU10gA_TCYUfJN-ahV6e_8Ke7/view>`_ | 测试集: `下载地址 <https://drive.google.com/file/d/12q0yJ7V9KtF_y-ZcCn2B-q0zFP8ysdv3/view>`_
+
+.. code-block:: console
+
+    reds_base
+    ├── test
+    │   ├── gt
+    │   └── spike
+    └── train
+        ├── gt
+        └── spike
+
+
+
+3. ``UHSR`` 数据集 
+^^^^^^^^^^^^^
+
+- **介绍:** 真实拍摄脉数据集 `UHSR <https://github.com/Evin-X/UHSR>`_ ，包括 ``U-CALTECH`` 和 ``U-CIFAR`` 两部分。（使用该数据集旨在探索不同模型在暗光场景下的泛化性）
+- **地址:**  `百度网盘地址 <https://pan.baidu.com/share/init?surl=Qcu4OVHakE6VZfIpjS9vlQ&pwd=asin>`_
+
+.. code-block:: console
+
+    u_caltech
+    ├── test
+    └── train
+
+参数配置
+----------------
+
+以 ``BASE`` 数据集为例，配置类定义如下：
 
 .. code-block:: python
 

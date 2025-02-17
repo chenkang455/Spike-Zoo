@@ -138,7 +138,7 @@
 训练流程
 ----------------
 
-1. 下载 ``REDS_BASE`` 数据集并放置在 ``spikezoo/data/REDS_BASE`` 路径下。
+1. 下载 ``REDS_BASE`` 数据集并放置在 ``spikezoo/data/reds_base`` 路径下，参考 :ref:`dataset_prepare` 。
 
 2. 构建训练管线代码，基于 ``BASE`` 模型开始训练：
 
@@ -149,7 +149,7 @@
     from spikezoo.models.base_model import BaseModelConfig
     pipeline = TrainPipeline(
         cfg=TrainPipelineConfig(save_folder="results", epochs = 10),
-        dataset_cfg=REDS_BASEConfig(root_dir = "spikezoo/data/REDS_BASE"),
+        dataset_cfg=REDS_BASEConfig(root_dir = "spikezoo/data/reds_base"),
         model_cfg=BaseModelConfig(),
     )
     pipeline.train()

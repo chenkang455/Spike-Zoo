@@ -7,7 +7,7 @@ import torch
 @dataclass
 class UHSRConfig(BaseDatasetConfig):
     dataset_name: str = "uhsr"
-    root_dir: Path = Path(__file__).parent.parent / Path("data/U-CALTECH")
+    root_dir: Path = Path(__file__).parent.parent / Path("data/u_caltech")
     width: int = 224
     height: int = 224
     with_img: bool = False

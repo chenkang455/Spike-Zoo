@@ -1,0 +1,50 @@
+支持范围
+=======================
+
+运行以下代码，查看Spike-Zoo支持的 **模型**、**数据集** 和 **指标**:
+
+.. code-block:: python
+
+    import spikezoo as sz
+    print(sz.METHODS)
+    print(sz.DATASETS)
+    print(sz.METRICS)
+
+
+**支持的模型:**
+
++------------------------+-------------------------------------------------------------------------------------------------+
+| Models                 | Source                                                                                          |
++========================+=================================================================================================+
+| ``tfp``, ``tfi``       | Spike camera and its coding methods                                                             |
++------------------------+-------------------------------------------------------------------------------------------------+
+| ``spk2imgnet``         | Spk2ImgNet: Learning to Reconstruct Dynamic Scene from Continuous Spike Stream                  |
++------------------------+-------------------------------------------------------------------------------------------------+
+| ``wgse``               | Learning Temporal-Ordered Representation for Spike Streams Based on Discrete Wavelet Transforms |
++------------------------+-------------------------------------------------------------------------------------------------+
+| ``ssml``               | Self-Supervised Mutual Learning for Dynamic Scene Reconstruction of Spiking Camera              |
++------------------------+-------------------------------------------------------------------------------------------------+
+| ``ssir``               | Spike Camera Image Reconstruction Using Deep Spiking Neural Networks                            |
++------------------------+-------------------------------------------------------------------------------------------------+
+| ``bsf``                | Boosting Spike Camera Image Reconstruction from a Perspective of Dealing with Spike Fluctuations|
++------------------------+-------------------------------------------------------------------------------------------------+
+| ``stir``               | Spatio-Temporal Interactive Learning for Efficient Image Reconstruction of Spiking Cameras      |
++------------------------+-------------------------------------------------------------------------------------------------+
+| ``base``, ``spikeclip``| Rethinking High-speed Image Reconstruction Framework with Spike Camera                          |
++------------------------+-------------------------------------------------------------------------------------------------+
+
+**支持的数据集:**
+
++-------------------+---------------------------------------------------------------------------------------------+
+| Datasets          | Source                                                                                      |
++===================+=============================================================================================+
+| ``base``          | Spike-Zoo: A Toolbox for Spike-to-Image Reconstruction                                      |
++-------------------+---------------------------------------------------------------------------------------------+
+| ``reds_base``     | Spk2ImgNet: Learning to Reconstruct Dynamic Scene from Continuous Spike Stream              |                   
++-------------------+---------------------------------------------------------------------------------------------+
+| ``uhsr``          | Recognizing Ultra-High-Speed Moving Objects with Bio-Inspired Spike Camera                  |
++-------------------+---------------------------------------------------------------------------------------------+
+| ``realworld``     | ``recVidarReal2019``, ``momVidarReal2021`` in SpikeCV (https://github.com/Zyj061/SpikeCV)   |
++-------------------+---------------------------------------------------------------------------------------------+
+| ``szdata``        | SpikeReveal: Unlocking Temporal Sequences from Real Blurry Inputs with Spike Streams        |
++-------------------+---------------------------------------------------------------------------------------------+
