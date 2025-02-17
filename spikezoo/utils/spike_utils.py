@@ -35,9 +35,9 @@ def load_vidar_dat(filename, height, width, remove_head=False, version: Literal[
             frame_ = np.stack(blist).transpose()
             frame_ = np.flipud(frame_.reshape((height, width), order="C"))
             spk = frame_.copy()[None]
-            spk = spk[:, :, :-16] if remove_head == True else spk
             spikes.append(spk)
         spikes = np.concatenate(spikes).astype(np.float32)
+    spikes = spikes[:, :, :-16] if remove_head == True else spikes
 
     # # Output format conversion
     format_dict = {"array": lambda x: x, "tensor": torch.from_numpy}

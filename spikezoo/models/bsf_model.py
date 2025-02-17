@@ -4,7 +4,6 @@ from spikezoo.models.base_model import BaseModel, BaseModelConfig
 from torch.optim import Adam
 import torch.optim.lr_scheduler as lr_scheduler
 import torch.nn as nn
-from spikezoo.pipeline import TrainPipelineConfig
 from typing import List
 from spikezoo.archs.bsf.models.bsf.bsf import BSF 
 

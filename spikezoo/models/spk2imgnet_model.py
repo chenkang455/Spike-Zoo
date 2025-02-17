@@ -1,7 +1,6 @@
 import torch
 from dataclasses import dataclass, field
 from spikezoo.models.base_model import BaseModel, BaseModelConfig
-from spikezoo.pipeline import TrainPipelineConfig
 import torch.nn as nn
 import torch.optim as optim
 import torch.optim.lr_scheduler as lr_scheduler
