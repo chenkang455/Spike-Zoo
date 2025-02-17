@@ -206,10 +206,9 @@
 </section>
 <section id="id5">
 <h2>训练流程<a class="headerlink" href="#id5" title="Link to this heading"></a></h2>
-<p>以下示例展示 <code class="docutils literal notranslate"><span class="pre">BASE</span></code> 模型在 <code class="docutils literal notranslate"><span class="pre">REDS_BASE</span></code> 数据集上的训练。</p>
 <ol class="arabic simple">
 <li><p>下载 <code class="docutils literal notranslate"><span class="pre">REDS_BASE</span></code> 数据集并放置在 <code class="docutils literal notranslate"><span class="pre">spikezoo/data/REDS_BASE</span></code> 路径下。</p></li>
-<li><p>构建训练管线代码，利用默认参数直接开始训练：</p></li>
+<li><p>构建训练管线代码，基于 <code class="docutils literal notranslate"><span class="pre">BASE</span></code> 模型开始训练：</p></li>
 </ol>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">spikezoo.pipeline</span><span class="w"> </span><span class="kn">import</span> <span class="n">TrainPipelineConfig</span><span class="p">,</span> <span class="n">TrainPipeline</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">spikezoo.datasets.reds_base_dataset</span><span class="w"> </span><span class="kn">import</span> <span class="n">REDS_BASEConfig</span>
