@@ -1,14 +1,15 @@
 数据集
 =======================
 
-Spike-Zoo目前包含Spk2ImgNet论文中发布的REDS数据集（命名为reds_base数据集），UHSR数据集和其他真实场景（realworld）数据集。
-BASE 数据集是REDS_BASE数据集的子集，以存储在对应路径当中，无需额外下载。
+Spike-Zoo当前支持 ``Spk2ImgNet`` 论文发布的 ``REDS_BASE`` 和 ``UHSR`` 数据集。其中BASE数据集作为REDS_BASE的子集，
+已预置于 ``spikezoo/data/base`` 目录，无需额外下载。
 
-数据格式
+数据集模块采用 **配置类+实现类** 的设计模式，每个数据集包含参数配置类 ``BaseDatasetConfig`` 和数据加载类 ``BaseDataset``。
+
+参数配置
 ----------------
-数据集的代码包含参数配置（BaseDatasetConfig）和数据类（BaseDataset）两部分。后续所有类别均直接在该基类上继承即可。
 
-数据集的组织形式，以BASE数据集为例。
+以BASE数据集为例，目录结构如下：
 
 .. code-block:: console
 
@@ -20,7 +21,7 @@ BASE 数据集是REDS_BASE数据集的子集，以存储在对应路径当中，
         ├── gt
         └── spike
 
-数据集参数配置代码如下所示：
+数据集配置类定义如下：
 
 .. code-block:: python
 
@@ -83,7 +84,36 @@ BASE 数据集是REDS_BASE数据集的子集，以存储在对应路径当中，
 - ``crop_size`` : 训练时如果使用数据增强技术，裁剪的尺寸大小，默认(-1，-1)不裁剪。
 - ``rate`` : 表示脉冲转化系数，在REDS_BASE数据集中设置默认为0.6。
 
-配置完数据集参数后，即可通过如下方式实例化数据集：
+
+数据加载类
+----------------
+
+.. code-block:: python
+
+    class BaseDataset(Dataset):
+        # 初始化数据集实例
+        def __init__(self, cfg: BaseDatasetConfig):
+        # 获取数据集样本总数
+        def __len__(self):
+        # 获取指定索引的样本（统一接口返回字典）
+        def __getitem__(self, idx: int):
+        # 数据路径预处理
+        def prepare_data(self):
+        # 脉冲文件检索方法
+        def get_spike_files(self, path: Path):
+        # 脉冲加载逻辑（支持.dat/.npz格式）
+        def load_spike(self, idx):
+        # 脉冲获取统一接口
+        def get_spike(self, idx):
+        # 图像文件检索方法
+        def get_image_files(self, path: Path):
+        # 图像读取接口
+        def get_img(self, idx):
+        # 数据缓存机制实现
+        def cache_data(self):
+
+实例化
+----------------
 
 .. code-block:: python
 
@@ -94,14 +124,19 @@ BASE 数据集是REDS_BASE数据集的子集，以存储在对应路径当中，
     for key,val in batch.items():
         print(key,val)
 
-数据集的输出是一个batch, 该batch会包含输入脉冲 ``spike``、监督图像信号 ``gt_img`` 以及脉冲转化系数 ``rate``，作为后续pipeline处理的接口。
+输出样本为字典格式，包含以下键值：
 
+- ``spike`` : 脉冲张量（形状 [T,H,W]）
 
-构建自己的数据集
+- ``gt_img`` : 清晰图像张量（形状 [3,H,W]）
+
+- ``rate`` : 脉冲转化系数标量
+
+自定义数据集开发
 ----------------
-我们以Spike-Zoo标准仿真管线得到的数据集为例，解释如何在已有基类数据集基础上开发自己的数据集。
+以下以Spike-Zoo标准仿真生成的数据集为例，说明如何扩展基础数据集类：
 
-数据集的格式如下所示
+**目录结构要求：**
 
 .. code-block:: console
 
@@ -113,14 +148,16 @@ BASE 数据集是REDS_BASE数据集的子集，以存储在对应路径当中，
         ├── sharp_data
         └── spike_data
 
-代码见 ``spikezoo/datasets/szdata_dataset.py`` 我们可以构建对应的配置类为：
+**实现步骤：**
+
+1. 创建配置文件 ``spikezoo/datasets/custom_dataset.py``
 
 .. code-block:: python
 
     @dataclass
-    class SZDataConfig(BaseDatasetConfig):
+    class CustomDataConfig(BaseDatasetConfig):
         # 数据集名称，和文件名保持一致
-        dataset_name: str = "szdata"
+        dataset_name: str = "custom"
         # 设定路径
         root_dir: Path = Path(__file__).parent.parent / Path("data/dataset")
         # 宽度为400
@@ -140,10 +177,18 @@ BASE 数据集是REDS_BASE数据集的子集，以存储在对应路径当中，
         # 设置为1
         rate: float = 1
 
-针对数据集类别，由于数据获取逻辑一致，直接继承BASE类数据集即可。
+2. 继承基础数据集类实现数据加载
 
 .. code-block:: python
 
-    class SZData(BaseDataset):
+    class CustomDataset(BaseDataset):
         def __init__(self, cfg: BaseDatasetConfig):
-            super(SZData, self).__init__(cfg)
+            super(CustomDataset, self).__init__(cfg)
+
+3. 使用自定义数据集
+
+.. code-block:: python
+
+    from spikezoo.datasets import CustomDataConfig, CustomDataset
+    cfg = CustomDataConfig()
+    train_set = CustomDataset(cfg)

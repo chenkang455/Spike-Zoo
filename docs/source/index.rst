@@ -1,7 +1,6 @@
 Spike-Zoo 文档
 =======================
-
-⚡ `Spike-Zoo <https://github.com/chenkang455/Spike-Zoo>`__ 是一个用于脉冲相机（Spike Camera）图像重构网络的推理和训练框架，主要功能包括：
+⚡ `Spike-Zoo <https://github.com/chenkang455/Spike-Zoo>`__ 是一个用于脉冲相机图像重构网络的推理和训练框架，主要功能包括：
 
 1. 使用预训练权重，快速进行多个重构模型的 **推理**。
 2. **训练** 自定义设计的脉冲图像重构网络。
