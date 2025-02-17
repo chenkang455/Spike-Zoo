@@ -55,6 +55,7 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="%E6%A8%A1%E5%9E%8B.html">模型</a></li>
 <li class="toctree-l1"><a class="reference internal" href="%E5%A4%84%E7%90%86%E7%AE%A1%E7%BA%BF.html">处理管线</a></li>
+<li class="toctree-l1"><a class="reference internal" href="%E5%8F%91%E8%A1%8C%E7%89%88%E6%9C%AC%E4%BB%8B%E7%BB%8D.html">发行版本介绍</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">APIs</span></p>
 <ul>
@@ -87,12 +88,11 @@
              
   <section id="id1">
 <h1>数据集<a class="headerlink" href="#id1" title="Link to this heading"></a></h1>
-<p>Spike-Zoo当前支持 <code class="docutils literal notranslate"><span class="pre">Spk2ImgNet</span></code> 论文发布的 <code class="docutils literal notranslate"><span class="pre">REDS_BASE</span></code> 和 <code class="docutils literal notranslate"><span class="pre">UHSR</span></code> 数据集。其中BASE数据集作为REDS_BASE的子集，
+<p>Spike-Zoo当前支持 <code class="docutils literal notranslate"><span class="pre">Spk2ImgNet</span></code> 论文发布的 <code class="docutils literal notranslate"><span class="pre">REDS_BASE</span></code> 和 <code class="docutils literal notranslate"><span class="pre">UHSR</span></code> 数据集。其中 <code class="docutils literal notranslate"><span class="pre">BASE</span></code> 数据集作为 <code class="docutils literal notranslate"><span class="pre">REDS_BASE</span></code> 的子集，
 已预置于 <code class="docutils literal notranslate"><span class="pre">spikezoo/data/base</span></code> 目录，无需额外下载。</p>
-<p>数据集模块采用 <strong>配置类+实现类</strong> 的设计模式，每个数据集包含参数配置类 <code class="docutils literal notranslate"><span class="pre">BaseDatasetConfig</span></code> 和数据加载类 <code class="docutils literal notranslate"><span class="pre">BaseDataset</span></code>。</p>
 <section id="id2">
 <h2>参数配置<a class="headerlink" href="#id2" title="Link to this heading"></a></h2>
-<p>以BASE数据集为例，目录结构如下：</p>
+<p>以 <code class="docutils literal notranslate"><span class="pre">BASE</span></code> 数据集为例，目录结构如下：</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">base</span>
 <span class="go">├── test</span>
 <span class="go">│   ├── gt</span>
@@ -147,21 +147,21 @@
 </div>
 <p>参数解释如下：</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">dataset_name</span></code> : 数据集的名称，如 <code class="docutils literal notranslate"><span class="pre">'base'</span></code>, <code class="docutils literal notranslate"><span class="pre">'reds_base'</span></code> 和 <code class="docutils literal notranslate"><span class="pre">'uhsr'</span></code>。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">dataset_name</span></code> : 数据集的名称，如 <code class="docutils literal notranslate"><span class="pre">&quot;base&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;reds_base&quot;</span></code> 和 <code class="docutils literal notranslate"><span class="pre">&quot;uhsr&quot;</span></code>。</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">root_dir</span></code> : 数据集的根路径。</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">width</span></code> : 输入脉冲的宽度。</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">height</span></code> : 输入脉冲的高度。</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">with_img</span></code> : 输入数据是否包含GT清晰图，真实数据集一般设置为False。</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">spike_length_train</span></code> : 训练集中输入脉冲的长度，在BASE中是41。（如果设置为-1则表示对输出的脉冲不做任何裁剪，可能会带来高显存问题。）</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">spike_length_test</span></code> : 测试集中输入脉冲的长度，在BASE中是301。</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">spike_length</span></code>: 表示实例化数据集的脉冲长度，在 <code class="docutils literal notranslate"><span class="pre">__post__init</span></code> 中自动赋值。</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">spike_dir_name</span></code> : 用于存储脉冲数据文件夹的名字，在BASE数据集中是spike。</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">img_dir_name</span></code> : 用于存储清晰图数据文件夹的名字，在BASE数据集中是gt。</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">split</span></code> : 表示该数据集是分类，训练集还是测试集。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">with_img</span></code> : 输入数据是否包含 GT 清晰图，真实数据集一般设置为 False。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">spike_length_train</span></code> : 训练集中输入脉冲的长度，在 BASE 数据集中为 41。（如果设置为 -1，则表示对输出的脉冲不做任何裁剪，可能会导致显存占用较高。）</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">spike_length_test</span></code> : 测试集中输入脉冲的长度，在 BASE 数据集中为 301。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">spike_length</span></code> : 表示实例化数据集的脉冲长度，在 <code class="docutils literal notranslate"><span class="pre">__post__init</span></code> 中会自动赋值。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">spike_dir_name</span></code> : 用于存储脉冲数据文件夹的名字，在 BASE 数据集中为 <code class="docutils literal notranslate"><span class="pre">spike</span></code>。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">img_dir_name</span></code> : 用于存储清晰图数据文件夹的名字，在 BASE 数据集中为 <code class="docutils literal notranslate"><span class="pre">gt</span></code>。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">split</span></code> : 表示该数据集是训练集还是测试集。</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">use_aug</span></code> : 表示是否使用数据增强技术。</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">use_cache</span></code> : 表示是否使用数据缓存技术，在数据IO较大且GPU利用率较低时开启可以增加训练速度，但是会带来高RAM占用。</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">crop_size</span></code> : 训练时如果使用数据增强技术，裁剪的尺寸大小，默认(-1，-1)不裁剪。</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">rate</span></code> : 表示脉冲转化系数，在REDS_BASE数据集中设置默认为0.6。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">use_cache</span></code> : 表示是否使用数据缓存技术。在数据 I/O 较大且 GPU 利用率较低时开启可以加速训练，但可能会增加 RAM 占用。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">crop_size</span></code> : 训练时如果使用数据增强技术，裁剪的尺寸大小，默认值为 (-1, -1) 表示不裁剪。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">rate</span></code> : 表示脉冲转化系数，在 REDS_BASE 数据集中默认设置为 0.6。</p></li>
 </ul>
 </section>
 <section id="id3">

@@ -1,15 +1,13 @@
 数据集
 =======================
 
-Spike-Zoo当前支持 ``Spk2ImgNet`` 论文发布的 ``REDS_BASE`` 和 ``UHSR`` 数据集。其中BASE数据集作为REDS_BASE的子集，
+Spike-Zoo当前支持 ``Spk2ImgNet`` 论文发布的 ``REDS_BASE`` 和 ``UHSR`` 数据集。其中 ``BASE`` 数据集作为 ``REDS_BASE`` 的子集，
 已预置于 ``spikezoo/data/base`` 目录，无需额外下载。
-
-数据集模块采用 **配置类+实现类** 的设计模式，每个数据集包含参数配置类 ``BaseDatasetConfig`` 和数据加载类 ``BaseDataset``。
 
 参数配置
 ----------------
 
-以BASE数据集为例，目录结构如下：
+以 ``BASE`` 数据集为例，目录结构如下：
 
 .. code-block:: console
 
@@ -68,21 +66,21 @@ Spike-Zoo当前支持 ``Spk2ImgNet`` 论文发布的 ``REDS_BASE`` 和 ``UHSR`` 
             
 参数解释如下：
 
-- ``dataset_name`` : 数据集的名称，如 ``'base'``, ``'reds_base'`` 和 ``'uhsr'``。
+- ``dataset_name`` : 数据集的名称，如 ``"base"``, ``"reds_base"`` 和 ``"uhsr"``。
 - ``root_dir`` : 数据集的根路径。
 - ``width`` : 输入脉冲的宽度。
 - ``height`` : 输入脉冲的高度。
-- ``with_img`` : 输入数据是否包含GT清晰图，真实数据集一般设置为False。
-- ``spike_length_train`` : 训练集中输入脉冲的长度，在BASE中是41。（如果设置为-1则表示对输出的脉冲不做任何裁剪，可能会带来高显存问题。）
-- ``spike_length_test`` : 测试集中输入脉冲的长度，在BASE中是301。
-- ``spike_length``: 表示实例化数据集的脉冲长度，在 ``__post__init`` 中自动赋值。
-- ``spike_dir_name`` : 用于存储脉冲数据文件夹的名字，在BASE数据集中是spike。
-- ``img_dir_name`` : 用于存储清晰图数据文件夹的名字，在BASE数据集中是gt。
-- ``split`` : 表示该数据集是分类，训练集还是测试集。
+- ``with_img`` : 输入数据是否包含 GT 清晰图，真实数据集一般设置为 False。
+- ``spike_length_train`` : 训练集中输入脉冲的长度，在 BASE 数据集中为 41。（如果设置为 -1，则表示对输出的脉冲不做任何裁剪，可能会导致显存占用较高。）
+- ``spike_length_test`` : 测试集中输入脉冲的长度，在 BASE 数据集中为 301。
+- ``spike_length`` : 表示实例化数据集的脉冲长度，在 ``__post__init`` 中会自动赋值。
+- ``spike_dir_name`` : 用于存储脉冲数据文件夹的名字，在 BASE 数据集中为 ``spike``。
+- ``img_dir_name`` : 用于存储清晰图数据文件夹的名字，在 BASE 数据集中为 ``gt``。
+- ``split`` : 表示该数据集是训练集还是测试集。
 - ``use_aug`` : 表示是否使用数据增强技术。
-- ``use_cache`` : 表示是否使用数据缓存技术，在数据IO较大且GPU利用率较低时开启可以增加训练速度，但是会带来高RAM占用。
-- ``crop_size`` : 训练时如果使用数据增强技术，裁剪的尺寸大小，默认(-1，-1)不裁剪。
-- ``rate`` : 表示脉冲转化系数，在REDS_BASE数据集中设置默认为0.6。
+- ``use_cache`` : 表示是否使用数据缓存技术。在数据 I/O 较大且 GPU 利用率较低时开启可以加速训练，但可能会增加 RAM 占用。
+- ``crop_size`` : 训练时如果使用数据增强技术，裁剪的尺寸大小，默认值为 (-1, -1) 表示不裁剪。
+- ``rate`` : 表示脉冲转化系数，在 REDS_BASE 数据集中默认设置为 0.6。
 
 
 数据加载类
