@@ -1,0 +1,37 @@
+发行版本介绍
+=======================
+发行版本参数 ``version`` 的使用方式如下所示：
+
+.. code-block:: python
+
+    from spikezoo.pipeline import Pipeline, PipelineConfig
+    import spikezoo as sz
+    pipeline = Pipeline(
+        cfg=PipelineConfig(save_folder="results",version="v023"),
+        model_cfg=sz.METHOD.BASE,
+        dataset_cfg=sz.DATASET.BASE
+    )
+
+通过指定发行版本，模型会自动加载对应版本网络参数并下载预训练权重。
+
+v010
+------------------
+
+``v0.1.0`` 中包含各方法原始论文中的预训练模型和参数。
+
+
+**地址：** https://github.com/chenkang455/Spike-Zoo/releases/tag/v0.1.0
+
+
+
+v023
+------------------
+
+``v0.2.3`` 中包含各方法在 ``REDS_BASE`` 数据集上重新训练得到的权重，训练脚本地址 `见此 <https://github.com/chenkang455/Spike-Zoo/tree/main/examples/train_reds_base>`_ 。
+
+**地址：** https://github.com/chenkang455/Spike-Zoo/releases/tag/v0.2.3
+
+.. note::
+
+    当前发行版本中，所有模型脉冲输入输入长度设置为 ``41`` 帧。 ``SpikeCLIP`` 因为是面向 ``UHSR`` 数据集设计的算法，这里并未重训，但 ``base`` 网络架构从 ``SpikeCLIP`` 中修改而来。
+

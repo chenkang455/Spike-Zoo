@@ -58,6 +58,7 @@
 <li class="toctree-l1"><a class="reference internal" href="%E6%95%B0%E6%8D%AE%E9%9B%86.html">数据集</a></li>
 <li class="toctree-l1"><a class="reference internal" href="%E6%A8%A1%E5%9E%8B.html">模型</a></li>
 <li class="toctree-l1"><a class="reference internal" href="%E5%A4%84%E7%90%86%E7%AE%A1%E7%BA%BF.html">处理管线</a></li>
+<li class="toctree-l1"><a class="reference internal" href="%E5%8F%91%E8%A1%8C%E7%89%88%E6%9C%AC%E4%BB%8B%E7%BB%8D.html">发行版本介绍</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">APIs</span></p>
 <ul>
@@ -144,7 +145,7 @@
 </div>
 <p>构建参数解析：</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">cfg</span></code> : 管线参数配置（存储路径/模型版本等）</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">cfg</span></code> : 管线参数配置，包括存储路径和模型版本参数。</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">model_cfg</span></code> : 模型参数配置</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">dataset_cfg</span></code> : 数据集参数配置</p></li>
 </ul>
@@ -169,7 +170,7 @@
 <h3>功能接口<a class="headerlink" href="#id4" title="Link to this heading"></a></h3>
 <p>单/多模型管线提供统一功能接口：</p>
 <ul class="simple">
-<li><p><strong>功能I-单脉冲重建:</strong> 支持三种输入方式生成重建图像并计算指标</p></li>
+<li><p><strong>I-单段脉冲重建:</strong> 支持三种输入方式生成重建图像并计算指标</p></li>
 </ul>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># 方式1: 从数据集加载测试样本（默认测试集），结果存储于infer_from_dataset</span>
 <span class="n">pipeline</span><span class="o">.</span><span class="n">infer_from_dataset</span><span class="p">(</span><span class="n">idx</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
@@ -181,21 +182,21 @@
 </pre></div>
 </div>
 <ul class="simple">
-<li><p><strong>功能II-数据集可视化:</strong> 批量保存数据集所有样本的重建结果</p></li>
+<li><p><strong>II-数据集可视化:</strong> 批量保存数据集所有样本的重建结果</p></li>
 </ul>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># 结果存储于infer_from_dataset</span>
 <span class="n">pipeline</span><span class="o">.</span><span class="n">save_imgs_from_dataset</span><span class="p">()</span>
 </pre></div>
 </div>
 <ul class="simple">
-<li><p><strong>功能III-量化指标计算:</strong> 执行数据集级别的性能评估</p></li>
+<li><p><strong>III-量化指标计算:</strong> 执行数据集级别的性能评估</p></li>
 </ul>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># 指标结果写入result.log</span>
 <span class="n">pipeline</span><span class="o">.</span><span class="n">cal_metrics</span><span class="p">()</span>
 </pre></div>
 </div>
 <ul class="simple">
-<li><p><strong>功能IV-模型参数分析:</strong> 计算模型参数量与计算复杂度</p></li>
+<li><p><strong>IV-模型参数分析:</strong> 计算模型参数量与计算复杂度</p></li>
 </ul>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># 分析结果写入result.log</span>
 <span class="n">pipeline</span><span class="o">.</span><span class="n">cal_params</span><span class="p">()</span>
@@ -205,7 +206,11 @@
 </section>
 <section id="id5">
 <h2>训练流程<a class="headerlink" href="#id5" title="Link to this heading"></a></h2>
-<p>训练管线构建逻辑与推理一致。以下示例展示 <code class="docutils literal notranslate"><span class="pre">`BASE`</span></code> 模型在 <code class="docutils literal notranslate"><span class="pre">`REDS_BASE`</span></code> 数据集上的训练：</p>
+<p>以下示例展示 <code class="docutils literal notranslate"><span class="pre">BASE</span></code> 模型在 <code class="docutils literal notranslate"><span class="pre">REDS_BASE</span></code> 数据集上的训练。</p>
+<ol class="arabic simple">
+<li><p>下载 <code class="docutils literal notranslate"><span class="pre">REDS_BASE</span></code> 数据集并放置在 <code class="docutils literal notranslate"><span class="pre">spikezoo/data/REDS_BASE</span></code> 路径下。</p></li>
+<li><p>构建训练管线代码，利用默认参数直接开始训练：</p></li>
+</ol>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">spikezoo.pipeline</span><span class="w"> </span><span class="kn">import</span> <span class="n">TrainPipelineConfig</span><span class="p">,</span> <span class="n">TrainPipeline</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">spikezoo.datasets.reds_base_dataset</span><span class="w"> </span><span class="kn">import</span> <span class="n">REDS_BASEConfig</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">spikezoo.models.base_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModelConfig</span>

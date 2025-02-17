@@ -73,7 +73,7 @@
 
 构建参数解析：
 
-- ``cfg`` : 管线参数配置（存储路径/模型版本等）
+- ``cfg`` : 管线参数配置，包括存储路径和模型版本参数。
 - ``model_cfg`` : 模型参数配置
 - ``dataset_cfg`` : 数据集参数配置
 
@@ -101,7 +101,7 @@
 
 单/多模型管线提供统一功能接口：
 
-- **功能I-单脉冲重建:** 支持三种输入方式生成重建图像并计算指标
+- **I-单段脉冲重建:** 支持三种输入方式生成重建图像并计算指标
 
 .. code-block:: python
 
@@ -113,21 +113,21 @@
     spike = sz.load_vidar_dat("data/scissor.dat", width=400, height=250)
     pipeline.infer_from_spk(spike)
 
-- **功能II-数据集可视化:** 批量保存数据集所有样本的重建结果
+- **II-数据集可视化:** 批量保存数据集所有样本的重建结果
 
 .. code-block:: python
 
     # 结果存储于infer_from_dataset
     pipeline.save_imgs_from_dataset()
 
-- **功能III-量化指标计算:** 执行数据集级别的性能评估
+- **III-量化指标计算:** 执行数据集级别的性能评估
 
 .. code-block:: python
 
     # 指标结果写入result.log
     pipeline.cal_metrics()
 
-- **功能IV-模型参数分析:** 计算模型参数量与计算复杂度
+- **IV-模型参数分析:** 计算模型参数量与计算复杂度
 
 .. code-block:: python
 
@@ -138,7 +138,9 @@
 训练流程
 ----------------
 
-训练管线构建逻辑与推理一致。以下示例展示 ```BASE``` 模型在 ```REDS_BASE``` 数据集上的训练：
+1. 下载 ``REDS_BASE`` 数据集并放置在 ``spikezoo/data/REDS_BASE`` 路径下。
+
+2. 构建训练管线代码，基于 ``BASE`` 模型开始训练：
 
 .. code-block:: python
 

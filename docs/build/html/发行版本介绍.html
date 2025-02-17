@@ -1,0 +1,147 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>发行版本介绍 &mdash; Spike-Zoo v0.2 文档</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/css/custom.css" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=e0f13565"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/translations.js?v=beaddf03"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="genindex.html" />
+    <link rel="search" title="搜索" href="search.html" />
+    <link rel="next" title="&lt;no title&gt;" href="%E8%84%89%E5%86%B2%E4%BB%BF%E7%9C%9F.html" />
+    <link rel="prev" title="处理管线" href="%E5%A4%84%E7%90%86%E7%AE%A1%E7%BA%BF.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Spike-Zoo
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="搜索文档" aria-label="搜索文档" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="导航菜单">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B.html">快速开始</a></li>
+<li class="toctree-l1"><a class="reference internal" href="%E6%95%B0%E6%8D%AE%E9%9B%86.html">数据集</a></li>
+<li class="toctree-l1"><a class="reference internal" href="%E6%A8%A1%E5%9E%8B.html">模型</a></li>
+<li class="toctree-l1"><a class="reference internal" href="%E5%A4%84%E7%90%86%E7%AE%A1%E7%BA%BF.html">处理管线</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">发行版本介绍</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#v010">v010</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#v023">v023</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">APIs</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="spikezoo.utils.html">spikezoo.utils</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="移动版导航菜单" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Spike-Zoo</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="页面导航">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">发行版本介绍</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/发行版本介绍.rst.txt" rel="nofollow"> 查看页面源码</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="id1">
+<h1>发行版本介绍<a class="headerlink" href="#id1" title="Link to this heading"></a></h1>
+<p>发行版本参数 <code class="docutils literal notranslate"><span class="pre">version</span></code> 的使用方式如下所示：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">spikezoo.pipeline</span><span class="w"> </span><span class="kn">import</span> <span class="n">Pipeline</span><span class="p">,</span> <span class="n">PipelineConfig</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">spikezoo</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sz</span>
+<span class="n">pipeline</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">(</span>
+    <span class="n">cfg</span><span class="o">=</span><span class="n">PipelineConfig</span><span class="p">(</span><span class="n">save_folder</span><span class="o">=</span><span class="s2">&quot;results&quot;</span><span class="p">,</span><span class="n">version</span><span class="o">=</span><span class="s2">&quot;v023&quot;</span><span class="p">),</span>
+    <span class="n">model_cfg</span><span class="o">=</span><span class="n">sz</span><span class="o">.</span><span class="n">METHOD</span><span class="o">.</span><span class="n">BASE</span><span class="p">,</span>
+    <span class="n">dataset_cfg</span><span class="o">=</span><span class="n">sz</span><span class="o">.</span><span class="n">DATASET</span><span class="o">.</span><span class="n">BASE</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>通过指定发行版本，模型会自动加载对应版本网络参数并下载预训练权重。</p>
+<section id="v010">
+<h2>v010<a class="headerlink" href="#v010" title="Link to this heading"></a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">v0.1.0</span></code> 中包含各方法原始论文中的预训练模型和参数。</p>
+<p><strong>地址：</strong> <a class="reference external" href="https://github.com/chenkang455/Spike-Zoo/releases/tag/v0.1.0">https://github.com/chenkang455/Spike-Zoo/releases/tag/v0.1.0</a></p>
+</section>
+<section id="v023">
+<h2>v023<a class="headerlink" href="#v023" title="Link to this heading"></a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">v0.2.3</span></code> 中包含各方法在 <code class="docutils literal notranslate"><span class="pre">REDS_BASE</span></code> 数据集上重新训练得到的权重，训练脚本地址 <a class="reference external" href="https://github.com/chenkang455/Spike-Zoo/tree/main/examples/train_reds_base">见此</a> 。</p>
+<p><strong>地址：</strong> <a class="reference external" href="https://github.com/chenkang455/Spike-Zoo/releases/tag/v0.2.3">https://github.com/chenkang455/Spike-Zoo/releases/tag/v0.2.3</a></p>
+<div class="admonition note">
+<p class="admonition-title">备注</p>
+<p>当前发行版本中，所有模型脉冲输入输入长度设置为 <code class="docutils literal notranslate"><span class="pre">41</span></code> 帧。 <code class="docutils literal notranslate"><span class="pre">SpikeCLIP</span></code> 因为是面向 <code class="docutils literal notranslate"><span class="pre">UHSR</span></code> 数据集设计的算法，这里并未重训，但 <code class="docutils literal notranslate"><span class="pre">base</span></code> 网络架构从 <code class="docutils literal notranslate"><span class="pre">SpikeCLIP</span></code> 中修改而来。</p>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="页脚">
+        <a href="%E5%A4%84%E7%90%86%E7%AE%A1%E7%BA%BF.html" class="btn btn-neutral float-left" title="处理管线" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="%E8%84%89%E5%86%B2%E4%BB%BF%E7%9C%9F.html" class="btn btn-neutral float-right" title="&lt;no title&gt;" accesskey="n" rel="next">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2025, Kang Chen。</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用的 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a> 开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
