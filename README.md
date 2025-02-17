@@ -87,7 +87,7 @@ We finish the training with one 4090 GPU in `2 minutes`, achieving `32.8dB` in P
 | [Dataset](https://spike-zoo.readthedocs.io/zh-cn/latest/%E6%95%B0%E6%8D%AE%E9%9B%86.html) | Learn the parameter configuration of datasets and how to construct them. |
 | [Model](https://spike-zoo.readthedocs.io/zh-cn/latest/%E6%A8%A1%E5%9E%8B.html) | Learn the parameter configuration of models and how to construct them. |
 | [Pipeline](https://spike-zoo.readthedocs.io/zh-cn/latest/%E5%A4%84%E7%90%86%E7%AE%A1%E7%BA%BF.html) | Learn how to configure and construct the processing pipeline for models. |
-| [Released Version](https://spike-zoo.readthedocs.io/zh-cn/latest/%E5%A4%84%E7%90%86%E7%AE%A1%E7%BA%BF.html) | Introduces the differences between different release versions of pre-trained weights. |
+| [Released Version](https://spike-zoo.readthedocs.io/zh-cn/latest/%E5%8F%91%E8%A1%8C%E7%89%88%E6%9C%AC%E4%BB%8B%E7%BB%8D.html) | Introduces the differences between different release versions of pre-trained weights. |
 | [Examples](https://spike-zoo.readthedocs.io/zh-cn/latest/%E4%BD%BF%E7%94%A8%E4%BE%8B%E5%AD%90.html) | Complete code examples for using Spike-Zoo. |
 | [Supports](https://spike-zoo.readthedocs.io/zh-cn/latest/%E6%94%AF%E6%8C%81%E8%8C%83%E5%9B%B4.html) | Learn about the datasets and models supported by Spike-Zoo. |
 
