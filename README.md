@@ -1,16 +1,13 @@
+<p align="center">
+    <img src="imgs/spike-zoo.png" width="300"/>
+<p>
+
 <h5 align="center">
 
 [![GitHub repo stars](https://img.shields.io/github/stars/chenkang455/Spike-Zoo?style=flat&logo=github&logoColor=whitesmoke&label=Stars)](https://github.com/chenkang455/Spike-Zoo/stargazers) [![GitHub Issues](https://img.shields.io/github/issues/chenkang455/Spike-Zoo?style=flat&logo=github&logoColor=whitesmoke&label=Stars)](https://github.com/chenkang455/Spike-Zoo/issues) <a href="https://badge.fury.io/py/spikezoo"><img src="https://badge.fury.io/py/spikezoo.svg" alt="PyPI version"></a> [![License](https://img.shields.io/badge/License-MIT-yellow)](https://github.com/chenkang455/Spike-Zoo)
 <p>
 
-<p align="center">
-    <img src="imgs/spike-zoo.png" width="300"/>
-<p>
 
-<p align="center">
-    <a href="https://spike-zoo.readthedocs.io/zh-cn/latest/#">
-        <img alt="documentation" src="https://user-images.githubusercontent.com/3310961/194022638-b591ce16-76e3-4ba6-9d70-3be252b36084.png" width="120"></a>
-</p>
 
 <!-- <h2 align="center"> 
   <a href="">⚡Spike-Zoo: 
@@ -82,37 +79,17 @@ We finish the training with one 4090 GPU in `2 minutes`, achieving `32.8dB` in P
 
 > 🌟 We encourage users to develop their models with simple modifications to our framework. 
 
+## 📚 How to navigate the documentation
 
-
-### 4. Model Usage
-We also provide a direct interface for users interested in taking the spike-to-image model as a part of their work:
-
-```python 
-import spikezoo as sz
-from spikezoo.models.base_model import BaseModel, BaseModelConfig
-# input data
-spike = sz.load_vidar_dat("data/data.dat", width=400, height=250, out_format="tensor")
-spike = spike[None].cuda()
-print(f"Input spike shape: {spike.shape}")
-# net
-net = BaseModel(BaseModelConfig(model_params={"inDim": 41}))
-net.build_network(mode = "debug")
-# process
-recon_img = net(spike)
-print(recon_img.shape,recon_img.max(),recon_img.min())
-```
-
-### 5. Spike Utility
-We provide a faster `load_vidar_dat` function implemented with `cpp` (by [@zeal-ye](https://github.com/zeal-ye)):
-``` python
-import spikezoo as sz
-spike = sz.load_vidar_dat("data/scissor.dat",width = 400,height = 250,version='cpp')
-```
-Experiments show that the `cpp` version is more than 10 times faster than the `python` version.
-
-The above are some basic usages of `Spike-Zoo`. For more detailed usage, please refer to the [Tutorials](https://spike-zoo.readthedocs.io/zh-cn/latest/#).
-
-
+| **Link** | **Description** |
+| --- | --- |
+| [Quick Start](https://spike-zoo.readthedocs.io/zh-cn/latest/%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B.html) | Learn how to quickly get started with the Spike-Zoo repository for inference and training. |
+| [Dataset](https://spike-zoo.readthedocs.io/zh-cn/latest/%E6%95%B0%E6%8D%AE%E9%9B%86.html) | Learn the parameter configuration of datasets and how to construct them. |
+| [Model](https://spike-zoo.readthedocs.io/zh-cn/latest/%E6%A8%A1%E5%9E%8B.html) | Learn the parameter configuration of models and how to construct them. |
+| [Pipeline](https://spike-zoo.readthedocs.io/zh-cn/latest/%E5%A4%84%E7%90%86%E7%AE%A1%E7%BA%BF.html) | Learn how to configure and construct the processing pipeline for models. |
+| [Released Version](https://spike-zoo.readthedocs.io/zh-cn/latest/%E5%A4%84%E7%90%86%E7%AE%A1%E7%BA%BF.html) | Introduces the differences between different release versions of pre-trained weights. |
+| [Examples](https://spike-zoo.readthedocs.io/zh-cn/latest/%E4%BD%BF%E7%94%A8%E4%BE%8B%E5%AD%90.html) | Complete code examples for using Spike-Zoo. |
+| [Supports](https://spike-zoo.readthedocs.io/zh-cn/latest/%E6%94%AF%E6%8C%81%E8%8C%83%E5%9B%B4.html) | Learn about the datasets and models supported by Spike-Zoo. |
 
 
 ## 📅 TODO
