@@ -1,9 +1,8 @@
-spikezoo/data
 results/
 spikezoo/models/weights
 *.pt
 *.pth
-spikezoo/data
+spikezoo/data/REDS_BASE
 spikezoo/archs/spcsnet
 /test.py
 /run.sh
