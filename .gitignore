@@ -2,7 +2,7 @@ results/
 spikezoo/models/weights
 *.pt
 *.pth
-spikezoo/data/REDS_BASE
+spikezoo/data/reds_base
 spikezoo/archs/spcsnet
 /test.py
 /run.sh
