@@ -20,7 +20,8 @@
       <script src="_static/translations.js?v=beaddf03"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="索引" href="genindex.html" />
-    <link rel="search" title="搜索" href="search.html" /> 
+    <link rel="search" title="搜索" href="search.html" />
+    <link rel="prev" title="spikezoo.utils" href="spikezoo.utils.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -48,10 +49,16 @@
 <li class="toctree-l1"><a class="reference internal" href="%E6%A8%A1%E5%9E%8B.html">模型</a></li>
 <li class="toctree-l1"><a class="reference internal" href="%E5%A4%84%E7%90%86%E7%AE%A1%E7%BA%BF.html">处理管线</a></li>
 <li class="toctree-l1"><a class="reference internal" href="%E5%8F%91%E8%A1%8C%E7%89%88%E6%9C%AC%E4%BB%8B%E7%BB%8D.html">发行版本介绍</a></li>
+<li class="toctree-l1"><a class="reference internal" href="%E4%BD%BF%E7%94%A8%E4%BE%8B%E5%AD%90.html">使用示例</a></li>
+<li class="toctree-l1"><a class="reference internal" href="%E6%94%AF%E6%8C%81%E8%8C%83%E5%9B%B4.html">支持范围</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">APIs</span></p>
-<ul>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="spikezoo.utils.html">spikezoo.utils</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">spikezoo.pipeline</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#init__"><code class="docutils literal notranslate"><span class="pre">__init__()</span></code></a></li>
+</ul>
+</li>
 </ul>
 
         </div>
@@ -81,41 +88,19 @@
   <section id="spikezoo-pipeline">
 <h1>spikezoo.pipeline<a class="headerlink" href="#spikezoo-pipeline" title="Link to this heading"></a></h1>
 <dl class="py function">
-<dt class="sig sig-object py" id="load_vidar_dat">
-<span class="sig-name descname"><span class="pre">load_vidar_dat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">height</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">width</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">remove_head</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">version</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Literal</span><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'python'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'cpp'</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'cpp'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_format</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Literal</span><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'array'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'tensor'</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'array'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#load_vidar_dat" title="Link to this definition"></a></dt>
-<dd><p>读取脉冲数据函数。</p>
+<dt class="sig sig-object py" id="init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cfg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_cfg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataset_cfg</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#init__" title="Link to this definition"></a></dt>
+<dd><p><code class="docutils literal notranslate"><span class="pre">pipeline</span></code> 初始化函数，需要分别指定 <code class="docutils literal notranslate"><span class="pre">pipeline</span></code>, <code class="docutils literal notranslate"><span class="pre">model</span></code> 和 <code class="docutils literal notranslate"><span class="pre">dataset</span></code> 的配置参数</p>
 <dl class="field-list simple">
 <dt class="field-odd">参数<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>filename</strong> (<em>string</em>) -- 脉冲数据路径</p></li>
-<li><p><strong>height</strong> (<em>int</em>) -- 读取脉冲高度</p></li>
-<li><p><strong>width</strong> (<em>int</em>) -- 读取脉冲宽度</p></li>
-<li><p><strong>remove_head</strong> (<em>bool</em>) -- 是否去除帧头</p></li>
-<li><p><strong>version</strong> (<em>str</em>) -- 选择cpp版还是python版实现，但目前只支持在linux系统。</p></li>
-<li><p><strong>out_format</strong> (<em>str</em>) -- 选择输出np.array还是torch.tensor</p></li>
+<li><p><strong>cfg</strong> -- 管线实例化参数</p></li>
+<li><p><strong>model</strong> -- 支持输入模型实例化参数和模型名称</p></li>
+<li><p><strong>dataset</strong> -- 支持输入数据集实例化参数和数据集名称</p></li>
 </ul>
 </dd>
-<dt class="field-even">返回<span class="colon">:</span></dt>
-<dd class="field-even"><p>脉冲序列 (尺寸为 K * H * W)</p>
-</dd>
-<dt class="field-odd">返回类型<span class="colon">:</span></dt>
-<dd class="field-odd"><p>array or tensor</p>
-</dd>
 </dl>
-<p>根据以下代码实测表明，<code class="docutils literal notranslate"><span class="pre">cpp</span></code> 版比 <code class="docutils literal notranslate"><span class="pre">python</span></code> 版快10倍左右。</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">spikezoo.utils.spike_utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_vidar_dat</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;cpp&quot;</span><span class="p">)</span>
-<span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
-<span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
-    <span class="n">result</span> <span class="o">=</span> <span class="n">load_vidar_dat</span><span class="p">(</span><span class="s2">&quot;data/data.dat&quot;</span><span class="p">,</span><span class="n">version</span><span class="o">=</span><span class="s2">&quot;cpp&quot;</span><span class="p">,</span><span class="n">width</span> <span class="o">=</span> <span class="mi">400</span><span class="p">,</span><span class="n">height</span> <span class="o">=</span> <span class="mi">250</span><span class="p">,</span><span class="n">out_format</span><span class="o">=</span><span class="s2">&quot;array&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start</span><span class="p">)</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;python&quot;</span><span class="p">)</span>
-<span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
-<span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
-    <span class="n">result</span> <span class="o">=</span> <span class="n">load_vidar_dat</span><span class="p">(</span><span class="s2">&quot;data/data.dat&quot;</span><span class="p">,</span><span class="n">version</span><span class="o">=</span><span class="s2">&quot;python&quot;</span><span class="p">,</span><span class="n">width</span> <span class="o">=</span> <span class="mi">400</span><span class="p">,</span><span class="n">height</span> <span class="o">=</span> <span class="mi">250</span><span class="p">,</span><span class="n">out_format</span><span class="o">=</span><span class="s2">&quot;array&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
 </dd></dl>
@@ -125,7 +110,9 @@
 
            </div>
           </div>
-          <footer>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="页脚">
+        <a href="spikezoo.utils.html" class="btn btn-neutral float-left" title="spikezoo.utils" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+    </div>
 
   <hr/>
 

@@ -84,3 +84,4 @@ Spike-Zoo 文档
    :caption: APIs
 
    spikezoo.utils
+   spikezoo.pipeline
