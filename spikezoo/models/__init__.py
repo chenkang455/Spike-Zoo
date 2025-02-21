@@ -24,14 +24,17 @@ model_list = [file.split("_")[0] for file in files_list if file.endswith("_model
 def build_model_cfg(cfg: BaseModelConfig):
     """Build the model from the given model config."""
     # model module name
-    module_name = cfg.model_name + "_model"
-    assert cfg.model_name in model_list, f"Given model {cfg.model_name} not in our model zoo {model_list}."
-    module_name = "spikezoo.models." + module_name
-    module = importlib.import_module(module_name)
-    # model,model_config
-    model_name = cfg.model_name
-    model_name = model_name + 'Model' if model_name == "base" else model_name
-    model_cls: BaseModel = getattr_case_insensitive(module,model_name)
+    if cfg.model_cls_local == None:
+        module_name = cfg.model_name + "_model"
+        assert cfg.model_name in model_list, f"Given model {cfg.model_name} not in our model zoo {model_list}."
+        module_name = "spikezoo.models." + module_name
+        module = importlib.import_module(module_name)
+        # model,model_config
+        model_name = cfg.model_name
+        model_name = model_name + 'Model' if model_name == "base" else model_name
+        model_cls: BaseModel = getattr_case_insensitive(module,model_name)
+    else:
+        model_cls: BaseModel = cfg.model_cls_local
     model = model_cls(cfg)
     return model
 

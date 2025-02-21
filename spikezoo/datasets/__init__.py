@@ -12,23 +12,24 @@ dataset_list = [file.replace("_dataset.py", "") for file in files_list if file.e
 
 
 # todo register function
-def build_dataset_cfg(cfg: BaseDatasetConfig, split: Literal["train", "test"] = "test"):
+def build_dataset_cfg(cfg: BaseDatasetConfig):
     """Build the dataset from the given dataset config."""
-    # build new cfg according to split
-    cfg = replace(cfg, split=split)
     # dataset module
-    module_name = cfg.dataset_name + "_dataset"
-    assert cfg.dataset_name in dataset_list, f"Given dataset {cfg.dataset_name} not in our dataset list {dataset_list}."
-    module_name = "spikezoo.datasets." + module_name
-    module = importlib.import_module(module_name)
-    # dataset,dataset_config
-    dataset_name = cfg.dataset_name
-    dataset_name = dataset_name + "Dataset" if dataset_name == "base" else dataset_name
-    dataset_cls: BaseDataset = getattr_case_insensitive(module, dataset_name)
+    if cfg.dataset_cls_local == None:
+        module_name = cfg.dataset_name + "_dataset"
+        assert cfg.dataset_name in dataset_list, f"Given dataset {cfg.dataset_name} not in our dataset list {dataset_list}."
+        module_name = "spikezoo.datasets." + module_name
+        module = importlib.import_module(module_name)
+        # dataset,dataset_config
+        dataset_name = cfg.dataset_name
+        dataset_name = dataset_name + "Dataset" if dataset_name == "base" else dataset_name
+        dataset_cls: BaseDataset = getattr_case_insensitive(module, dataset_name)
+    else:
+        dataset_cls = cfg.dataset_cls_local
     dataset = dataset_cls(cfg)
     return dataset
 
-def build_dataset_name(dataset_name: str, split: Literal["train", "test"] = "test"):
+def build_dataset_name(dataset_name: str):
     """Build the default dataset from the given name."""
     module_name = dataset_name + "_dataset"
     assert dataset_name in dataset_list, f"Given dataset {dataset_name} not in our dataset list {dataset_list}."
@@ -37,7 +38,7 @@ def build_dataset_name(dataset_name: str, split: Literal["train", "test"] = "tes
     # dataset,dataset_config
     dataset_name = dataset_name + "Dataset" if dataset_name == "base" else dataset_name
     dataset_cls: BaseDataset = getattr_case_insensitive(module, dataset_name)
-    dataset_cfg: BaseDatasetConfig = getattr_case_insensitive(module, dataset_name + "config")(split=split)
+    dataset_cfg: BaseDatasetConfig = getattr_case_insensitive(module, dataset_name + "config")()
     dataset = dataset_cls(dataset_cfg)
     return dataset
 
@@ -45,13 +46,13 @@ def build_dataset_name(dataset_name: str, split: Literal["train", "test"] = "tes
 # todo to modify according to the basicsr
 def build_dataloader(dataset: BaseDataset, cfg=None):
     # train dataloader
-    if dataset.cfg.split == "train":
+    if dataset.split == "train":
         if cfg is None:
             return torch.utils.data.DataLoader(dataset, batch_size=1, shuffle=False, num_workers=1)
         else:
             return torch.utils.data.DataLoader(dataset, batch_size=cfg.bs_train, shuffle=True, num_workers=cfg.num_workers, pin_memory=cfg.pin_memory)
     # test dataloader
-    elif dataset.cfg.split == "test":
+    elif dataset.split == "test":
         return torch.utils.data.DataLoader(dataset, batch_size=1, shuffle=False, num_workers=1)
 
 

@@ -160,6 +160,8 @@
         # 数据缓存机制实现
         def cache_data(self):
 
+.. _param_rate:
+
 实例化
 ----------------
 
@@ -168,6 +170,7 @@
     from spikezoo.datasets import BaseDataset,BaseDatasetConfig
     cfg = BaseDatasetConfig()
     dataset = BaseDataset(cfg)
+    dataset.build_source(split = "test")
     batch = dataset[0]
     for key,val in batch.items():
         print(key,val)
@@ -179,6 +182,23 @@
 - ``gt_img`` : 清晰图像张量（形状 [3,H,W]）
 
 - ``rate`` : 脉冲转化系数标量
+
+``rate`` 参数的作用是对重构图像进行亮度矫正 ``img = img / rate``，以消除脉冲重构图和真实清晰图在幅值上的差异（仿真过程中存在光电转化系数，导致脉冲重构图和真实清晰图的像素亮度呈比例关系）。
+
+.. code-block:: python
+
+    # data
+    spike = batch["spike"]
+    img = batch["gt_img"]
+    rate = batch["rate"]
+    # process
+    tfp = spike.mean(dim = 0,keepdim = False)
+    print(f"重构图像的均值为{tfp.mean()}")
+    tfp_correct = tfp / rate
+    print(f"重构图像矫正后的均值为{tfp_correct.mean()}")
+    print(f"清晰图像的均值为{img.mean()}")
+
+可以发现，在利用 ``rate`` 参数矫正后，重构图像的均值和给定清晰图像的均值近似相等。
 
 自定义数据集开发
 ----------------

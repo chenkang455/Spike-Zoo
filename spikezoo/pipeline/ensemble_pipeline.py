@@ -48,6 +48,7 @@ class EnsemblePipeline(Pipeline):
         torch.set_grad_enabled(False)
         # data
         self.dataset: BaseDataset = build_dataset_name(dataset_cfg) if isinstance(dataset_cfg, str) else build_dataset_cfg(dataset_cfg)
+        self.dataset.build_source(split = "test")
         self.dataloader = build_dataloader(self.dataset)
         # device
         self.device = "cuda" if torch.cuda.is_available() else "cpu"

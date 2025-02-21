@@ -34,7 +34,7 @@ class PipelineConfig:
     "Evaluate metrics or not."
     save_metric: bool = True
     "Metric names for evaluation."
-    metric_names: List[str] = field(default_factory=lambda: ["psnr", "ssim","niqe","brisque"])
+    metric_names: List[str] = field(default_factory=lambda: ["psnr", "ssim", "niqe", "brisque"])
     "Save recoverd images or not."
     save_img: bool = True
     "Normalizing recoverd images and gt or not."
@@ -63,6 +63,7 @@ class Pipeline:
         torch.set_grad_enabled(False)
         # dataset
         self.dataset: BaseDataset = build_dataset_name(dataset_cfg) if isinstance(dataset_cfg, str) else build_dataset_cfg(dataset_cfg)
+        self.dataset.build_source(split="test")
         self.dataloader = build_dataloader(self.dataset)
         # device
         self.device = "cuda" if torch.cuda.is_available() else "cpu"
@@ -103,7 +104,7 @@ class Pipeline:
         """Function I---Save the recoverd image and calculate the metric from the given dataset."""
         # save folder
         self.logger.info("*********************** infer_from_dataset ***********************")
-        save_folder = self.save_folder / Path(f"infer_from_dataset/{self.dataset.cfg.dataset_name}_dataset/{self.dataset.cfg.split}/{idx:06d}")
+        save_folder = self.save_folder / Path(f"infer_from_dataset/{self.dataset.cfg.dataset_name}_dataset/{self.dataset.split}/{idx:06d}")
         os.makedirs(str(save_folder), exist_ok=True)
 
         # data process
@@ -117,7 +118,7 @@ class Pipeline:
             img = None
         return self.infer(spike, img, save_folder, rate)
 
-    def infer_from_file(self, file_path, height=-1, width=-1, img_path=None, rate=1, remove_head=False):
+    def infer_from_file(self, file_path, height=-1, width=-1, rate=1, img_path=None, remove_head=False):
         """Function II---Save the recoverd image and calculate the metric from the given input file."""
         # save folder
         self.logger.info("*********************** infer_from_file ***********************")
@@ -144,7 +145,7 @@ class Pipeline:
         spike = torch.from_numpy(spike)[None].to(self.device)
         return self.infer(spike, img, save_folder, rate)
 
-    def infer_from_spk(self, spike, img=None, rate=1):
+    def infer_from_spk(self, spike, rate=1, img=None):
         """Function III---Save the recoverd image and calculate the metric from the given spike stream."""
         # save folder
         self.logger.info("*********************** infer_from_spk ***********************")
@@ -181,7 +182,7 @@ class Pipeline:
         for idx in range(len(self.dataset)):
             self.infer_from_dataset(idx=idx)
         self.cfg.save_metric = base_setting
-        
+
     # TODO: To be overridden
     def cal_params(self):
         """Function VI---Calculate the parameters/flops/latency of the given method."""

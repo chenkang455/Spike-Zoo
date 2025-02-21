@@ -11,6 +11,7 @@ import warnings
 import torch
 from tqdm import tqdm
 from spikezoo.utils.data_utils import Augmentor
+from typing import Optional
 
 
 @dataclass
@@ -36,24 +37,18 @@ class BaseDatasetConfig:
     img_dir_name: str = "gt"
     "Rate. (-1 denotes variant)"
     rate: float = 0.6
-    
+
     # ------------- Config -------------
-    "Dataset split: train/test. Default set as the 'test' for evaluation."
-    split: Literal["train", "test"] = "test"
     "Use the data augumentation technique or not."
     use_aug: bool = False
     "Use cache mechanism."
     use_cache: bool = False
     "Crop size."
     crop_size: tuple = (-1, -1)
-
-
-    # post process
-    def __post_init__(self):
-        self.spike_length = self.spike_length_train if self.split == "train" else self.spike_length_test
-        self.root_dir = Path(self.root_dir) if isinstance(self.root_dir, str) else self.root_dir
-        # todo try download
-        assert self.root_dir.exists(), f"No files found in {self.root_dir} for the specified dataset `{self.dataset_name}`."
+    "Load the dataset from local or spikezoo lib."
+    dataset_cls_local: Optional[Dataset] = None
+    "Spike load version. [python,cpp]"
+    spike_load_version: Literal["python", "cpp"] = "python"
 
 
 # todo cache mechanism
@@ -61,10 +56,6 @@ class BaseDataset(Dataset):
     def __init__(self, cfg: BaseDatasetConfig):
         super(BaseDataset, self).__init__()
         self.cfg = cfg
-        self.augmentor = Augmentor(self.cfg.crop_size) if self.cfg.use_aug == True and self.cfg.split == "train" else -1
-        self.prepare_data()
-        self.cache_data() if cfg.use_cache == True else -1
-        warnings.warn("Lengths of the image list and the spike list should be equal.") if len(self.img_list) != len(self.spike_list) else -1
 
     def __len__(self):
         return len(self.spike_list)
@@ -79,7 +70,7 @@ class BaseDataset(Dataset):
             img = self.get_img(idx)
 
         # process data
-        if self.cfg.use_aug == True and self.cfg.split == "train":
+        if self.cfg.use_aug == True and self.split == "train":
             spike, img = self.augmentor(spike, img)
 
         # rate
@@ -89,15 +80,29 @@ class BaseDataset(Dataset):
         batch = {"spike": spike, "gt_img": img, "rate": rate}
         return batch
 
+    def build_source(self, split: Literal["train", "test"] = "test"):
+        """Build the dataset source and prepare to be loaded files."""
+        # spike length
+        self.split = split
+        self.spike_length = self.cfg.spike_length_train if self.split == "train" else self.cfg.spike_length_test
+        # root dir
+        self.cfg.root_dir = Path(self.cfg.root_dir) if isinstance(self.cfg.root_dir, str) else self.cfg.root_dir
+        assert self.cfg.root_dir.exists(), f"No files found in {self.cfg.root_dir} for the specified dataset `{self.dataset_name}`."
+        # prepare
+        self.augmentor = Augmentor(self.cfg.crop_size) if self.cfg.use_aug == True and self.split == "train" else -1
+        self.prepare_data()
+        self.cache_data() if self.cfg.use_cache == True else -1
+        warnings.warn("Lengths of the image list and the spike list should be equal.") if len(self.img_list) != len(self.spike_list) else -1
+
     # todo: To be overridden
     def prepare_data(self):
         """Specify the spike and image files to be loaded."""
         # spike
-        self.spike_dir = self.cfg.root_dir / self.cfg.split / self.cfg.spike_dir_name
+        self.spike_dir = self.cfg.root_dir / self.split / self.cfg.spike_dir_name
         self.spike_list = self.get_spike_files(self.spike_dir)
         # gt
         if self.cfg.with_img == True:
-            self.img_dir = self.cfg.root_dir / self.cfg.split / self.cfg.img_dir_name
+            self.img_dir = self.cfg.root_dir / self.split / self.cfg.img_dir_name
             self.img_list = self.get_image_files(self.img_dir)
 
     # todo: To be overridden
@@ -115,12 +120,13 @@ class BaseDataset(Dataset):
             height=self.cfg.height,
             width=self.cfg.width,
             out_format="tensor",
+            version=self.cfg.spike_load_version
         )
         return spike
 
     def get_spike(self, idx):
         """Get and process the spike stream from the given idx."""
-        spike_length = self.cfg.spike_length
+        spike_length = self.spike_length
         spike = self.load_spike(idx)
         assert spike.shape[0] >= spike_length, f"Given spike length {spike.shape[0]} smaller than the required length {spike_length}"
         spike_mid = spike.shape[0] // 2

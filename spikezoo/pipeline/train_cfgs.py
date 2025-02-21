@@ -30,6 +30,8 @@ class REDS_BASE_TrainConfig(TrainPipelineConfig):
     scheduler_cfg: Optional[SchedulerConfig] = MultiStepSchedulerConfig(milestones=[400], gamma=0.2) # from wgse
     loss_weight_dict: Dict = field(default_factory=lambda: {"l1": 1})
 
+
+
 # ! Train Config for each method on the official setting, not recommended to utilize their default parameters owing to the dataset setting.
 @dataclass
 class BSFTrainConfig(TrainPipelineConfig):

@@ -88,11 +88,13 @@ class TrainPipeline(Pipeline):
         torch.set_grad_enabled(True)
         # data
         if isinstance(dataset_cfg, str):
-            self.train_dataset: BaseDataset = build_dataset_name(dataset_cfg, split="train")
-            self.dataset: BaseDataset = build_dataset_name(dataset_cfg, split="test")
+            self.train_dataset: BaseDataset = build_dataset_name(dataset_cfg)
+            self.dataset: BaseDataset = build_dataset_name(dataset_cfg)
         else:
-            self.train_dataset: BaseDataset = build_dataset_cfg(dataset_cfg, split="train")
-            self.dataset: BaseDataset = build_dataset_cfg(dataset_cfg, split="test")
+            self.train_dataset: BaseDataset = build_dataset_cfg(dataset_cfg)
+            self.dataset: BaseDataset = build_dataset_cfg(dataset_cfg)
+        self.train_dataset.build_source("train")
+        self.dataset.build_source("test")
         self.train_dataloader = build_dataloader(self.train_dataset, self.cfg)
         self.dataloader = build_dataloader(self.dataset)
         # device

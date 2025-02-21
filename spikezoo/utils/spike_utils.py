@@ -10,7 +10,7 @@ import imageio
 _platform_check_done = False
 
 
-def load_vidar_dat(filename, height, width, remove_head=False, version: Literal["python", "cpp"] = "cpp", out_format: Literal["array", "tensor"] = "array"):
+def load_vidar_dat(filename, height, width, remove_head=False, version: Literal["python", "cpp"] = "python", out_format: Literal["array", "tensor"] = "array"):
     """Load the spike stream from the .dat file."""
     global _platform_check_done
     # Spike decode

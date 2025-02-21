@@ -1,6 +1,3 @@
-import os, sys
-
-# os.environ["CUDA_VISIBLE_DEVICES"] = "3"
 from spikezoo.pipeline import TrainPipeline
 from spikezoo.datasets.reds_base_dataset import REDS_BASEConfig
 from spikezoo.models.stir_model import STIRConfig

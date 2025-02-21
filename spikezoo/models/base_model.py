@@ -44,7 +44,10 @@ class BaseModelConfig:
     multi_gpu: bool = False
     "Base url."
     base_url: str = "https://github.com/chenkang455/Spike-Zoo/releases/download"
-
+    "Load the model from local class or spikezoo lib. (None)"
+    model_cls_local: Optional[nn.Module] = None
+    "Load the arch from local class or spikezoo lib. (None)"
+    arch_cls_local: Optional[nn.Module] = None
 
 class BaseModel(nn.Module):
     def __init__(self, cfg: BaseModelConfig):
@@ -71,8 +74,11 @@ class BaseModel(nn.Module):
     ):
         """Build the network and load the pretrained weight."""
         # network
-        module = importlib.import_module(f"spikezoo.archs.{self.cfg.model_name}.{self.cfg.model_file_name}")
-        model_cls = getattr(module, self.cfg.model_cls_name)
+        if self.cfg.arch_cls_local == None:
+            module = importlib.import_module(f"spikezoo.archs.{self.cfg.model_name}.{self.cfg.model_file_name}")
+            model_cls = getattr(module, self.cfg.model_cls_name)
+        else:
+            model_cls = self.cfg.arch_cls_local
         # load model config parameters
         if version == "local":
             model = model_cls(**self.cfg.model_params)
