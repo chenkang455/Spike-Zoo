@@ -34,7 +34,7 @@ For users focused on **utilizing pretrained models for spike-to-image conversion
 ```
 pip install spikezoo
 ```
-*  Install the latest developing version `0.2.3` from the source code **(recommended)**:
+*  Install the latest developing version `0.2.3.6` from the source code **(recommended)**:
 ```
 git clone https://github.com/chenkang455/Spike-Zoo
 cd Spike-Zoo
