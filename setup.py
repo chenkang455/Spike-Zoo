@@ -6,7 +6,7 @@ with open("./requirements.txt", "r", encoding="utf-8") as fh:
 
 with open("./README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
-123
+
 setup(
     install_requires=install_requires,
     name="spikezoo",
