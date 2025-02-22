@@ -135,7 +135,7 @@ class BaseModel(nn.Module):
         """Crop the spike length."""
         spike_length = spike.shape[1]
         spike_mid = spike_length // 2
-        assert spike_length >= self.model_length, f"Spike input is not long enough, given {spike_length} frames < {self.cfg.model_length}."
+        assert spike_length >= self.model_length, f"Spike input is not long enough, given {spike_length} frames < {self.cfg.model_length} required by the {self.cfg.model_name}."
         # even length
         if self.model_length == self.model_half_length * 2:
             spike = spike[
