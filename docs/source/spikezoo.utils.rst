@@ -1,3 +1,5 @@
+.. _api_utils:
+
 spikezoo.utils 
 -------------------
 

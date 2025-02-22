@@ -218,7 +218,7 @@
         "Batch size for the train dataloader."
         bs_train: int = 8
         "Num_workers for the train dataloader."
-        num_workers: int = 4
+        nw_train: int = 4
         "Pin_memory true or false for the train dataloader."
         pin_memory: bool = False
 
@@ -241,7 +241,7 @@
 - ``use_tensorboard`` : 启用TensorBoard可视化
 - ``seed`` : 随机数种子
 - ``bs_train`` : 训练批大小
-- ``num_workers`` : 数据加载线程数
+- ``nw_train`` : 训练数据加载线程数
 - ``pin_memory`` : 启用内存锁页
 - ``optimizer_cfg`` : 优化器配置（默认Adam）
 - ``scheduler_cfg`` : 学习率调度策略

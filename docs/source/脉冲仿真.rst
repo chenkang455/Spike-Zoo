@@ -3,4 +3,6 @@
 
 可以参考：https://github.com/chenkang455/S-SDM/blob/master/scripts/GOPRO_dataset.md
 
+仿真代码见 https://github.com/chenkang455/Spike-Zoo/tree/main/scripts
+
 有待完善...

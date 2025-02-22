@@ -33,6 +33,12 @@
         save_img: bool = True
         "Normalizing recoverd images and gt or not."
         img_norm: bool = False
+        "Batch size for the test dataloader."
+        bs_test: int = 1
+        "Num_workers for the test dataloader."
+        nw_test: int = 0
+        "Pin_memory true or false for the dataloader."
+        pin_memory: bool = False
         "Different modes for the pipeline."
         _mode: Literal["single_mode", "multi_mode", "train_mode"] = "single_mode"
 
@@ -45,7 +51,11 @@
 - ``metric_names`` : 指定输出的评估指标
 - ``save_img`` : 是否保存重建图像
 - ``img_norm`` : 保存图像以及测试指标前是否进行归一化处理
+- ``bs_test`` : 测试批大小
+- ``nw_test`` : 测试数据加载线程数
+- ``pin_memory`` : 启用 ``pin_memory`` 模式
 - ``_mode`` : 管线运行模式标识（内部参数）
+
 
 2. 多模型管线：
 
@@ -218,9 +228,7 @@
         "Batch size for the train dataloader."
         bs_train: int = 8
         "Num_workers for the train dataloader."
-        num_workers: int = 4
-        "Pin_memory true or false for the train dataloader."
-        pin_memory: bool = False
+        nw_train: int = 4
 
         # train setting - optimizer & scheduler & loss_dict
         "Optimizer config."
@@ -241,8 +249,7 @@
 - ``use_tensorboard`` : 启用TensorBoard可视化
 - ``seed`` : 随机数种子
 - ``bs_train`` : 训练批大小
-- ``num_workers`` : 数据加载线程数
-- ``pin_memory`` : 启用内存锁页
+- ``nw_train`` : 训练数据加载线程数
 - ``optimizer_cfg`` : 优化器配置（默认Adam）
 - ``scheduler_cfg`` : 学习率调度策略
 - ``loss_weight_dict`` : 损失函数权重配置
@@ -294,7 +301,7 @@
 
         # 数据加载设置
         bs_train: int = 8
-        num_workers: int = 4
+        nw_train: int = 4
         pin_memory: bool = False
 
         # 训练策略

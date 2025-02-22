@@ -45,16 +45,13 @@ def build_dataset_name(dataset_name: str):
 
 
 # todo to modify according to the basicsr
-def build_dataloader(dataset: BaseDataset, cfg=None):
+def build_dataloader(dataset, cfg):
     # train dataloader
-    if dataset.split == "train":
-        if cfg is None:
-            return torch.utils.data.DataLoader(dataset, batch_size=1, shuffle=False, num_workers=0)
-        else:
-            return torch.utils.data.DataLoader(dataset, batch_size=cfg.bs_train, shuffle=True, num_workers=cfg.num_workers, pin_memory=cfg.pin_memory)
+    if dataset.split == "train" and cfg._mode == "train_mode":
+        return torch.utils.data.DataLoader(dataset, batch_size=cfg.bs_train, shuffle=True, num_workers=cfg.nw_train, pin_memory=cfg.pin_memory)
     # test dataloader
-    elif dataset.split == "test":
-        return torch.utils.data.DataLoader(dataset, batch_size=1, shuffle=False, num_workers=0)
+    else:
+        return torch.utils.data.DataLoader(dataset, batch_size=cfg.bs_test, shuffle=False, num_workers=cfg.nw_test,pin_memory=False)
 
 
 # dataset_size_dict = {}

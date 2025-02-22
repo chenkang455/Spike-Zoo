@@ -48,9 +48,7 @@ class TrainPipelineConfig(PipelineConfig):
     "Batch size for the train dataloader."
     bs_train: int = 8
     "Num_workers for the train dataloader."
-    num_workers: int = 4
-    "Pin_memory true or false for the train dataloader."
-    pin_memory: bool = False
+    nw_train: int = 4
 
     # train setting - optimizer & scheduler & loss_dict
     "Optimizer config."
@@ -96,7 +94,7 @@ class TrainPipeline(Pipeline):
         self.train_dataset.build_source("train")
         self.dataset.build_source("test")
         self.train_dataloader = build_dataloader(self.train_dataset, self.cfg)
-        self.dataloader = build_dataloader(self.dataset)
+        self.dataloader = build_dataloader(self.dataset,self.cfg)
         # device
         self.device = "cuda" if torch.cuda.is_available() else "cpu"
 

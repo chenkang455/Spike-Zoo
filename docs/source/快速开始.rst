@@ -211,3 +211,8 @@
     print(recon_img.shape, recon_img.max(), recon_img.min())
 
 更多高级用法详见 :ref:`model_use` 。
+
+函数调用
+----------------
+
+Spike-Zoo 集成了各种针对脉冲相机设计的函数库，可以参考 :ref:`api_utils` 查看相关使用方式。

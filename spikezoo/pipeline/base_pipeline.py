@@ -39,6 +39,12 @@ class PipelineConfig:
     save_img: bool = True
     "Normalizing recoverd images and gt or not."
     img_norm: bool = False
+    "Batch size for the test dataloader."
+    bs_test: int = 1
+    "Num_workers for the test dataloader."
+    nw_test: int = 0
+    "Pin_memory true or false for the dataloader."
+    pin_memory: bool = False
     "Different modes for the pipeline."
     _mode: Literal["single_mode", "multi_mode", "train_mode"] = "single_mode"
 
@@ -64,7 +70,7 @@ class Pipeline:
         # dataset
         self.dataset: BaseDataset = build_dataset_name(dataset_cfg) if isinstance(dataset_cfg, str) else build_dataset_cfg(dataset_cfg)
         self.dataset.build_source(split="test")
-        self.dataloader = build_dataloader(self.dataset)
+        self.dataloader = build_dataloader(self.dataset,self.cfg)
         # device
         self.device = "cuda" if torch.cuda.is_available() else "cpu"
 

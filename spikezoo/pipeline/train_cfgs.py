@@ -22,7 +22,7 @@ class REDS_BASE_TrainConfig(TrainPipelineConfig):
 
     # dataloader setting
     bs_train: int = 8
-    num_workers: int = 4
+    nw_train: int = 4
     pin_memory: bool = False
 
     # train setting - optimizer & scheduler & loss_dict
