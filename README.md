@@ -105,9 +105,9 @@ Our code is built on the open-source projects of [SpikeCV](https://spikecv.githu
 If you find our codes helpful to your research, please consider to use the following citation:
 ```
 @misc{spikezoo,
-  title={{Spike-Zoo}: Spike-Zoo: A Toolbox for Spike-to-Image Reconstruction},
+  title={{Spike-Zoo}: A Toolbox for Spike-to-Image Reconstruction},
   author={Kang Chen and Zhiyuan Ye and Tiejun Huang and Zhaofei Yu},
   year={2025},
-  howpublished = "[Online]. Available: \url{https://github.com/chenkang455/Spike-Zoo}"
+  howpublished = {\url{https://github.com/chenkang455/Spike-Zoo}},
 }
 ```
