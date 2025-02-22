@@ -87,7 +87,7 @@ class BaseDataset(Dataset):
         self.spike_length = self.cfg.spike_length_train if self.split == "train" else self.cfg.spike_length_test
         # root dir
         self.cfg.root_dir = Path(self.cfg.root_dir) if isinstance(self.cfg.root_dir, str) else self.cfg.root_dir
-        assert self.cfg.root_dir.exists(), f"No files found in {self.cfg.root_dir} for the specified dataset `{self.dataset_name}`."
+        assert self.cfg.root_dir.exists(), f"No files found in {self.cfg.root_dir} for the specified dataset `{self.cfg.dataset_name}`."
         # prepare
         self.augmentor = Augmentor(self.cfg.crop_size) if self.cfg.use_aug == True and self.split == "train" else -1
         self.prepare_data()

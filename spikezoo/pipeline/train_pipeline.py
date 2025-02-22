@@ -29,13 +29,13 @@ from spikingjelly.clock_driven import functional
 class TrainPipelineConfig(PipelineConfig):
     # parameters setting
     "Training epochs."
-    epochs: int = 1000
+    epochs: int = 10
     "Steps per to save images."
-    steps_per_save_imgs: int = 200
+    steps_per_save_imgs: int = 10
     "Steps per to save model weights."
-    steps_per_save_ckpt: int = 500
+    steps_per_save_ckpt: int = 10
     "Steps per to calculate the metrics."
-    steps_per_cal_metrics: int = 100
+    steps_per_cal_metrics: int = 10
     "Step for gradient accumulation. (for snn methods)"
     steps_grad_accumulation: int = 4
     "Pipeline mode."

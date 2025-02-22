@@ -11,7 +11,7 @@ pipeline = EnsemblePipeline(
         metric_names=["psnr", "ssim", "lpips", "niqe", "brisque","piqe"],
         # save image or not
         save_img=True,
-        save_img_norm=False,
+        img_norm=False,
     ),
     model_cfg_list=[
         sz.METHOD.BASE,sz.METHOD.TFP,sz.METHOD.TFI,sz.METHOD.SPK2IMGNET,sz.METHOD.WGSE,

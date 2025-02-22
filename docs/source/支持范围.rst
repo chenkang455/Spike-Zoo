@@ -1,3 +1,5 @@
+.. _support:
+
 支持范围
 =======================
 
@@ -48,3 +50,17 @@
 +-------------------+---------------------------------------------------------------------------------------------+
 | ``szdata``        | SpikeReveal: Unlocking Temporal Sequences from Real Blurry Inputs with Spike Streams        |
 +-------------------+---------------------------------------------------------------------------------------------+
+
+
+**支持的指标:**
+
+Spike-Zoo目前支持的指标范围如下：
+
+.. code-block:: python
+
+    ["psnr", "ssim", "lpips", "mse", "niqe", "brisque", "piqe", "liqe_mix", "clipiqa"]
+
+- ``"psnr", "ssim", "mse"`` 指标计算的代码来源于 ``skimage`` 库。
+- ``"lpips"`` 指标计算的代码来源于 ``lpips`` 库。
+- ``"niqe", "brisque", "piqe", "liqe_mix", "clipiqa"`` 等非参考指标计算的代码来源于 ``pyiqa`` 库。本仓库通过直接调用 ``pyiqa`` 接口实现非参考指标计算，理论上该仓库支持的指标本仓库均支持。
+

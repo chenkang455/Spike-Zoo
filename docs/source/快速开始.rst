@@ -63,7 +63,7 @@
 
 .. code-block:: python
 
-    from spikezoo.pipeline import Pipeline, PipelineConfig
+    from spikezoo.pipeline.base_pipeline import Pipeline, PipelineConfig
     import spikezoo as sz
     pipeline = Pipeline(
         cfg=PipelineConfig(save_folder="results",version="v023"),
@@ -82,7 +82,7 @@
 .. code-block:: python
 
     import spikezoo as sz
-    from spikezoo.pipeline import EnsemblePipeline, EnsemblePipelineConfig
+    from spikezoo.pipeline.ensemble_pipeline import EnsemblePipeline, EnsemblePipelineConfig
     pipeline = EnsemblePipeline(
         cfg=EnsemblePipelineConfig(save_folder="results",version="v023"),
         model_cfg_list=[
@@ -93,8 +93,7 @@
 
 - ``model_cfg_list`` : 多模型参数配置列表
 
-管线参数的详细配置说明参考 :ref:`eval_config`，模型与数据集的参数支持预设配置（如示例）和自定义配置（参考 :ref:`eval_initial`）。
-
+管线参数说明参考 :ref:`eval_config`，针对模型和数据集的加载，提供直接命名和参数实例化两种方式，具体使用参考 :ref:`eval_initial`。
 
 功能接口
 ^^^^^^^^^^^^
@@ -115,7 +114,7 @@
 
 .. note::
 
-    ``rate`` 参数对重构图像进行了亮度矫正，具体作用参见 :ref:`param_rate` 。
+    函数接口参数解释见 :ref:`api_pipeline`，其中``rate`` 参数对重构图像进行了亮度矫正，具体作用参见 :ref:`param_rate` 。
 
 
 - **II-数据集可视化:** 批量保存数据集所有样本的重建结果
@@ -139,21 +138,50 @@
     # 分析结果写入result.log
     pipeline.cal_params()
 
+.. note::
+
+    参数计算主要包含参数量(Params)、计算量(FLOPs)和延迟(Latency),计算代码如下所示:
+
+    .. code-block:: python
+
+        def _cal_prams_model(self, model):
+            """Calculate the parameters for the given model."""
+            network = model.net
+            model_name = model.cfg.model_name.upper()
+            # params
+            params = sum(p.numel() for p in network.parameters())
+            # latency
+            spike = torch.zeros((1, 200, 250, 400)).cuda()
+            start_time = time.time()
+            for _ in range(100):
+                model.spk2img(spike)
+            latency = (time.time() - start_time) / 100
+            # flop # todo thop bug for BSF
+            flops, _ = profile((model), inputs=(spike,))
+            re_msg = (
+                "Total params: %.4fM" % (params / 1e6),
+                "FLOPs:" + str(flops / 1e9) + "{}".format("G"),
+                "Latency: {:.6f} seconds".format(latency),
+            )
+            self.logger.info(f"----------------------Method: {model_name}----------------------")
+            self.logger.info(re_msg)
+
+关于不同模型的指标和参数计算结果，参见 :ref:`version`。
 
 训练流程
 ----------------
 
-1. 下载 ``REDS_BASE`` 数据集并放置在 ``spikezoo/data/reds_base`` 路径下，参考 :ref:`dataset_prepare` 。
+1. 下载 ``REDS_BASE`` 数据集并放置在 ``spikezoo/data/reds_base`` 路径下（或者其他路径，在 ``root_dir`` 参数中设置即可），参考 :ref:`dataset_prepare` 。
 
 2. 构建训练管线代码，基于 ``BASE`` 模型开始训练：
 
 .. code-block:: python
 
-    from spikezoo.pipeline import TrainPipelineConfig, TrainPipeline
+    from spikezoo.pipeline.train_pipeline import TrainPipelineConfig, TrainPipeline
     from spikezoo.datasets.reds_base_dataset import REDS_BASEConfig
     from spikezoo.models.base_model import BaseModelConfig
     pipeline = TrainPipeline(
-        cfg=TrainPipelineConfig(save_folder="results", epochs = 10),
+        cfg=TrainPipelineConfig(save_folder="results"),
         dataset_cfg=REDS_BASEConfig(root_dir = "spikezoo/data/reds_base"),
         model_cfg=BaseModelConfig(),
     )
@@ -161,13 +189,13 @@
 
 .. note::
 
-    单卡NVIDIA RTX 4090实测：训练耗时约2分钟，PSNR 32.8dB / SSIM 0.92。完整训练配置参考 :ref:`train_pipe`。
+    单卡NVIDIA RTX 4090实测：训练耗时约2分钟，PSNR 32.8dB / SSIM 0.92。完整训练配置参考 :ref:`train_pipe`。模型和数据集的参数配置参考 :ref:`eval_initial`。
 
 
 模型直接调用
 ----------------
 
-除通过管线调用外，也支持模型独立使用：
+除通过管线调用外，也支持模型独立使用，根据给定输入脉冲输出重构图像：
 
 .. code-block:: python
 

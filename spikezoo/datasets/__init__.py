@@ -1,4 +1,5 @@
 from spikezoo.datasets.base_dataset import BaseDataset, BaseDatasetConfig
+
 from dataclasses import replace
 import importlib, inspect
 import os

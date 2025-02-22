@@ -38,7 +38,7 @@ class PipelineConfig:
     "Save recoverd images or not."
     save_img: bool = True
     "Normalizing recoverd images and gt or not."
-    save_img_norm: bool = False
+    img_norm: bool = False
     "Different modes for the pipeline."
     _mode: Literal["single_mode", "multi_mode", "train_mode"] = "single_mode"
 
@@ -229,8 +229,8 @@ class Pipeline:
         # With no GT
         if recon_img == None:
             return None
-        # TFP, TFI, spikeclip algorithms are normalized automatically, others are normalized based on the self.cfg.use_norm
-        if model_name in ["tfp", "tfi", "spikeclip"] or self.cfg.save_img_norm == True:
+        # spikeclip is normalized automatically
+        if model_name in ["spikeclip"] or self.cfg.img_norm == True:
             recon_img = (recon_img - recon_img.min()) / (recon_img.max() - recon_img.min())
         else:
             recon_img = recon_img / rate
@@ -254,7 +254,7 @@ class Pipeline:
             batch = model.feed_to_device(batch)
             outputs = model.get_outputs_dict(batch)
             recon_img, img = model.get_paired_imgs(batch, outputs)
-            recon_img, img = self._post_process_img(recon_img, model_name), self._post_process_img(img, "auto")
+            recon_img, img = self._post_process_img(recon_img, model_name), self._post_process_img(img, "gt")
             for metric_name in metrics_dict.keys():
                 if metric_name in metric_pair_names:
                     metrics_dict[metric_name].update(cal_metric_pair(recon_img, img, metric_name))

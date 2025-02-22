@@ -15,7 +15,7 @@ data/spike_data/
 data/spike_data/
 data_zjy/
 
-
+spikezoo/data/your_data_path
 
 examples/train_reds_base/train_spcsnet.py
 TODO.md

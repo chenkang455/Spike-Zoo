@@ -1,16 +1,6 @@
 import importlib
 import inspect
 from spikezoo.models.base_model import BaseModel,BaseModelConfig
-from spikezoo.models.tfp_model import TFPModel,TFPConfig
-from spikezoo.models.tfi_model import TFIModel,TFIConfig
-from spikezoo.models.spk2imgnet_model import Spk2ImgNet,Spk2ImgNetConfig
-from spikezoo.models.wgse_model import WGSE,WGSEConfig
-from spikezoo.models.ssml_model import SSML,SSMLConfig
-from spikezoo.models.bsf_model import BSF,BSFConfig
-from spikezoo.models.stir_model import STIR,STIRConfig
-from spikezoo.models.ssir_model import SSIR,SSIRConfig
-from spikezoo.models.spikeclip_model import SpikeCLIP,SpikeCLIPConfig
-
 
 from spikezoo.utils.other_utils import getattr_case_insensitive
 import os

@@ -9,7 +9,7 @@ import numpy as np
 @dataclass
 class SZDataConfig(BaseDatasetConfig):
     dataset_name: str = "szdata"
-    root_dir: Path = Path(__file__).parent.parent / Path("data/dataset")
+    root_dir: Path = Path(__file__).parent.parent / Path("data/szdata")
     width: int = 400
     height: int = 250
     with_img: bool = True

@@ -11,7 +11,9 @@
 参数配置
 ^^^^^^^^^^^
 
-单模型管线基础配置：
+1. 单模型管线
+
+参数配置代码：
 
 .. code-block:: python
 
@@ -30,7 +32,7 @@
         "Save recoverd images or not."
         save_img: bool = True
         "Normalizing recoverd images and gt or not."
-        save_img_norm: bool = False
+        img_norm: bool = False
         "Different modes for the pipeline."
         _mode: Literal["single_mode", "multi_mode", "train_mode"] = "single_mode"
 
@@ -42,10 +44,10 @@
 - ``save_metric`` : 是否输出量化指标
 - ``metric_names`` : 指定输出的评估指标
 - ``save_img`` : 是否保存重建图像
-- ``save_img_norm`` : 保存图像前是否进行归一化处理
+- ``img_norm`` : 保存图像以及测试指标前是否进行归一化处理
 - ``_mode`` : 管线运行模式标识（内部参数）
 
-多模型集成管线扩展配置：
+2. 多模型管线：
 
 .. code-block:: python
 
@@ -57,12 +59,20 @@
 
 - ``_mode`` : 强制设置为多模型模式（内部标识参数）
 
+3. 参数设置补充说明
+
+- ``version``: 支持 ``"local"``, ``"v010"``, ``"v023"`` 三个参数设置，其中 ``"local"``表示从本地路径加载权重，使用方式见 :ref:`eval_initial`，不同发行版本的介绍见 :ref:`version`。
+- ``metric_names``: 指定评测指标，例如 ``["psnr", "ssim","niqe","brisque"]``, 通过 :ref:`support` 查看Spike-Zoo支持的指标。
+- ``img_norm``: 会同时将重构图像和清晰图像归一化，影响最终保存图像的可视化以及指标计算。(``SpikeCLIP`` 由于是基于文本训练的模型，输出不在`[0,1]`范围内，会自动归一化输出图像)
+
 .. _eval_initial:
 
 实例化
 ^^^^^^^^^^^
 
-**单模型管线** 初始化方法：
+1. 单模型管线
+
+管线初始化代码接口如下：
 
 .. code-block:: python
 
@@ -77,7 +87,7 @@
             self._setup_model_data(model_cfg, dataset_cfg)
             self._setup_pipeline()
 
-支持两种配置方式：
+管线实例化支持以下两种方式:
 
 - 预设参数初始化
 
@@ -90,6 +100,8 @@
         model_cfg=sz.METHOD.BASE,
         dataset_cfg=sz.DATASET.BASE 
     )
+
+此方式利用名称来直接指定方法和数据集的默认配置参数，针对数据集需要按照 :ref:`dataset_prepare` 将数据下载至对应位置。
 
 - 自定义参数初始化（推荐方式）
 
@@ -109,10 +121,12 @@
     pipeline = Pipeline(
         cfg=PipelineConfig(save_folder="results",version="local"),
         model_cfg=BaseModelConfig(ckpt_path="spikezoo/models/weights/v023/base.pth"),
-        dataset_cfg=BaseDatasetConfig(root_dir="spikezoo/data/base")
+        dataset_cfg=BaseDatasetConfig()
     )   
 
-**多模型集成管线** 初始化方法：
+2. 多模型管线
+
+管线初始化代码接口如下：
 
 .. code-block:: python
 
@@ -127,7 +141,7 @@
             self._setup_model_data(model_cfg_list, dataset_cfg)
             self._setup_pipeline()
 
-配置方式示例：
+支持两种配置方式：
 
 - 预设参数初始化
 
@@ -150,7 +164,17 @@
     import spikezoo as sz
     from spikezoo.datasets.base_dataset import BaseDatasetConfig
     from spikezoo.pipeline import EnsemblePipeline, EnsemblePipelineConfig
-    from spikezoo.models import BaseModelConfig,TFPConfig,TFIConfig,Spk2ImgNetConfig,WGSEConfig,SSMLConfig,BSFConfig,STIRConfig,SpikeCLIPConfig,SSIRConfig
+    from spikezoo.models.base_model import BaseModel,BaseModelConfig
+    from spikezoo.models.tfp_model import TFPModel,TFPConfig
+    from spikezoo.models.tfi_model import TFIModel,TFIConfig
+    from spikezoo.models.spk2imgnet_model import Spk2ImgNet,Spk2ImgNetConfig
+    from spikezoo.models.wgse_model import WGSE,WGSEConfig
+    from spikezoo.models.ssml_model import SSML,SSMLConfig
+    from spikezoo.models.bsf_model import BSF,BSFConfig
+    from spikezoo.models.stir_model import STIR,STIRConfig
+    from spikezoo.models.ssir_model import SSIR,SSIRConfig
+    from spikezoo.models.spikeclip_model import SpikeCLIP,SpikeCLIPConfig
+
     pipeline = EnsemblePipeline(
         cfg=EnsemblePipelineConfig(save_folder="results",version="v023"),
         model_cfg_list=[
@@ -167,7 +191,7 @@
 
 参数配置
 ^^^^^^^^^^^
-扩展基础配置，增加训练控制参数：
+在推理管线的基础上，训练管线配置代码增加了额外的训练控制参数：
 
 .. code-block:: python
 
@@ -175,13 +199,13 @@
     class TrainPipelineConfig(PipelineConfig):
         # parameters setting
         "Training epochs."
-        epochs: int = 1000
+        epochs: int = 10
         "Steps per to save images."
-        steps_per_save_imgs: int = 200
+        steps_per_save_imgs: int = 10
         "Steps per to save model weights."
-        steps_per_save_ckpt: int = 500
+        steps_per_save_ckpt: int = 10
         "Steps per to calculate the metrics."
-        steps_per_cal_metrics: int = 100
+        steps_per_cal_metrics: int = 10
         "Step for gradient accumulation. (for snn methods)"
         steps_grad_accumulation: int = 4
         "Pipeline mode."
@@ -291,3 +315,10 @@
 
 更多模型在REDS_BASE数据集上的训练配置示例可参考：  
 https://github.com/chenkang455/Spike-Zoo/tree/main/examples/train_reds_base
+
+自定义训练
+^^^^^^^^^^^
+
+Spike-Zoo 提供通过继承基类的方式来分别实现 ``model``, ``dataset`` 和 ``pipeline``，以尽量少的代码修改完成自定义功能设置。
+
+具体例子见：https://github.com/chenkang455/Spike-Zoo/tree/main/examples/train_reds_base

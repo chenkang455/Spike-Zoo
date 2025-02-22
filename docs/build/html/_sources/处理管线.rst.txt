@@ -30,7 +30,7 @@
         "Save recoverd images or not."
         save_img: bool = True
         "Normalizing recoverd images and gt or not."
-        save_img_norm: bool = False
+        img_norm: bool = False
         "Different modes for the pipeline."
         _mode: Literal["single_mode", "multi_mode", "train_mode"] = "single_mode"
 
@@ -42,7 +42,7 @@
 - ``save_metric`` : 是否输出量化指标
 - ``metric_names`` : 指定输出的评估指标
 - ``save_img`` : 是否保存重建图像
-- ``save_img_norm`` : 保存图像前是否进行归一化处理
+- ``img_norm`` : 保存图像前是否进行归一化处理
 - ``_mode`` : 管线运行模式标识（内部参数）
 
 多模型集成管线扩展配置：

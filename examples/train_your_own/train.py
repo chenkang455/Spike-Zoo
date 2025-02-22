@@ -1,5 +1,3 @@
-import os
-os.environ["CUDA_VISIBLE_DEVICES"] = "7"
 from pipeline import YourPipeline, YourPipelineConfig
 from model import YourModel, YourModelConfig
 from dataset import YourDataset, YourDatasetConfig

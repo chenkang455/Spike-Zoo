@@ -18,7 +18,7 @@ pipeline = TrainPipeline(
         optimizer_cfg=AdamOptimizerConfig(lr=3e-4),
         scheduler_cfg=CosineAnnealingLRConfig(T_max=400),  # epochs
         loss_weight_dict={"l2": 1},
-        save_img_norm=False, 
+        img_norm=False, 
     ),
     dataset_cfg=REDS_BASEConfig(root_dir="spikezoo/data/reds_base", use_aug=True, crop_size=(40, 40)),
     model_cfg=SSMLConfig(tfp_label_length=7),
