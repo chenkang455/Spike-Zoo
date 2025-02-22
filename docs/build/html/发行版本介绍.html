@@ -7,7 +7,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>发行版本介绍 &mdash; Spike-Zoo v0.2 文档</title>
-      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="_static/css/custom.css" />
 
@@ -15,13 +15,13 @@
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
       <script src="_static/documentation_options.js?v=e0f13565"></script>
-      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/doctools.js?v=9a2dae69"></script>
       <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
       <script src="_static/translations.js?v=beaddf03"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="索引" href="genindex.html" />
     <link rel="search" title="搜索" href="search.html" />
-    <link rel="next" title="&lt;no title&gt;" href="%E8%84%89%E5%86%B2%E4%BB%BF%E7%9C%9F.html" />
+    <link rel="next" title="脉冲仿真" href="%E8%84%89%E5%86%B2%E4%BB%BF%E7%9C%9F.html" />
     <link rel="prev" title="处理管线" href="%E5%A4%84%E7%90%86%E7%AE%A1%E7%BA%BF.html" /> 
 </head>
 
@@ -54,11 +54,14 @@
 <li class="toctree-l2"><a class="reference internal" href="#v023">v023</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="%E8%84%89%E5%86%B2%E4%BB%BF%E7%9C%9F.html">脉冲仿真</a></li>
 <li class="toctree-l1"><a class="reference internal" href="%E4%BD%BF%E7%94%A8%E4%BE%8B%E5%AD%90.html">使用示例</a></li>
+<li class="toctree-l1"><a class="reference internal" href="%E6%94%AF%E6%8C%81%E8%8C%83%E5%9B%B4.html">支持范围</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">APIs</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="spikezoo.utils.html">spikezoo.utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="spikezoo.pipeline.html">spikezoo.pipeline</a></li>
 </ul>
 
         </div>
@@ -85,11 +88,11 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="id1">
-<h1>发行版本介绍<a class="headerlink" href="#id1" title="Link to this heading"></a></h1>
+  <section id="version">
+<span id="id1"></span><h1>发行版本介绍<a class="headerlink" href="#version" title="Link to this heading"></a></h1>
 <p>发行版本参数 <code class="docutils literal notranslate"><span class="pre">version</span></code> 的使用方式如下所示：</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">spikezoo.pipeline</span><span class="w"> </span><span class="kn">import</span> <span class="n">Pipeline</span><span class="p">,</span> <span class="n">PipelineConfig</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">spikezoo</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sz</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">spikezoo.pipeline</span> <span class="kn">import</span> <span class="n">Pipeline</span><span class="p">,</span> <span class="n">PipelineConfig</span>
+<span class="kn">import</span> <span class="nn">spikezoo</span> <span class="k">as</span> <span class="nn">sz</span>
 <span class="n">pipeline</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">(</span>
     <span class="n">cfg</span><span class="o">=</span><span class="n">PipelineConfig</span><span class="p">(</span><span class="n">save_folder</span><span class="o">=</span><span class="s2">&quot;results&quot;</span><span class="p">,</span><span class="n">version</span><span class="o">=</span><span class="s2">&quot;v023&quot;</span><span class="p">),</span>
     <span class="n">model_cfg</span><span class="o">=</span><span class="n">sz</span><span class="o">.</span><span class="n">METHOD</span><span class="o">.</span><span class="n">BASE</span><span class="p">,</span>
@@ -127,23 +130,23 @@
 </thead>
 <tbody>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">tfi</span></code></p></td>
-<td><p>16.503</p></td>
-<td><p>0.454</p></td>
-<td><p>0.382</p></td>
-<td><p>7.289</p></td>
-<td><p>43.17</p></td>
-<td><p>49.12</p></td>
+<td><p>25.098</p></td>
+<td><p>0.726</p></td>
+<td><p>0.318</p></td>
+<td><p>7.395</p></td>
+<td><p>46.44</p></td>
+<td><p>49.44</p></td>
 <td><p>0.00</p></td>
 <td><p>0.00</p></td>
 <td><p>3.60</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">tfp</span></code></p></td>
-<td><p>24.287</p></td>
-<td><p>0.644</p></td>
-<td><p>0.274</p></td>
-<td><p>8.197</p></td>
-<td><p>48.48</p></td>
-<td><p>38.38</p></td>
+<td><p>28.169</p></td>
+<td><p>0.770</p></td>
+<td><p>0.261</p></td>
+<td><p>8.058</p></td>
+<td><p>47.26</p></td>
+<td><p>38.13</p></td>
 <td><p>0.00</p></td>
 <td><p>0.00</p></td>
 <td><p>0.03</p></td>
@@ -246,7 +249,7 @@
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="页脚">
         <a href="%E5%A4%84%E7%90%86%E7%AE%A1%E7%BA%BF.html" class="btn btn-neutral float-left" title="处理管线" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
-        <a href="%E8%84%89%E5%86%B2%E4%BB%BF%E7%9C%9F.html" class="btn btn-neutral float-right" title="&lt;no title&gt;" accesskey="n" rel="next">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="%E8%84%89%E5%86%B2%E4%BB%BF%E7%9C%9F.html" class="btn btn-neutral float-right" title="脉冲仿真" accesskey="n" rel="next">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

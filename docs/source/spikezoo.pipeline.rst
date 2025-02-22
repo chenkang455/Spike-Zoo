@@ -14,13 +14,13 @@ spikezoo.pipeline
 
     .. code-block:: python
 
-    from spikezoo.pipeline import Pipeline, PipelineConfig
-    import spikezoo as sz
-    pipeline = Pipeline(
-        cfg=PipelineConfig(save_folder="results",version="v023"),
-        model_cfg=sz.METHOD.BASE,
-        dataset_cfg=sz.DATASET.BASE
-    )
+        from spikezoo.pipeline import Pipeline, PipelineConfig
+        import spikezoo as sz
+        pipeline = Pipeline(
+            cfg=PipelineConfig(save_folder="results",version="v023"),
+            model_cfg=sz.METHOD.BASE,
+            dataset_cfg=sz.DATASET.BASE
+        )
 
 .. py:function:: infer_from_dataset(self, idx=0)
 
@@ -31,7 +31,7 @@ spikezoo.pipeline
 
     .. code-block:: python
 
-    pipeline.infer_from_dataset(idx=0)
+        pipeline.infer_from_dataset(idx=0)
 
 .. py:function:: infer_from_file(self, file_path, height=-1, width=-1, rate=1, img_path=None, remove_head=False)
 
@@ -52,12 +52,12 @@ spikezoo.pipeline
 
     .. code-block:: python
 
-    # without gt (for calculating psnr,ssim and lpips)
-    pipeline.infer_from_file(file_path='data/data.dat',width=400,height=250)
-    # with gt (only niqe and brisque)
-    pipeline.infer_from_file(file_path = 'data/data.dat',width = 400,height=250,img_path= "data/data.png",rate = 0.6)
-    # for real-captured data with frame index
-    pipeline.infer_from_file(file_path='realworld.dat',width=416,height=250,remove_head=True)
+        # without gt (for calculating psnr,ssim and lpips)
+        pipeline.infer_from_file(file_path='data/data.dat',width=400,height=250)
+        # with gt (only niqe and brisque)
+        pipeline.infer_from_file(file_path = 'data/data.dat',width = 400,height=250,img_path= "data/data.png",rate = 0.6)
+        # for real-captured data with frame index
+        pipeline.infer_from_file(file_path='realworld.dat',width=416,height=250,remove_head=True)
 
 .. py:function:: infer_from_spk(self, spike, rate=1, img=None)
 
@@ -72,13 +72,13 @@ spikezoo.pipeline
 
     .. code-block:: python
 
-    import spikezoo as sz
-    import cv2
-    spike = sz.load_vidar_dat("data/data.dat",width=400,height=250)
-    img = cv2.imread("data/data.png")
-    # without gt (for calculating psnr,ssim,lpips,niqe and brisque)
-    pipeline.infer_from_spk(spike)
+        import spikezoo as sz
+        import cv2
+        spike = sz.load_vidar_dat("data/data.dat",width=400,height=250)
+        img = cv2.imread("data/data.png")
+        # without gt (for calculating psnr,ssim,lpips,niqe and brisque)
+        pipeline.infer_from_spk(spike)
 
-    # with gt (only niqe and brisque)
-    pipeline.infer_from_spk(spike,img,rate = 0.6)
+        # with gt (only niqe and brisque)
+        pipeline.infer_from_spk(spike,img,rate = 0.6)
 

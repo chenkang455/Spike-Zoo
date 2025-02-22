@@ -49,12 +49,12 @@ def build_dataloader(dataset: BaseDataset, cfg=None):
     # train dataloader
     if dataset.split == "train":
         if cfg is None:
-            return torch.utils.data.DataLoader(dataset, batch_size=1, shuffle=False, num_workers=1)
+            return torch.utils.data.DataLoader(dataset, batch_size=1, shuffle=False, num_workers=0)
         else:
             return torch.utils.data.DataLoader(dataset, batch_size=cfg.bs_train, shuffle=True, num_workers=cfg.num_workers, pin_memory=cfg.pin_memory)
     # test dataloader
     elif dataset.split == "test":
-        return torch.utils.data.DataLoader(dataset, batch_size=1, shuffle=False, num_workers=1)
+        return torch.utils.data.DataLoader(dataset, batch_size=1, shuffle=False, num_workers=0)
 
 
 # dataset_size_dict = {}

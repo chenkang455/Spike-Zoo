@@ -1,7 +1,7 @@
 spikezoo.utils 
 -------------------
 
-.. py:function:: load_vidar_dat(filename, height, width,remove_head=False,version: Literal["python", "cpp"] = "cpp", out_format: Literal["array", "tensor"] = "array")
+.. py:function:: load_vidar_dat(filename, height, width,remove_head=False,version: Literal["python", "cpp"] = "python", out_format: Literal["array", "tensor"] = "array")
 
   读取脉冲数据函数。
 

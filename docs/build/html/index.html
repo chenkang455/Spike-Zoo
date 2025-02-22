@@ -7,7 +7,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Spike-Zoo 文档 &mdash; Spike-Zoo v0.2 文档</title>
-      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="_static/css/custom.css" />
 
@@ -15,7 +15,7 @@
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
       <script src="_static/documentation_options.js?v=e0f13565"></script>
-      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/doctools.js?v=9a2dae69"></script>
       <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
       <script src="_static/translations.js?v=beaddf03"></script>
     <script src="_static/js/theme.js"></script>
@@ -49,6 +49,7 @@
 <li class="toctree-l1"><a class="reference internal" href="%E6%A8%A1%E5%9E%8B.html">模型</a></li>
 <li class="toctree-l1"><a class="reference internal" href="%E5%A4%84%E7%90%86%E7%AE%A1%E7%BA%BF.html">处理管线</a></li>
 <li class="toctree-l1"><a class="reference internal" href="%E5%8F%91%E8%A1%8C%E7%89%88%E6%9C%AC%E4%BB%8B%E7%BB%8D.html">发行版本介绍</a></li>
+<li class="toctree-l1"><a class="reference internal" href="%E8%84%89%E5%86%B2%E4%BB%BF%E7%9C%9F.html">脉冲仿真</a></li>
 <li class="toctree-l1"><a class="reference internal" href="%E4%BD%BF%E7%94%A8%E4%BE%8B%E5%AD%90.html">使用示例</a></li>
 <li class="toctree-l1"><a class="reference internal" href="%E6%94%AF%E6%8C%81%E8%8C%83%E5%9B%B4.html">支持范围</a></li>
 </ul>
@@ -99,7 +100,7 @@
 </pre></div>
 </div>
 <ul class="simple">
-<li><p>从 <code class="docutils literal notranslate"><span class="pre">github</span></code> 安装最新的开发版本：</p></li>
+<li><p>从 <code class="docutils literal notranslate"><span class="pre">github</span></code> 安装最新的开发版本  <strong>(推荐)</strong>：</p></li>
 </ul>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">git clone https://github.com/chenkang455/Spike-Zoo</span>
 <span class="go">cd Spike-Zoo</span>
@@ -131,17 +132,18 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="%E6%95%B0%E6%8D%AE%E9%9B%86.html">数据集</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="%E6%95%B0%E6%8D%AE%E9%9B%86.html#dataset-prepare">数据来源</a></li>
-<li class="toctree-l2"><a class="reference internal" href="%E6%95%B0%E6%8D%AE%E9%9B%86.html#id7">参数配置</a></li>
-<li class="toctree-l2"><a class="reference internal" href="%E6%95%B0%E6%8D%AE%E9%9B%86.html#id8">数据加载类</a></li>
-<li class="toctree-l2"><a class="reference internal" href="%E6%95%B0%E6%8D%AE%E9%9B%86.html#id9">实例化</a></li>
-<li class="toctree-l2"><a class="reference internal" href="%E6%95%B0%E6%8D%AE%E9%9B%86.html#id10">自定义数据集开发</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E6%95%B0%E6%8D%AE%E9%9B%86.html#id8">参数配置</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E6%95%B0%E6%8D%AE%E9%9B%86.html#id9">数据加载类</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E6%95%B0%E6%8D%AE%E9%9B%86.html#param-rate">实例化</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E6%95%B0%E6%8D%AE%E9%9B%86.html#id11">自定义数据集开发</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="%E6%A8%A1%E5%9E%8B.html">模型</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="%E6%A8%A1%E5%9E%8B.html#id2">参数配置</a></li>
-<li class="toctree-l2"><a class="reference internal" href="%E6%A8%A1%E5%9E%8B.html#id3">模型构建类</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E6%A8%A1%E5%9E%8B.html#id2">模型介绍</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E6%A8%A1%E5%9E%8B.html#id3">参数配置</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E6%A8%A1%E5%9E%8B.html#id4">模型构建类</a></li>
 <li class="toctree-l2"><a class="reference internal" href="%E6%A8%A1%E5%9E%8B.html#model-use">实例化</a></li>
-<li class="toctree-l2"><a class="reference internal" href="%E6%A8%A1%E5%9E%8B.html#id5">自定义模型开发</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E6%A8%A1%E5%9E%8B.html#id6">自定义模型开发</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="%E5%A4%84%E7%90%86%E7%AE%A1%E7%BA%BF.html">处理管线</a><ul>
@@ -154,9 +156,12 @@
 <li class="toctree-l2"><a class="reference internal" href="%E5%8F%91%E8%A1%8C%E7%89%88%E6%9C%AC%E4%BB%8B%E7%BB%8D.html#v023">v023</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="%E8%84%89%E5%86%B2%E4%BB%BF%E7%9C%9F.html">脉冲仿真</a></li>
 <li class="toctree-l1"><a class="reference internal" href="%E4%BD%BF%E7%94%A8%E4%BE%8B%E5%AD%90.html">使用示例</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="%E4%BD%BF%E7%94%A8%E4%BE%8B%E5%AD%90.html#pipeline">Pipeline</a></li>
-<li class="toctree-l2"><a class="reference internal" href="%E4%BD%BF%E7%94%A8%E4%BE%8B%E5%AD%90.html#model">Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E4%BD%BF%E7%94%A8%E4%BE%8B%E5%AD%90.html#id2">推理管线</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E4%BD%BF%E7%94%A8%E4%BE%8B%E5%AD%90.html#id3">训练管线</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E4%BD%BF%E7%94%A8%E4%BE%8B%E5%AD%90.html#id4">模型</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E4%BD%BF%E7%94%A8%E4%BE%8B%E5%AD%90.html#id5">数据集</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="%E6%94%AF%E6%8C%81%E8%8C%83%E5%9B%B4.html">支持范围</a></li>
@@ -172,7 +177,7 @@
 <li><p><strong>BasicSR</strong>: <a class="reference external" href="https://github.com/XPixelGroup/BasicSR">https://github.com/XPixelGroup/BasicSR</a></p></li>
 <li><p><strong>NeRFStudio</strong>: <a class="reference external" href="https://github.com/nerfstudio-project/nerfstudio">https://github.com/nerfstudio-project/nerfstudio</a></p></li>
 </ul>
-<p>同时，感谢 <a class="reference external" href="https://github.com/ruizhao26">rui zhao</a> 、<a class="reference external" href="https://github.com/Leozhangjiyuan">jiyuan zhang</a> 以及 <a class="reference external" href="https://github.com/hnmizuho">shiyan chen</a>
+<p>同时，感谢 <a class="reference external" href="https://github.com/hzw-abc">zhiwen huang</a> <a class="reference external" href="https://github.com/ruizhao26">rui zhao</a> 、<a class="reference external" href="https://github.com/Leozhangjiyuan">jiyuan zhang</a> 以及 <a class="reference external" href="https://github.com/hnmizuho">shiyan chen</a>
 对我们项目的帮助。</p>
 </section>
 <section id="id4">
@@ -194,6 +199,9 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="spikezoo.pipeline.html">spikezoo.pipeline</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="spikezoo.pipeline.html#init__"><code class="docutils literal notranslate"><span class="pre">__init__()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="spikezoo.pipeline.html#infer_from_dataset"><code class="docutils literal notranslate"><span class="pre">infer_from_dataset()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="spikezoo.pipeline.html#infer_from_file"><code class="docutils literal notranslate"><span class="pre">infer_from_file()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="spikezoo.pipeline.html#infer_from_spk"><code class="docutils literal notranslate"><span class="pre">infer_from_spk()</span></code></a></li>
 </ul>
 </li>
 </ul>

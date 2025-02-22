@@ -7,7 +7,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>模型 &mdash; Spike-Zoo v0.2 文档</title>
-      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="_static/css/custom.css" />
 
@@ -15,7 +15,7 @@
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
       <script src="_static/documentation_options.js?v=e0f13565"></script>
-      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/doctools.js?v=9a2dae69"></script>
       <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
       <script src="_static/translations.js?v=beaddf03"></script>
     <script src="_static/js/theme.js"></script>
@@ -48,18 +48,23 @@
 <li class="toctree-l1"><a class="reference internal" href="%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B.html">快速开始</a></li>
 <li class="toctree-l1"><a class="reference internal" href="%E6%95%B0%E6%8D%AE%E9%9B%86.html">数据集</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">模型</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#id2">参数配置</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#id3">模型构建类</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id2">模型介绍</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id3">参数配置</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id4">模型构建类</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#model-use">实例化</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#id5">自定义模型开发</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id6">自定义模型开发</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="%E5%A4%84%E7%90%86%E7%AE%A1%E7%BA%BF.html">处理管线</a></li>
 <li class="toctree-l1"><a class="reference internal" href="%E5%8F%91%E8%A1%8C%E7%89%88%E6%9C%AC%E4%BB%8B%E7%BB%8D.html">发行版本介绍</a></li>
+<li class="toctree-l1"><a class="reference internal" href="%E8%84%89%E5%86%B2%E4%BB%BF%E7%9C%9F.html">脉冲仿真</a></li>
+<li class="toctree-l1"><a class="reference internal" href="%E4%BD%BF%E7%94%A8%E4%BE%8B%E5%AD%90.html">使用示例</a></li>
+<li class="toctree-l1"><a class="reference internal" href="%E6%94%AF%E6%8C%81%E8%8C%83%E5%9B%B4.html">支持范围</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">APIs</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="spikezoo.utils.html">spikezoo.utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="spikezoo.pipeline.html">spikezoo.pipeline</a></li>
 </ul>
 
         </div>
@@ -88,11 +93,16 @@
              
   <section id="id1">
 <h1>模型<a class="headerlink" href="#id1" title="Link to this heading"></a></h1>
-<p>Spike-Zoo的模型组件 <code class="docutils literal notranslate"><span class="pre">model</span></code> 封装了网络架构 <code class="docutils literal notranslate"><span class="pre">arch</span></code>，主要负责模型输入脉冲的预处理、输出图像的后处理以及训练相关的损失函数计算等功能。</p>
+<p>Spike-Zoo的模型组件 <code class="docutils literal notranslate"><span class="pre">model</span></code> 对网络架构 <code class="docutils literal notranslate"><span class="pre">arch</span></code> 进行封装，主要负责模型输入脉冲的预处理、输出图像的后处理以及训练相关的损失函数计算等功能。</p>
 <section id="id2">
-<h2>参数配置<a class="headerlink" href="#id2" title="Link to this heading"></a></h2>
+<h2>模型介绍<a class="headerlink" href="#id2" title="Link to this heading"></a></h2>
+<p>有待完善……..</p>
+</section>
+<section id="id3">
+<h2>参数配置<a class="headerlink" href="#id3" title="Link to this heading"></a></h2>
+<p>以 BASE 模型为例，配置类定义如下：</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@dataclass</span>
-<span class="k">class</span><span class="w"> </span><span class="nc">BaseModelConfig</span><span class="p">:</span>
+<span class="k">class</span> <span class="nc">BaseModelConfig</span><span class="p">:</span>
     <span class="c1"># ------------- Not Recommended to Change -------------</span>
     <span class="s2">&quot;Registerd model name.&quot;</span>
     <span class="n">model_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;base&quot;</span>
@@ -119,6 +129,10 @@
     <span class="n">multi_gpu</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
     <span class="s2">&quot;Base url.&quot;</span>
     <span class="n">base_url</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;https://github.com/chenkang455/Spike-Zoo/releases/download&quot;</span>
+    <span class="s2">&quot;Load the model from local class or spikezoo lib. (None)&quot;</span>
+    <span class="n">model_cls_local</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="s2">&quot;Load the arch from local class or spikezoo lib. (None)&quot;</span>
+    <span class="n">arch_cls_local</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
 </pre></div>
 </div>
 <p>参数说明如下：</p>
@@ -135,56 +149,61 @@
 <li><p><code class="docutils literal notranslate"><span class="pre">load_state</span></code> : 是否加载预训练权重（默认关闭，评估模式需设为开启）</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">multi_gpu</span></code> : 是否启用多GPU训练模式</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">base_url</span></code> : 各版本预训练权重的云端存储地址</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">model_cls_local</span></code> : 调用本地设计的模型类，默认值为 <code class="docutils literal notranslate"><span class="pre">None``（即导入</span> <span class="pre">``spikezoo</span></code> 仓库的模型类）</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">arch_cls_local</span></code> : 调用本地设计的网络架构，默认值为 <code class="docutils literal notranslate"><span class="pre">None``（即导入</span> <span class="pre">``spikezoo</span></code> 仓库的网络架构）</p></li>
 </ul>
 </section>
-<section id="id3">
-<h2>模型构建类<a class="headerlink" href="#id3" title="Link to this heading"></a></h2>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">BaseModel</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<section id="id4">
+<h2>模型构建类<a class="headerlink" href="#id4" title="Link to this heading"></a></h2>
+<p>以 BASE 模型为例，模型构建类定义如下：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">BaseModel</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
     <span class="c1"># 初始化模型实例</span>
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cfg</span><span class="p">:</span> <span class="n">BaseModelConfig</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cfg</span><span class="p">:</span> <span class="n">BaseModelConfig</span><span class="p">):</span>
     <span class="c1"># 前向推理接口：输入脉冲，输出重建图像</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spike</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spike</span><span class="p">):</span>
     <span class="c1"># 核心转换方法：将单个脉冲转换为图像（被训练和推理接口调用）</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">spk2img</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spike</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">spk2img</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spike</span><span class="p">):</span>
     <span class="c1"># 网络构建方法：加载模型架构并选择是否加载权重</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">build_network</span><span class="p">(</span>
+    <span class="k">def</span> <span class="nf">build_network</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">mode</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;debug&quot;</span><span class="p">,</span> <span class="s2">&quot;train&quot;</span><span class="p">,</span> <span class="s2">&quot;eval&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;debug&quot;</span><span class="p">,</span>
         <span class="n">version</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;local&quot;</span><span class="p">,</span> <span class="s2">&quot;v010&quot;</span><span class="p">,</span> <span class="s2">&quot;v023&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;local&quot;</span><span class="p">,</span>
     <span class="p">):</span>
     <span class="c1"># 网络权重保存</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">save_network</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">save_path</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">save_network</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">save_path</span><span class="p">):</span>
     <span class="c1"># 输入脉冲长度裁剪</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">crop_spike_length</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spike</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">crop_spike_length</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spike</span><span class="p">):</span>
     <span class="c1"># 输入脉冲预处理（尺寸调整、脉冲表征转换等）</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">preprocess_spike</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spike</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">preprocess_spike</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spike</span><span class="p">):</span>
     <span class="c1"># 输出图像后处理（尺寸还原、亮度校正等）</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">postprocess_img</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">image</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">postprocess_img</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">image</span><span class="p">):</span>
     <span class="c1"># 获取训练输出字典（训练时可能包含多组输出）</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">get_outputs_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">get_outputs_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch</span><span class="p">):</span>
     <span class="c1"># 获取需要保存的可视化图像字典</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">get_visual_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch</span><span class="p">,</span> <span class="n">outputs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">get_visual_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch</span><span class="p">,</span> <span class="n">outputs</span><span class="p">):</span>
     <span class="c1"># 根据输出结果和输入数据计算损失值</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">get_loss_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">outputs</span><span class="p">,</span> <span class="n">batch</span><span class="p">,</span> <span class="n">loss_weight_dict</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">get_loss_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">outputs</span><span class="p">,</span> <span class="n">batch</span><span class="p">,</span> <span class="n">loss_weight_dict</span><span class="p">):</span>
     <span class="c1"># 损失函数定义方法</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">get_loss_func</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;l1&quot;</span><span class="p">,</span> <span class="s2">&quot;l2&quot;</span><span class="p">]):</span>
+    <span class="k">def</span> <span class="nf">get_loss_func</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;l1&quot;</span><span class="p">,</span> <span class="s2">&quot;l2&quot;</span><span class="p">]):</span>
     <span class="c1"># 获取用于计算图像指标的真值-重建图像对</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">get_paired_imgs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch</span><span class="p">,</span> <span class="n">outputs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">get_paired_imgs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch</span><span class="p">,</span> <span class="n">outputs</span><span class="p">):</span>
     <span class="c1"># 将输入数据载入计算设备</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">feed_to_device</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">feed_to_device</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch</span><span class="p">):</span>
 </pre></div>
 </div>
 <p><strong>注意事项：</strong></p>
+<p>模型的核心作用是实现单段输入脉冲到重构图像的映射关系，但脉冲重构在训练和推理阶段接口不同：</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">spk2img</span></code> 实现单脉冲到重构图像的映射，但训练过程中涉及其他参数输入以及模型输出不单纯是重构图像，还包括一些辅助输出，故训练过程中利用 <code class="docutils literal notranslate"><span class="pre">get_outputs_dict</span></code> 函数来得到输出字典。</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">forward</span></code> 方法直接调用 <code class="docutils literal notranslate"><span class="pre">spk2img</span></code> 函数实现脉冲输入到重构图像的映射</p></li>
+<li><p>训练接口 <code class="docutils literal notranslate"><span class="pre">get_outputs_dict</span></code>: 部分训练方法如 <code class="docutils literal notranslate"><span class="pre">ssml</span></code> 和 <code class="docutils literal notranslate"><span class="pre">stir</span></code> 存在多个输出构成损失函数，故该接口会输出一个字典并在 <code class="docutils literal notranslate"><span class="pre">get_loss_dict</span></code> 接口中计算损失函数</p></li>
+<li><p>推理接口 <code class="docutils literal notranslate"><span class="pre">forward</span></code>: 直接调用 <code class="docutils literal notranslate"><span class="pre">spk2img</span></code> 函数实现脉冲输入到重构图像的映射</p></li>
+<li><p>各函数里使用 <code class="docutils literal notranslate"><span class="pre">batch</span></code> 和 <code class="docutils literal notranslate"><span class="pre">outputs</span></code> 时注意和数据集给定的字典 <code class="docutils literal notranslate"><span class="pre">key</span></code> 对齐</p></li>
 </ul>
 </section>
 <section id="model-use">
-<span id="id4"></span><h2>实例化<a class="headerlink" href="#model-use" title="Link to this heading"></a></h2>
-<p>模型除在 <code class="docutils literal notranslate"><span class="pre">pipeline</span></code> 中与 <code class="docutils literal notranslate"><span class="pre">dataset</span></code> 结合使用外，也可单独调用：</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">spikezoo</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sz</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">spikezoo.models.base_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span><span class="p">,</span> <span class="n">BaseModelConfig</span>
+<span id="id5"></span><h2>实例化<a class="headerlink" href="#model-use" title="Link to this heading"></a></h2>
+<p>模型除在 <code class="docutils literal notranslate"><span class="pre">pipeline</span></code> 中与 <code class="docutils literal notranslate"><span class="pre">dataset</span></code> 结合使用外，也提供单独调用方式：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">spikezoo</span> <span class="k">as</span> <span class="nn">sz</span>
+<span class="kn">from</span> <span class="nn">spikezoo.models.base_model</span> <span class="kn">import</span> <span class="n">BaseModel</span><span class="p">,</span> <span class="n">BaseModelConfig</span>
 <span class="c1"># 输入数据加载</span>
 <span class="n">spike</span> <span class="o">=</span> <span class="n">sz</span><span class="o">.</span><span class="n">load_vidar_dat</span><span class="p">(</span><span class="s2">&quot;data/data.dat&quot;</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">250</span><span class="p">,</span> <span class="n">out_format</span><span class="o">=</span><span class="s2">&quot;tensor&quot;</span><span class="p">)</span>
 <span class="n">spike</span> <span class="o">=</span> <span class="n">spike</span><span class="p">[</span><span class="kc">None</span><span class="p">]</span><span class="o">.</span><span class="n">cuda</span><span class="p">()</span>
@@ -199,12 +218,16 @@
 </div>
 <p><code class="docutils literal notranslate"><span class="pre">build_network</span></code> 的典型用法：</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># 1. 调试模式构建网络，是否加载权重由配置决定</span>
-<span class="n">net</span><span class="o">.</span><span class="n">build_network</span><span class="p">(</span><span class="n">mode</span> <span class="o">=</span> <span class="s2">&quot;debug&quot;</span><span class="p">)</span>
+<span class="n">net</span> <span class="o">=</span> <span class="n">BaseModel</span><span class="p">(</span><span class="n">BaseModelConfig</span><span class="p">(</span><span class="n">model_params</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;inDim&quot;</span><span class="p">:</span> <span class="mi">41</span><span class="p">},</span> <span class="n">load_state</span><span class="o">=</span><span class="kc">False</span><span class="p">))</span>
+<span class="n">net</span><span class="o">.</span><span class="n">build_network</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s2">&quot;debug&quot;</span><span class="p">)</span>
 <span class="c1"># 2. 训练模式构建网络，是否加载权重由配置决定</span>
-<span class="n">net</span><span class="o">.</span><span class="n">build_network</span><span class="p">(</span><span class="n">mode</span> <span class="o">=</span> <span class="s2">&quot;train&quot;</span><span class="p">)</span>
+<span class="n">net</span> <span class="o">=</span> <span class="n">BaseModel</span><span class="p">(</span><span class="n">BaseModelConfig</span><span class="p">(</span><span class="n">model_params</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;inDim&quot;</span><span class="p">:</span> <span class="mi">41</span><span class="p">},</span> <span class="n">load_state</span><span class="o">=</span><span class="kc">False</span><span class="p">))</span>
+<span class="n">net</span><span class="o">.</span><span class="n">build_network</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s2">&quot;train&quot;</span><span class="p">)</span>
 <span class="c1"># 3. 评估模式构建网络，自动加载本地配置指定的预训练权重</span>
+<span class="n">net</span> <span class="o">=</span> <span class="n">BaseModel</span><span class="p">(</span><span class="n">BaseModelConfig</span><span class="p">(</span><span class="n">model_params</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;inDim&quot;</span><span class="p">:</span> <span class="mi">41</span><span class="p">},</span> <span class="n">load_state</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">ckpt_path</span><span class="o">=</span><span class="s2">&quot;spikezoo/models/weights/v023/base.pth&quot;</span><span class="p">))</span>
 <span class="n">net</span><span class="o">.</span><span class="n">build_network</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s2">&quot;eval&quot;</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="s2">&quot;local&quot;</span><span class="p">)</span>
 <span class="c1"># 4. 评估模式构建网络，自动加载发行版预训练权重</span>
+<span class="n">net</span> <span class="o">=</span> <span class="n">BaseModel</span><span class="p">(</span><span class="n">BaseModelConfig</span><span class="p">())</span>
 <span class="n">net</span><span class="o">.</span><span class="n">build_network</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s2">&quot;eval&quot;</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="s2">&quot;v023&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -214,17 +237,126 @@
 <li><p><code class="docutils literal notranslate"><span class="pre">eval</span></code> : 评估模式，支持从本地路径 <code class="docutils literal notranslate"><span class="pre">ckpt_path</span></code> 或发行版（如 <code class="docutils literal notranslate"><span class="pre">v023</span></code>）加载权重</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">train</span></code> : 训练模式，默认不加载权重，可通过 <code class="docutils literal notranslate"><span class="pre">load_state</span></code> 参数控制权重加载</p></li>
 </ul>
+<p>其他模型的使用方式:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">spikezoo.models.tfp_model</span> <span class="kn">import</span> <span class="n">TFPModel</span><span class="p">,</span><span class="n">TFPConfig</span>
+<span class="kn">from</span> <span class="nn">spikezoo.models.tfi_model</span> <span class="kn">import</span> <span class="n">TFIModel</span><span class="p">,</span><span class="n">TFIConfig</span>
+<span class="kn">from</span> <span class="nn">spikezoo.models.spk2imgnet_model</span> <span class="kn">import</span> <span class="n">Spk2ImgNet</span><span class="p">,</span><span class="n">Spk2ImgNetConfig</span>
+<span class="kn">from</span> <span class="nn">spikezoo.models.wgse_model</span> <span class="kn">import</span> <span class="n">WGSE</span><span class="p">,</span><span class="n">WGSEConfig</span>
+<span class="kn">from</span> <span class="nn">spikezoo.models.ssml_model</span> <span class="kn">import</span> <span class="n">SSML</span><span class="p">,</span><span class="n">SSMLConfig</span>
+<span class="kn">from</span> <span class="nn">spikezoo.models.bsf_model</span> <span class="kn">import</span> <span class="n">BSF</span><span class="p">,</span><span class="n">BSFConfig</span>
+<span class="kn">from</span> <span class="nn">spikezoo.models.stir_model</span> <span class="kn">import</span> <span class="n">STIR</span><span class="p">,</span><span class="n">STIRConfig</span>
+<span class="kn">from</span> <span class="nn">spikezoo.models.ssir_model</span> <span class="kn">import</span> <span class="n">SSIR</span><span class="p">,</span><span class="n">SSIRConfig</span>
+<span class="kn">from</span> <span class="nn">spikezoo.models.spikeclip_model</span> <span class="kn">import</span> <span class="n">SpikeCLIP</span><span class="p">,</span><span class="n">SpikeCLIPConfig</span>
+</pre></div>
+</div>
 </section>
-<section id="id5">
-<h2>自定义模型开发<a class="headerlink" href="#id5" title="Link to this heading"></a></h2>
-<p>以下以 <code class="docutils literal notranslate"><span class="pre">STIR</span></code> 模型为例，说明自定义模型的封装流程：</p>
+<section id="id6">
+<h2>自定义模型开发<a class="headerlink" href="#id6" title="Link to this heading"></a></h2>
+<p>除了给定模型以外，Spike-Zoo还支持使用自定义设计模型：</p>
+<p><strong>实现步骤：</strong></p>
+<p><em>方式一、将模型加入到Spike-Zoo仓库中，采样标准调用方式</em></p>
+<ol class="arabic simple">
+<li><p>创建模型文件 <code class="docutils literal notranslate"><span class="pre">spikezoo/models/yourmodel_model.py</span></code></p></li>
+<li><p>继承基类并分别实现 <code class="docutils literal notranslate"><span class="pre">YourModelConfig</span></code> 和 <code class="docutils literal notranslate"><span class="pre">YourModel</span></code>:</p></li>
+</ol>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">torch.utils.data</span> <span class="kn">import</span> <span class="n">Dataset</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Literal</span><span class="p">,</span> <span class="n">Union</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span>
+<span class="kn">from</span> <span class="nn">spikezoo.models.base_model</span> <span class="kn">import</span> <span class="n">BaseModel</span><span class="p">,</span> <span class="n">BaseModelConfig</span>
+<span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">field</span>
+<span class="kn">import</span> <span class="nn">torch.nn</span> <span class="k">as</span> <span class="nn">nn</span>
+
+<span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">YourModelConfig</span><span class="p">(</span><span class="n">BaseModelConfig</span><span class="p">):</span>
+    <span class="n">model_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;yourmodel&quot;</span>  <span class="c1"># 需与文件名保持一致</span>
+    <span class="n">model_file_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;arch.net&quot;</span>  <span class="c1"># archs路径下的模块路径</span>
+    <span class="n">model_cls_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;YourNet&quot;</span>  <span class="c1"># 模型类名</span>
+    <span class="n">model_length</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">41</span>
+    <span class="n">require_params</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">model_params</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;inDim&quot;</span><span class="p">:</span> <span class="mi">41</span><span class="p">})</span>
+
+<span class="k">class</span> <span class="nc">YourModel</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cfg</span><span class="p">:</span> <span class="n">BaseModelConfig</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">YourModel</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">cfg</span><span class="p">)</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="3">
+<li><p>创建架构文件 <code class="docutils literal notranslate"><span class="pre">spikezoo/archs/yourmodel/arch/net.py</span></code>, 其中 <code class="docutils literal notranslate"><span class="pre">yourmodel</span></code> 对应 <code class="docutils literal notranslate"><span class="pre">model_name</span></code>，<code class="docutils literal notranslate"><span class="pre">arch/net.py</span></code> 对应 <code class="docutils literal notranslate"><span class="pre">model_file_name</span></code>，<code class="docutils literal notranslate"><span class="pre">YourNet</span></code> 是架构的类名称</p></li>
+<li><p>架构文件代码如下：</p></li>
+</ol>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">torch.nn</span> <span class="k">as</span> <span class="nn">nn</span>
+
+<span class="k">def</span> <span class="nf">conv_layer</span><span class="p">(</span><span class="n">inDim</span><span class="p">,</span> <span class="n">outDim</span><span class="p">,</span> <span class="n">ks</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">norm_layer</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">):</span>
+    <span class="c1">## convolutional layer</span>
+    <span class="n">conv</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span><span class="n">inDim</span><span class="p">,</span> <span class="n">outDim</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="n">ks</span><span class="p">,</span> <span class="n">stride</span><span class="o">=</span><span class="n">s</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="n">p</span><span class="p">)</span>
+    <span class="n">relu</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">norm_layer</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;batch&quot;</span><span class="p">,</span> <span class="s2">&quot;instance&quot;</span><span class="p">,</span> <span class="s2">&quot;none&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">norm_layer</span> <span class="o">==</span> <span class="s2">&quot;none&quot;</span><span class="p">:</span>
+        <span class="n">seq</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span><span class="o">*</span><span class="p">[</span><span class="n">conv</span><span class="p">,</span> <span class="n">relu</span><span class="p">])</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">norm_layer</span> <span class="o">==</span> <span class="s2">&quot;instance&quot;</span><span class="p">:</span>
+            <span class="n">norm</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">InstanceNorm2d</span><span class="p">(</span><span class="n">outDim</span><span class="p">,</span> <span class="n">affine</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">track_running_stats</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>  <span class="c1"># instance norm</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">momentum</span> <span class="o">=</span> <span class="mf">0.1</span>
+            <span class="n">norm</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">BatchNorm2d</span><span class="p">(</span><span class="n">outDim</span><span class="p">,</span> <span class="n">momentum</span><span class="o">=</span><span class="n">momentum</span><span class="p">,</span> <span class="n">affine</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">track_running_stats</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">seq</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span><span class="o">*</span><span class="p">[</span><span class="n">conv</span><span class="p">,</span> <span class="n">norm</span><span class="p">,</span> <span class="n">relu</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">seq</span>
+
+
+<span class="k">class</span> <span class="nc">YourNet</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Borrow the structure from the SpikeCLIP. (https://arxiv.org/abs/2501.04477)&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inDim</span><span class="o">=</span><span class="mi">41</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">YourNet</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="n">norm</span> <span class="o">=</span> <span class="s2">&quot;none&quot;</span>
+        <span class="n">outDim</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="n">convBlock1</span> <span class="o">=</span> <span class="n">conv_layer</span><span class="p">(</span><span class="n">inDim</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">convBlock2</span> <span class="o">=</span> <span class="n">conv_layer</span><span class="p">(</span><span class="mi">64</span><span class="p">,</span> <span class="mi">128</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">norm</span><span class="p">)</span>
+        <span class="n">convBlock3</span> <span class="o">=</span> <span class="n">conv_layer</span><span class="p">(</span><span class="mi">128</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">norm</span><span class="p">)</span>
+        <span class="n">convBlock4</span> <span class="o">=</span> <span class="n">conv_layer</span><span class="p">(</span><span class="mi">64</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">norm</span><span class="p">)</span>
+        <span class="n">conv</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="n">outDim</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">seq</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span><span class="o">*</span><span class="p">[</span><span class="n">convBlock1</span><span class="p">,</span> <span class="n">convBlock2</span><span class="p">,</span> <span class="n">convBlock3</span><span class="p">,</span> <span class="n">convBlock4</span><span class="p">,</span> <span class="n">conv</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">seq</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="5">
+<li><p>本地文件 <code class="docutils literal notranslate"><span class="pre">test.py</span></code> 调用自定义模型</p></li>
+</ol>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">spikezoo.models.yourmodel_model</span> <span class="kn">import</span> <span class="n">YourModel</span><span class="p">,</span> <span class="n">YourModelConfig</span>
+<span class="n">net</span> <span class="o">=</span> <span class="n">YourModel</span><span class="p">(</span><span class="n">YourModelConfig</span><span class="p">())</span>
+<span class="n">net</span><span class="o">.</span><span class="n">build_network</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s2">&quot;debug&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><em>方式二、本地直接继承模型基类</em></p>
+<ol class="arabic simple">
+<li><p>创建本地运行文件 <code class="docutils literal notranslate"><span class="pre">test.py</span></code></p></li>
+<li><p>同方式一步骤2和4实现 <code class="docutils literal notranslate"><span class="pre">YourModelConfig</span></code>, <code class="docutils literal notranslate"><span class="pre">YourModel</span></code> 和 <code class="docutils literal notranslate"><span class="pre">YourNet</span></code>, 其中 <code class="docutils literal notranslate"><span class="pre">model_file_name</span></code>, <code class="docutils literal notranslate"><span class="pre">model_cls_name</span></code> 参数可以忽略设置</p></li>
+<li><p>直接调用自定义模型:</p></li>
+</ol>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">net</span> <span class="o">=</span> <span class="n">YourModel</span><span class="p">(</span>
+    <span class="n">YourModelConfig</span><span class="p">(</span>
+        <span class="n">model_cls_local</span><span class="o">=</span><span class="n">YourModel</span><span class="p">,</span>
+        <span class="n">arch_cls_local</span><span class="o">=</span><span class="n">YourNet</span><span class="p">,</span>
+        <span class="n">load_state</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">ckpt_path</span><span class="o">=</span><span class="s2">&quot;spikezoo/models/weights/v023/base.pth&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+<span class="p">)</span>
+<span class="n">net</span><span class="o">.</span><span class="n">build_network</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s2">&quot;eval&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>具体例子见：<a class="reference external" href="https://github.com/chenkang455/Spike-Zoo/blob/main/examples/test/test_yourmodel.py">https://github.com/chenkang455/Spike-Zoo/blob/main/examples/test/test_yourmodel.py</a></p>
+<p><em>示例、封装已有模型</em></p>
 <ol class="arabic simple">
 <li><p>将STIR官方代码克隆至 <code class="docutils literal notranslate"><span class="pre">spikezoo/archs/stir</span></code> 目录</p></li>
 <li><p>定位模型定义文件 <code class="docutils literal notranslate"><span class="pre">spikezoo/archs/stir/models/networks_STIR.py</span></code>，其中类名为 <code class="docutils literal notranslate"><span class="pre">STIR</span></code></p></li>
 <li><p>在 <code class="docutils literal notranslate"><span class="pre">spikezoo/models</span></code> 目录下创建 <code class="docutils literal notranslate"><span class="pre">stir_model.py</span></code>，配置参数如下：</p></li>
 </ol>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@dataclass</span>
-<span class="k">class</span><span class="w"> </span><span class="nc">STIRConfig</span><span class="p">(</span><span class="n">BaseModelConfig</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">STIRConfig</span><span class="p">(</span><span class="n">BaseModelConfig</span><span class="p">):</span>
     <span class="n">model_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;stir&quot;</span>  <span class="c1"># 需与文件名保持一致</span>
     <span class="n">model_file_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;models.networks_STIR&quot;</span>  <span class="c1"># archs路径下的模块路径</span>
     <span class="n">model_cls_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;STIR&quot;</span>  <span class="c1"># 模型类名</span>
@@ -236,11 +368,11 @@
 <ol class="arabic simple" start="4">
 <li><p>继承基类实现STIR模型。由于涉及多次输入脉冲下采样处理，需重写脉冲预处理和后处理方法：</p></li>
 </ol>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">STIR</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cfg</span><span class="p">:</span> <span class="n">BaseModelConfig</span><span class="p">):</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">STIR</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cfg</span><span class="p">:</span> <span class="n">BaseModelConfig</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">STIR</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">cfg</span><span class="p">)</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="nf">preprocess_spike</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spike</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">preprocess_spike</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spike</span><span class="p">):</span>
         <span class="n">spike</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">crop_spike_length</span><span class="p">(</span><span class="n">spike</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">spike_size</span> <span class="o">==</span> <span class="p">(</span><span class="mi">250</span><span class="p">,</span> <span class="mi">400</span><span class="p">):</span>
             <span class="n">spike</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">([</span><span class="n">spike</span><span class="p">,</span> <span class="n">spike</span><span class="p">[:,</span> <span class="p">:,</span> <span class="o">-</span><span class="mi">6</span><span class="p">:]],</span> <span class="n">dim</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
@@ -248,14 +380,14 @@
             <span class="n">spike</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">([</span><span class="n">spike</span><span class="p">,</span> <span class="n">spike</span><span class="p">[:,</span> <span class="p">:,</span> <span class="p">:,</span> <span class="o">-</span><span class="mi">10</span><span class="p">:]],</span> <span class="n">dim</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">spike</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="nf">postprocess_img</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">image</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">postprocess_img</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">image</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">spike_size</span> <span class="o">==</span> <span class="p">(</span><span class="mi">250</span><span class="p">,</span> <span class="mi">400</span><span class="p">):</span>
             <span class="n">image</span> <span class="o">=</span> <span class="n">image</span><span class="p">[:,</span> <span class="p">:,</span> <span class="p">:</span><span class="mi">250</span><span class="p">,</span> <span class="p">:]</span>
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">spike_size</span> <span class="o">==</span> <span class="p">(</span><span class="mi">480</span><span class="p">,</span> <span class="mi">854</span><span class="p">):</span>
             <span class="n">image</span> <span class="o">=</span> <span class="n">image</span><span class="p">[:,</span> <span class="p">:,</span> <span class="p">:,</span> <span class="p">:</span><span class="mi">854</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">image</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="nf">get_outputs_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">get_outputs_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch</span><span class="p">):</span>
         <span class="n">spike</span> <span class="o">=</span> <span class="n">batch</span><span class="p">[</span><span class="s2">&quot;spike&quot;</span><span class="p">]</span>
         <span class="n">rate</span> <span class="o">=</span> <span class="n">batch</span><span class="p">[</span><span class="s2">&quot;rate&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">float</span><span class="p">()</span>
         <span class="n">outputs</span> <span class="o">=</span> <span class="p">{}</span>

@@ -7,7 +7,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>支持范围 &mdash; Spike-Zoo v0.2 文档</title>
-      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="_static/css/custom.css" />
 
@@ -15,7 +15,7 @@
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
       <script src="_static/documentation_options.js?v=e0f13565"></script>
-      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/doctools.js?v=9a2dae69"></script>
       <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
       <script src="_static/translations.js?v=beaddf03"></script>
     <script src="_static/js/theme.js"></script>
@@ -50,12 +50,14 @@
 <li class="toctree-l1"><a class="reference internal" href="%E6%A8%A1%E5%9E%8B.html">模型</a></li>
 <li class="toctree-l1"><a class="reference internal" href="%E5%A4%84%E7%90%86%E7%AE%A1%E7%BA%BF.html">处理管线</a></li>
 <li class="toctree-l1"><a class="reference internal" href="%E5%8F%91%E8%A1%8C%E7%89%88%E6%9C%AC%E4%BB%8B%E7%BB%8D.html">发行版本介绍</a></li>
+<li class="toctree-l1"><a class="reference internal" href="%E8%84%89%E5%86%B2%E4%BB%BF%E7%9C%9F.html">脉冲仿真</a></li>
 <li class="toctree-l1"><a class="reference internal" href="%E4%BD%BF%E7%94%A8%E4%BE%8B%E5%AD%90.html">使用示例</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">支持范围</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">APIs</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="spikezoo.utils.html">spikezoo.utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="spikezoo.pipeline.html">spikezoo.pipeline</a></li>
 </ul>
 
         </div>
@@ -82,10 +84,10 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="id1">
-<h1>支持范围<a class="headerlink" href="#id1" title="Link to this heading"></a></h1>
+  <section id="support">
+<span id="id1"></span><h1>支持范围<a class="headerlink" href="#support" title="Link to this heading"></a></h1>
 <p>运行以下代码，查看Spike-Zoo支持的 <strong>模型</strong>、<strong>数据集</strong> 和 <strong>指标</strong>:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">spikezoo</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sz</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">spikezoo</span> <span class="k">as</span> <span class="nn">sz</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">sz</span><span class="o">.</span><span class="n">METHODS</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">sz</span><span class="o">.</span><span class="n">DATASETS</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">sz</span><span class="o">.</span><span class="n">METRICS</span><span class="p">)</span>
@@ -150,6 +152,16 @@
 </tr>
 </tbody>
 </table>
+<p><strong>支持的指标:</strong></p>
+<p>Spike-Zoo目前支持的指标范围如下：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="s2">&quot;psnr&quot;</span><span class="p">,</span> <span class="s2">&quot;ssim&quot;</span><span class="p">,</span> <span class="s2">&quot;lpips&quot;</span><span class="p">,</span> <span class="s2">&quot;mse&quot;</span><span class="p">,</span> <span class="s2">&quot;niqe&quot;</span><span class="p">,</span> <span class="s2">&quot;brisque&quot;</span><span class="p">,</span> <span class="s2">&quot;piqe&quot;</span><span class="p">,</span> <span class="s2">&quot;liqe_mix&quot;</span><span class="p">,</span> <span class="s2">&quot;clipiqa&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;psnr&quot;,</span> <span class="pre">&quot;ssim&quot;,</span> <span class="pre">&quot;mse&quot;</span></code> 指标计算的代码来源于 <code class="docutils literal notranslate"><span class="pre">skimage</span></code> 库。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;lpips&quot;</span></code> 指标计算的代码来源于 <code class="docutils literal notranslate"><span class="pre">lpips</span></code> 库。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;niqe&quot;,</span> <span class="pre">&quot;brisque&quot;,</span> <span class="pre">&quot;piqe&quot;,</span> <span class="pre">&quot;liqe_mix&quot;,</span> <span class="pre">&quot;clipiqa&quot;</span></code> 等非参考指标计算的代码来源于 <code class="docutils literal notranslate"><span class="pre">pyiqa</span></code> 库。本仓库通过直接调用 <code class="docutils literal notranslate"><span class="pre">pyiqa</span></code> 接口实现非参考指标计算，理论上该仓库支持的指标本仓库均支持。</p></li>
+</ul>
 </section>
 
 

@@ -1,0 +1,6 @@
+脉冲仿真
+=======================
+
+可以参考：https://github.com/chenkang455/S-SDM/blob/master/scripts/GOPRO_dataset.md
+
+有待完善...

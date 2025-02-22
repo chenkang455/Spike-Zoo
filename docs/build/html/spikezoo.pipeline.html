@@ -7,7 +7,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>spikezoo.pipeline &mdash; Spike-Zoo v0.2 文档</title>
-      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="_static/css/custom.css" />
 
@@ -15,7 +15,7 @@
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
       <script src="_static/documentation_options.js?v=e0f13565"></script>
-      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/doctools.js?v=9a2dae69"></script>
       <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
       <script src="_static/translations.js?v=beaddf03"></script>
     <script src="_static/js/theme.js"></script>
@@ -49,6 +49,7 @@
 <li class="toctree-l1"><a class="reference internal" href="%E6%A8%A1%E5%9E%8B.html">模型</a></li>
 <li class="toctree-l1"><a class="reference internal" href="%E5%A4%84%E7%90%86%E7%AE%A1%E7%BA%BF.html">处理管线</a></li>
 <li class="toctree-l1"><a class="reference internal" href="%E5%8F%91%E8%A1%8C%E7%89%88%E6%9C%AC%E4%BB%8B%E7%BB%8D.html">发行版本介绍</a></li>
+<li class="toctree-l1"><a class="reference internal" href="%E8%84%89%E5%86%B2%E4%BB%BF%E7%9C%9F.html">脉冲仿真</a></li>
 <li class="toctree-l1"><a class="reference internal" href="%E4%BD%BF%E7%94%A8%E4%BE%8B%E5%AD%90.html">使用示例</a></li>
 <li class="toctree-l1"><a class="reference internal" href="%E6%94%AF%E6%8C%81%E8%8C%83%E5%9B%B4.html">支持范围</a></li>
 </ul>
@@ -57,6 +58,9 @@
 <li class="toctree-l1"><a class="reference internal" href="spikezoo.utils.html">spikezoo.utils</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">spikezoo.pipeline</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#init__"><code class="docutils literal notranslate"><span class="pre">__init__()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#infer_from_dataset"><code class="docutils literal notranslate"><span class="pre">infer_from_dataset()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#infer_from_file"><code class="docutils literal notranslate"><span class="pre">infer_from_file()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#infer_from_spk"><code class="docutils literal notranslate"><span class="pre">infer_from_spk()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -86,7 +90,7 @@
            <div itemprop="articleBody">
              
   <section id="spikezoo-pipeline">
-<h1>spikezoo.pipeline<a class="headerlink" href="#spikezoo-pipeline" title="Link to this heading"></a></h1>
+<span id="api-pipeline"></span><h1>spikezoo.pipeline<a class="headerlink" href="#spikezoo-pipeline" title="Link to this heading"></a></h1>
 <dl class="py function">
 <dt class="sig sig-object py" id="init__">
 <span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cfg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_cfg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataset_cfg</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#init__" title="Link to this definition"></a></dt>
@@ -94,13 +98,85 @@
 <dl class="field-list simple">
 <dt class="field-odd">参数<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>cfg</strong> -- 管线实例化参数</p></li>
-<li><p><strong>model</strong> -- 支持输入模型实例化参数和模型名称</p></li>
-<li><p><strong>dataset</strong> -- 支持输入数据集实例化参数和数据集名称</p></li>
+<li><p><strong>cfg</strong> – 管线实例化参数</p></li>
+<li><p><strong>model</strong> – 支持输入模型实例化参数或模型名称</p></li>
+<li><p><strong>dataset</strong> – 支持输入数据集实例化参数或数据集名称</p></li>
 </ul>
 </dd>
 </dl>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">spikezoo.pipeline</span> <span class="kn">import</span> <span class="n">Pipeline</span><span class="p">,</span> <span class="n">PipelineConfig</span>
+<span class="kn">import</span> <span class="nn">spikezoo</span> <span class="k">as</span> <span class="nn">sz</span>
+<span class="n">pipeline</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">(</span>
+    <span class="n">cfg</span><span class="o">=</span><span class="n">PipelineConfig</span><span class="p">(</span><span class="n">save_folder</span><span class="o">=</span><span class="s2">&quot;results&quot;</span><span class="p">,</span><span class="n">version</span><span class="o">=</span><span class="s2">&quot;v023&quot;</span><span class="p">),</span>
+    <span class="n">model_cfg</span><span class="o">=</span><span class="n">sz</span><span class="o">.</span><span class="n">METHOD</span><span class="o">.</span><span class="n">BASE</span><span class="p">,</span>
+    <span class="n">dataset_cfg</span><span class="o">=</span><span class="n">sz</span><span class="o">.</span><span class="n">DATASET</span><span class="o">.</span><span class="n">BASE</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="infer_from_dataset">
+<span class="sig-name descname"><span class="pre">infer_from_dataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idx</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#infer_from_dataset" title="Link to this definition"></a></dt>
+<dd><p>直接从 <code class="docutils literal notranslate"><span class="pre">pipeline</span></code> 中给定的数据集进行推理，包含指标测试和性能指标计算两部分，结果保存在输出路径的 <code class="docutils literal notranslate"><span class="pre">infer_from_dataset</span></code> 文件夹下。</p>
+<dl class="field-list simple">
+<dt class="field-odd">参数<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>idx</strong> (<em>int</em>) – 管线实例化参数</p>
+</dd>
+</dl>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pipeline</span><span class="o">.</span><span class="n">infer_from_dataset</span><span class="p">(</span><span class="n">idx</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="infer_from_file">
+<span class="sig-name descname"><span class="pre">infer_from_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">height</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">width</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">img_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">remove_head</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#infer_from_file" title="Link to this definition"></a></dt>
+<dd><p>从给定输入脉冲文件进行推理，包含指标测试和性能指标计算两部分，结果保存在输出路径的 <code class="docutils literal notranslate"><span class="pre">infer_from_file</span></code> 文件夹下。</p>
+<dl class="field-list simple">
+<dt class="field-odd">参数<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>file_path</strong> (<em>str</em>) – 输入脉冲文件路径</p></li>
+<li><p><strong>height</strong> (<em>int</em>) – 输入脉冲的高度</p></li>
+<li><p><strong>width</strong> (<em>int</em>) – 输入脉冲的宽度</p></li>
+<li><p><strong>rate</strong> (<em>float</em>) – 脉冲转化系数，对重构图像亮度进行矫正， <code class="docutils literal notranslate"><span class="pre">img</span> <span class="pre">=</span> <span class="pre">img</span> <span class="pre">/</span> <span class="pre">rate</span></code>。</p></li>
+<li><p><strong>img_path</strong> (<em>str</em>) – 输入清晰图像的路径，用于脉冲重构图像的指标（如果不提供只会计算非参考指标）</p></li>
+<li><p><strong>remove_head</strong> (<em>bool</em>) – 是否移除帧头（针对真实拍摄数据）</p></li>
+</ul>
+</dd>
+</dl>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># without gt (for calculating psnr,ssim and lpips)</span>
+<span class="n">pipeline</span><span class="o">.</span><span class="n">infer_from_file</span><span class="p">(</span><span class="n">file_path</span><span class="o">=</span><span class="s1">&#39;data/data.dat&#39;</span><span class="p">,</span><span class="n">width</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span><span class="n">height</span><span class="o">=</span><span class="mi">250</span><span class="p">)</span>
+<span class="c1"># with gt (only niqe and brisque)</span>
+<span class="n">pipeline</span><span class="o">.</span><span class="n">infer_from_file</span><span class="p">(</span><span class="n">file_path</span> <span class="o">=</span> <span class="s1">&#39;data/data.dat&#39;</span><span class="p">,</span><span class="n">width</span> <span class="o">=</span> <span class="mi">400</span><span class="p">,</span><span class="n">height</span><span class="o">=</span><span class="mi">250</span><span class="p">,</span><span class="n">img_path</span><span class="o">=</span> <span class="s2">&quot;data/data.png&quot;</span><span class="p">,</span><span class="n">rate</span> <span class="o">=</span> <span class="mf">0.6</span><span class="p">)</span>
+<span class="c1"># for real-captured data with frame index</span>
+<span class="n">pipeline</span><span class="o">.</span><span class="n">infer_from_file</span><span class="p">(</span><span class="n">file_path</span><span class="o">=</span><span class="s1">&#39;realworld.dat&#39;</span><span class="p">,</span><span class="n">width</span><span class="o">=</span><span class="mi">416</span><span class="p">,</span><span class="n">height</span><span class="o">=</span><span class="mi">250</span><span class="p">,</span><span class="n">remove_head</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="infer_from_spk">
+<span class="sig-name descname"><span class="pre">infer_from_spk</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spike</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">img</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#infer_from_spk" title="Link to this definition"></a></dt>
+<dd><p>利用给定输入脉冲进行推理，包含指标测试和性能指标计算两部分，结果保存在输出路径的 <code class="docutils literal notranslate"><span class="pre">infer_from_spk</span></code> 文件夹下。</p>
+<dl class="field-list simple">
+<dt class="field-odd">参数<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>spike</strong> (<em>array</em><em> or </em><em>tensor</em>) – 输入脉冲</p></li>
+<li><p><strong>rate</strong> (<em>float</em>) – 脉冲转化系数，对重构图像亮度进行矫正， <code class="docutils literal notranslate"><span class="pre">img</span> <span class="pre">=</span> <span class="pre">img</span> <span class="pre">/</span> <span class="pre">rate</span></code>。</p></li>
+<li><p><strong>img</strong> (<em>array</em>) – 输入清晰图像，用于脉冲重构图像的指标（如果不提供只会计算非参考指标）</p></li>
+</ul>
+</dd>
+</dl>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">spikezoo</span> <span class="k">as</span> <span class="nn">sz</span>
+<span class="kn">import</span> <span class="nn">cv2</span>
+<span class="n">spike</span> <span class="o">=</span> <span class="n">sz</span><span class="o">.</span><span class="n">load_vidar_dat</span><span class="p">(</span><span class="s2">&quot;data/data.dat&quot;</span><span class="p">,</span><span class="n">width</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span><span class="n">height</span><span class="o">=</span><span class="mi">250</span><span class="p">)</span>
+<span class="n">img</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="s2">&quot;data/data.png&quot;</span><span class="p">)</span>
+<span class="c1"># without gt (for calculating psnr,ssim,lpips,niqe and brisque)</span>
+<span class="n">pipeline</span><span class="o">.</span><span class="n">infer_from_spk</span><span class="p">(</span><span class="n">spike</span><span class="p">)</span>
+
+<span class="c1"># with gt (only niqe and brisque)</span>
+<span class="n">pipeline</span><span class="o">.</span><span class="n">infer_from_spk</span><span class="p">(</span><span class="n">spike</span><span class="p">,</span><span class="n">img</span><span class="p">,</span><span class="n">rate</span> <span class="o">=</span> <span class="mf">0.6</span><span class="p">)</span>
 </pre></div>
 </div>
 </dd></dl>

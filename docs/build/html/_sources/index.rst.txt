@@ -15,7 +15,7 @@ Spike-Zoo 文档
 
    pip install spikezoo
 
-* 从 ``github`` 安装最新的开发版本：
+* 从 ``github`` 安装最新的开发版本  **(推荐)**：
 
 .. code-block:: console
 
@@ -63,7 +63,7 @@ Spike-Zoo 文档
 - **BasicSR**: https://github.com/XPixelGroup/BasicSR
 - **NeRFStudio**: https://github.com/nerfstudio-project/nerfstudio
 
-同时，感谢 `rui zhao <https://github.com/ruizhao26>`_ 、`jiyuan zhang <https://github.com/Leozhangjiyuan>`_ 以及 `shiyan chen <https://github.com/hnmizuho>`_
+同时，感谢 `zhiwen huang <https://github.com/hzw-abc>`_ `rui zhao <https://github.com/ruizhao26>`_ 、`jiyuan zhang <https://github.com/Leozhangjiyuan>`_ 以及 `shiyan chen <https://github.com/hnmizuho>`_
 对我们项目的帮助。
 
 引用

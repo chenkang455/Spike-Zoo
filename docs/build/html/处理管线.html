@@ -7,7 +7,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>处理管线 &mdash; Spike-Zoo v0.2 文档</title>
-      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="_static/css/custom.css" />
 
@@ -15,7 +15,7 @@
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
       <script src="_static/documentation_options.js?v=e0f13565"></script>
-      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/doctools.js?v=9a2dae69"></script>
       <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
       <script src="_static/translations.js?v=beaddf03"></script>
     <script src="_static/js/theme.js"></script>
@@ -55,19 +55,22 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#train-pipe">训练管线</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#id6">参数配置</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id7">实例化</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id10">参数配置</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id11">实例化</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id12">自定义训练</a></li>
 </ul>
 </li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="%E5%8F%91%E8%A1%8C%E7%89%88%E6%9C%AC%E4%BB%8B%E7%BB%8D.html">发行版本介绍</a></li>
+<li class="toctree-l1"><a class="reference internal" href="%E8%84%89%E5%86%B2%E4%BB%BF%E7%9C%9F.html">脉冲仿真</a></li>
 <li class="toctree-l1"><a class="reference internal" href="%E4%BD%BF%E7%94%A8%E4%BE%8B%E5%AD%90.html">使用示例</a></li>
 <li class="toctree-l1"><a class="reference internal" href="%E6%94%AF%E6%8C%81%E8%8C%83%E5%9B%B4.html">支持范围</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">APIs</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="spikezoo.utils.html">spikezoo.utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="spikezoo.pipeline.html">spikezoo.pipeline</a></li>
 </ul>
 
         </div>
@@ -101,9 +104,12 @@
 <h2>推理管线<a class="headerlink" href="#id2" title="Link to this heading"></a></h2>
 <section id="eval-config">
 <span id="id3"></span><h3>参数配置<a class="headerlink" href="#eval-config" title="Link to this heading"></a></h3>
-<p>单模型管线基础配置：</p>
+<ol class="arabic simple">
+<li><p>单模型管线</p></li>
+</ol>
+<p>参数配置代码：</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@dataclass</span>
-<span class="k">class</span><span class="w"> </span><span class="nc">PipelineConfig</span><span class="p">:</span>
+<span class="k">class</span> <span class="nc">PipelineConfig</span><span class="p">:</span>
     <span class="s2">&quot;Loading weights from local or version on the url.&quot;</span>
     <span class="n">version</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;local&quot;</span><span class="p">,</span> <span class="s2">&quot;v010&quot;</span><span class="p">,</span> <span class="s2">&quot;v023&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;local&quot;</span>
     <span class="s2">&quot;Save folder for the code running result.&quot;</span>
@@ -117,7 +123,7 @@
     <span class="s2">&quot;Save recoverd images or not.&quot;</span>
     <span class="n">save_img</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
     <span class="s2">&quot;Normalizing recoverd images and gt or not.&quot;</span>
-    <span class="n">save_img_norm</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">img_norm</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
     <span class="s2">&quot;Different modes for the pipeline.&quot;</span>
     <span class="n">_mode</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;single_mode&quot;</span><span class="p">,</span> <span class="s2">&quot;multi_mode&quot;</span><span class="p">,</span> <span class="s2">&quot;train_mode&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;single_mode&quot;</span>
 </pre></div>
@@ -130,12 +136,14 @@
 <li><p><code class="docutils literal notranslate"><span class="pre">save_metric</span></code> : 是否输出量化指标</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">metric_names</span></code> : 指定输出的评估指标</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">save_img</span></code> : 是否保存重建图像</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">save_img_norm</span></code> : 保存图像前是否进行归一化处理</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">img_norm</span></code> : 保存图像以及测试指标前是否进行归一化处理</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">_mode</span></code> : 管线运行模式标识（内部参数）</p></li>
 </ul>
-<p>多模型集成管线扩展配置：</p>
+<ol class="arabic simple" start="2">
+<li><p>多模型管线：</p></li>
+</ol>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@dataclass</span>
-<span class="k">class</span><span class="w"> </span><span class="nc">EnsemblePipelineConfig</span><span class="p">(</span><span class="n">PipelineConfig</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">EnsemblePipelineConfig</span><span class="p">(</span><span class="n">PipelineConfig</span><span class="p">):</span>
     <span class="n">_mode</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;single_mode&quot;</span><span class="p">,</span> <span class="s2">&quot;multi_mode&quot;</span><span class="p">,</span> <span class="s2">&quot;train_mode&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;multi_mode&quot;</span>
 </pre></div>
 </div>
@@ -143,12 +151,23 @@
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">_mode</span></code> : 强制设置为多模型模式（内部标识参数）</p></li>
 </ul>
+<ol class="arabic simple" start="3">
+<li><p>参数设置补充说明</p></li>
+</ol>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">version</span></code>: 支持 <code class="docutils literal notranslate"><span class="pre">&quot;local&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;v010&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;v023&quot;</span></code> 三个参数设置，其中 <a href="#id4"><span class="problematic" id="id5">``</span></a>”local”<a href="#id6"><span class="problematic" id="id7">``</span></a>表示从本地路径加载权重，使用方式见 <a class="reference internal" href="#eval-initial"><span class="std std-ref">实例化</span></a>，不同发行版本的介绍见 <a class="reference internal" href="%E5%8F%91%E8%A1%8C%E7%89%88%E6%9C%AC%E4%BB%8B%E7%BB%8D.html#version"><span class="std std-ref">发行版本介绍</span></a>。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">metric_names</span></code>: 指定评测指标，例如 <code class="docutils literal notranslate"><span class="pre">[&quot;psnr&quot;,</span> <span class="pre">&quot;ssim&quot;,&quot;niqe&quot;,&quot;brisque&quot;]</span></code>, 通过 <a class="reference internal" href="%E6%94%AF%E6%8C%81%E8%8C%83%E5%9B%B4.html#support"><span class="std std-ref">支持范围</span></a> 查看Spike-Zoo支持的指标。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">img_norm</span></code>: 会同时将重构图像和清晰图像归一化，影响最终保存图像的可视化以及指标计算。(<code class="docutils literal notranslate"><span class="pre">SpikeCLIP</span></code> 由于是基于文本训练的模型，输出不在`[0,1]`范围内，会自动归一化输出图像)</p></li>
+</ul>
 </section>
 <section id="eval-initial">
-<span id="id4"></span><h3>实例化<a class="headerlink" href="#eval-initial" title="Link to this heading"></a></h3>
-<p><strong>单模型管线</strong> 初始化方法：</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Pipeline</span><span class="p">:</span>
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+<span id="id8"></span><h3>实例化<a class="headerlink" href="#eval-initial" title="Link to this heading"></a></h3>
+<ol class="arabic simple">
+<li><p>单模型管线</p></li>
+</ol>
+<p>管线初始化代码接口如下：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Pipeline</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">cfg</span><span class="p">:</span> <span class="n">PipelineConfig</span><span class="p">,</span>
         <span class="n">model_cfg</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">sz</span><span class="o">.</span><span class="n">METHOD</span><span class="p">,</span> <span class="n">BaseModelConfig</span><span class="p">],</span>
@@ -159,12 +178,12 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_setup_pipeline</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>支持两种配置方式：</p>
+<p>管线实例化支持以下两种方式:</p>
 <ul class="simple">
 <li><p>预设参数初始化</p></li>
 </ul>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">spikezoo.pipeline</span><span class="w"> </span><span class="kn">import</span> <span class="n">Pipeline</span><span class="p">,</span> <span class="n">PipelineConfig</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">spikezoo</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sz</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">spikezoo.pipeline</span> <span class="kn">import</span> <span class="n">Pipeline</span><span class="p">,</span> <span class="n">PipelineConfig</span>
+<span class="kn">import</span> <span class="nn">spikezoo</span> <span class="k">as</span> <span class="nn">sz</span>
 <span class="n">pipeline</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">(</span>
     <span class="n">cfg</span><span class="o">=</span><span class="n">PipelineConfig</span><span class="p">(</span><span class="n">save_folder</span><span class="o">=</span><span class="s2">&quot;results&quot;</span><span class="p">,</span><span class="n">version</span><span class="o">=</span><span class="s2">&quot;v023&quot;</span><span class="p">),</span>
     <span class="n">model_cfg</span><span class="o">=</span><span class="n">sz</span><span class="o">.</span><span class="n">METHOD</span><span class="o">.</span><span class="n">BASE</span><span class="p">,</span>
@@ -172,13 +191,14 @@
 <span class="p">)</span>
 </pre></div>
 </div>
+<p>此方式利用名称来直接指定方法和数据集的默认配置参数，针对数据集需要按照 <a class="reference internal" href="%E6%95%B0%E6%8D%AE%E9%9B%86.html#dataset-prepare"><span class="std std-ref">数据来源</span></a> 将数据下载至对应位置。</p>
 <ul class="simple">
 <li><p>自定义参数初始化（推荐方式）</p></li>
 </ul>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">spikezoo.pipeline</span><span class="w"> </span><span class="kn">import</span> <span class="n">Pipeline</span><span class="p">,</span> <span class="n">PipelineConfig</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">spikezoo.models.base_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModelConfig</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">spikezoo.datasets.base_dataset</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseDatasetConfig</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">spikezoo</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sz</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">spikezoo.pipeline</span> <span class="kn">import</span> <span class="n">Pipeline</span><span class="p">,</span> <span class="n">PipelineConfig</span>
+<span class="kn">from</span> <span class="nn">spikezoo.models.base_model</span> <span class="kn">import</span> <span class="n">BaseModelConfig</span>
+<span class="kn">from</span> <span class="nn">spikezoo.datasets.base_dataset</span> <span class="kn">import</span> <span class="n">BaseDatasetConfig</span>
+<span class="kn">import</span> <span class="nn">spikezoo</span> <span class="k">as</span> <span class="nn">sz</span>
 <span class="c1"># 方式一：加载发行版v023预训练权重</span>
 <span class="n">pipeline</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">(</span>
     <span class="n">cfg</span><span class="o">=</span><span class="n">PipelineConfig</span><span class="p">(</span><span class="n">save_folder</span><span class="o">=</span><span class="s2">&quot;results&quot;</span><span class="p">,</span><span class="n">version</span><span class="o">=</span><span class="s2">&quot;v023&quot;</span><span class="p">),</span>
@@ -189,13 +209,16 @@
 <span class="n">pipeline</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">(</span>
     <span class="n">cfg</span><span class="o">=</span><span class="n">PipelineConfig</span><span class="p">(</span><span class="n">save_folder</span><span class="o">=</span><span class="s2">&quot;results&quot;</span><span class="p">,</span><span class="n">version</span><span class="o">=</span><span class="s2">&quot;local&quot;</span><span class="p">),</span>
     <span class="n">model_cfg</span><span class="o">=</span><span class="n">BaseModelConfig</span><span class="p">(</span><span class="n">ckpt_path</span><span class="o">=</span><span class="s2">&quot;spikezoo/models/weights/v023/base.pth&quot;</span><span class="p">),</span>
-    <span class="n">dataset_cfg</span><span class="o">=</span><span class="n">BaseDatasetConfig</span><span class="p">(</span><span class="n">root_dir</span><span class="o">=</span><span class="s2">&quot;spikezoo/data/base&quot;</span><span class="p">)</span>
+    <span class="n">dataset_cfg</span><span class="o">=</span><span class="n">BaseDatasetConfig</span><span class="p">()</span>
 <span class="p">)</span>
 </pre></div>
 </div>
-<p><strong>多模型集成管线</strong> 初始化方法：</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">EnsemblePipeline</span><span class="p">(</span><span class="n">Pipeline</span><span class="p">):</span>
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+<ol class="arabic simple" start="2">
+<li><p>多模型管线</p></li>
+</ol>
+<p>管线初始化代码接口如下：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">EnsemblePipeline</span><span class="p">(</span><span class="n">Pipeline</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">cfg</span><span class="p">:</span> <span class="n">PipelineConfig</span><span class="p">,</span>
         <span class="n">model_cfg_list</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">sz</span><span class="o">.</span><span class="n">METHOD</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="n">BaseModelConfig</span><span class="p">]],</span>
@@ -206,12 +229,12 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_setup_pipeline</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>配置方式示例：</p>
+<p>支持两种配置方式：</p>
 <ul class="simple">
 <li><p>预设参数初始化</p></li>
 </ul>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">spikezoo</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sz</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">spikezoo.pipeline</span><span class="w"> </span><span class="kn">import</span> <span class="n">EnsemblePipeline</span><span class="p">,</span> <span class="n">EnsemblePipelineConfig</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">spikezoo</span> <span class="k">as</span> <span class="nn">sz</span>
+<span class="kn">from</span> <span class="nn">spikezoo.pipeline</span> <span class="kn">import</span> <span class="n">EnsemblePipeline</span><span class="p">,</span> <span class="n">EnsemblePipelineConfig</span>
 <span class="n">pipeline</span> <span class="o">=</span> <span class="n">EnsemblePipeline</span><span class="p">(</span>
     <span class="n">cfg</span><span class="o">=</span><span class="n">EnsemblePipelineConfig</span><span class="p">(</span><span class="n">save_folder</span><span class="o">=</span><span class="s2">&quot;results&quot;</span><span class="p">,</span><span class="n">version</span><span class="o">=</span><span class="s2">&quot;v023&quot;</span><span class="p">),</span>
     <span class="n">model_cfg_list</span><span class="o">=</span><span class="p">[</span>
@@ -224,10 +247,20 @@
 <ul class="simple">
 <li><p>自定义参数初始化（推荐方式）</p></li>
 </ul>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">spikezoo</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sz</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">spikezoo.datasets.base_dataset</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseDatasetConfig</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">spikezoo.pipeline</span><span class="w"> </span><span class="kn">import</span> <span class="n">EnsemblePipeline</span><span class="p">,</span> <span class="n">EnsemblePipelineConfig</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">spikezoo.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModelConfig</span><span class="p">,</span><span class="n">TFPConfig</span><span class="p">,</span><span class="n">TFIConfig</span><span class="p">,</span><span class="n">Spk2ImgNetConfig</span><span class="p">,</span><span class="n">WGSEConfig</span><span class="p">,</span><span class="n">SSMLConfig</span><span class="p">,</span><span class="n">BSFConfig</span><span class="p">,</span><span class="n">STIRConfig</span><span class="p">,</span><span class="n">SpikeCLIPConfig</span><span class="p">,</span><span class="n">SSIRConfig</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">spikezoo</span> <span class="k">as</span> <span class="nn">sz</span>
+<span class="kn">from</span> <span class="nn">spikezoo.datasets.base_dataset</span> <span class="kn">import</span> <span class="n">BaseDatasetConfig</span>
+<span class="kn">from</span> <span class="nn">spikezoo.pipeline</span> <span class="kn">import</span> <span class="n">EnsemblePipeline</span><span class="p">,</span> <span class="n">EnsemblePipelineConfig</span>
+<span class="kn">from</span> <span class="nn">spikezoo.models.base_model</span> <span class="kn">import</span> <span class="n">BaseModel</span><span class="p">,</span><span class="n">BaseModelConfig</span>
+<span class="kn">from</span> <span class="nn">spikezoo.models.tfp_model</span> <span class="kn">import</span> <span class="n">TFPModel</span><span class="p">,</span><span class="n">TFPConfig</span>
+<span class="kn">from</span> <span class="nn">spikezoo.models.tfi_model</span> <span class="kn">import</span> <span class="n">TFIModel</span><span class="p">,</span><span class="n">TFIConfig</span>
+<span class="kn">from</span> <span class="nn">spikezoo.models.spk2imgnet_model</span> <span class="kn">import</span> <span class="n">Spk2ImgNet</span><span class="p">,</span><span class="n">Spk2ImgNetConfig</span>
+<span class="kn">from</span> <span class="nn">spikezoo.models.wgse_model</span> <span class="kn">import</span> <span class="n">WGSE</span><span class="p">,</span><span class="n">WGSEConfig</span>
+<span class="kn">from</span> <span class="nn">spikezoo.models.ssml_model</span> <span class="kn">import</span> <span class="n">SSML</span><span class="p">,</span><span class="n">SSMLConfig</span>
+<span class="kn">from</span> <span class="nn">spikezoo.models.bsf_model</span> <span class="kn">import</span> <span class="n">BSF</span><span class="p">,</span><span class="n">BSFConfig</span>
+<span class="kn">from</span> <span class="nn">spikezoo.models.stir_model</span> <span class="kn">import</span> <span class="n">STIR</span><span class="p">,</span><span class="n">STIRConfig</span>
+<span class="kn">from</span> <span class="nn">spikezoo.models.ssir_model</span> <span class="kn">import</span> <span class="n">SSIR</span><span class="p">,</span><span class="n">SSIRConfig</span>
+<span class="kn">from</span> <span class="nn">spikezoo.models.spikeclip_model</span> <span class="kn">import</span> <span class="n">SpikeCLIP</span><span class="p">,</span><span class="n">SpikeCLIPConfig</span>
+
 <span class="n">pipeline</span> <span class="o">=</span> <span class="n">EnsemblePipeline</span><span class="p">(</span>
     <span class="n">cfg</span><span class="o">=</span><span class="n">EnsemblePipelineConfig</span><span class="p">(</span><span class="n">save_folder</span><span class="o">=</span><span class="s2">&quot;results&quot;</span><span class="p">,</span><span class="n">version</span><span class="o">=</span><span class="s2">&quot;v023&quot;</span><span class="p">),</span>
     <span class="n">model_cfg_list</span><span class="o">=</span><span class="p">[</span>
@@ -240,21 +273,21 @@
 </section>
 </section>
 <section id="train-pipe">
-<span id="id5"></span><h2>训练管线<a class="headerlink" href="#train-pipe" title="Link to this heading"></a></h2>
-<section id="id6">
-<h3>参数配置<a class="headerlink" href="#id6" title="Link to this heading"></a></h3>
-<p>扩展基础配置，增加训练控制参数：</p>
+<span id="id9"></span><h2>训练管线<a class="headerlink" href="#train-pipe" title="Link to this heading"></a></h2>
+<section id="id10">
+<h3>参数配置<a class="headerlink" href="#id10" title="Link to this heading"></a></h3>
+<p>在推理管线的基础上，训练管线配置代码增加了额外的训练控制参数：</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@dataclass</span>
-<span class="k">class</span><span class="w"> </span><span class="nc">TrainPipelineConfig</span><span class="p">(</span><span class="n">PipelineConfig</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">TrainPipelineConfig</span><span class="p">(</span><span class="n">PipelineConfig</span><span class="p">):</span>
     <span class="c1"># parameters setting</span>
     <span class="s2">&quot;Training epochs.&quot;</span>
-    <span class="n">epochs</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1000</span>
+    <span class="n">epochs</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span>
     <span class="s2">&quot;Steps per to save images.&quot;</span>
-    <span class="n">steps_per_save_imgs</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">200</span>
+    <span class="n">steps_per_save_imgs</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span>
     <span class="s2">&quot;Steps per to save model weights.&quot;</span>
-    <span class="n">steps_per_save_ckpt</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">500</span>
+    <span class="n">steps_per_save_ckpt</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span>
     <span class="s2">&quot;Steps per to calculate the metrics.&quot;</span>
-    <span class="n">steps_per_cal_metrics</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">100</span>
+    <span class="n">steps_per_cal_metrics</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span>
     <span class="s2">&quot;Step for gradient accumulation. (for snn methods)&quot;</span>
     <span class="n">steps_grad_accumulation</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">4</span>
     <span class="s2">&quot;Pipeline mode.&quot;</span>
@@ -298,12 +331,12 @@
 <li><p><code class="docutils literal notranslate"><span class="pre">loss_weight_dict</span></code> : 损失函数权重配置</p></li>
 </ul>
 </section>
-<section id="id7">
-<h3>实例化<a class="headerlink" href="#id7" title="Link to this heading"></a></h3>
+<section id="id11">
+<h3>实例化<a class="headerlink" href="#id11" title="Link to this heading"></a></h3>
 <p>基础训练示例（快速验证）：</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">spikezoo.pipeline</span><span class="w"> </span><span class="kn">import</span> <span class="n">TrainPipelineConfig</span><span class="p">,</span> <span class="n">TrainPipeline</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">spikezoo.datasets.reds_base_dataset</span><span class="w"> </span><span class="kn">import</span> <span class="n">REDS_BASEConfig</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">spikezoo.models.base_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModelConfig</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">spikezoo.pipeline</span> <span class="kn">import</span> <span class="n">TrainPipelineConfig</span><span class="p">,</span> <span class="n">TrainPipeline</span>
+<span class="kn">from</span> <span class="nn">spikezoo.datasets.reds_base_dataset</span> <span class="kn">import</span> <span class="n">REDS_BASEConfig</span>
+<span class="kn">from</span> <span class="nn">spikezoo.models.base_model</span> <span class="kn">import</span> <span class="n">BaseModelConfig</span>
 <span class="n">pipeline</span> <span class="o">=</span> <span class="n">TrainPipeline</span><span class="p">(</span>
     <span class="n">cfg</span><span class="o">=</span><span class="n">TrainPipelineConfig</span><span class="p">(</span><span class="n">save_folder</span><span class="o">=</span><span class="s2">&quot;results&quot;</span><span class="p">,</span> <span class="n">epochs</span> <span class="o">=</span> <span class="mi">10</span><span class="p">),</span>
     <span class="n">dataset_cfg</span><span class="o">=</span><span class="n">REDS_BASEConfig</span><span class="p">(</span><span class="n">root_dir</span> <span class="o">=</span> <span class="s2">&quot;spikezoo/data/reds_base&quot;</span><span class="p">),</span>
@@ -317,17 +350,17 @@
 <p>单卡4090 GPU实测：训练耗时约2分钟，PSNR 32.8dB / SSIM 0.92</p>
 </div>
 <p>高级配置示例（完整训练）：</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">spikezoo.utils.optimizer_utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">OptimizerConfig</span><span class="p">,</span> <span class="n">AdamOptimizerConfig</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">spikezoo.utils.scheduler_utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">SchedulerConfig</span><span class="p">,</span> <span class="n">MultiStepSchedulerConfig</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">spikezoo.pipeline.train_pipeline</span><span class="w"> </span><span class="kn">import</span> <span class="n">TrainPipelineConfig</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">spikezoo.pipeline</span><span class="w"> </span><span class="kn">import</span> <span class="n">TrainPipeline</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">spikezoo.datasets.reds_base_dataset</span><span class="w"> </span><span class="kn">import</span> <span class="n">REDS_BASEConfig</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">spikezoo.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModelConfig</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">spikezoo.utils.optimizer_utils</span> <span class="kn">import</span> <span class="n">OptimizerConfig</span><span class="p">,</span> <span class="n">AdamOptimizerConfig</span>
+<span class="kn">from</span> <span class="nn">spikezoo.utils.scheduler_utils</span> <span class="kn">import</span> <span class="n">SchedulerConfig</span><span class="p">,</span> <span class="n">MultiStepSchedulerConfig</span>
+<span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
+<span class="kn">from</span> <span class="nn">spikezoo.pipeline.train_pipeline</span> <span class="kn">import</span> <span class="n">TrainPipelineConfig</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span>
+<span class="kn">from</span> <span class="nn">spikezoo.pipeline</span> <span class="kn">import</span> <span class="n">TrainPipeline</span>
+<span class="kn">from</span> <span class="nn">spikezoo.datasets.reds_base_dataset</span> <span class="kn">import</span> <span class="n">REDS_BASEConfig</span>
+<span class="kn">from</span> <span class="nn">spikezoo.models</span> <span class="kn">import</span> <span class="n">BaseModelConfig</span>
 
 <span class="nd">@dataclass</span>
-<span class="k">class</span><span class="w"> </span><span class="nc">REDS_BASE_TrainConfig</span><span class="p">(</span><span class="n">TrainPipelineConfig</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">REDS_BASE_TrainConfig</span><span class="p">(</span><span class="n">TrainPipelineConfig</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;REDS-BASE数据集专用训练配置&quot;&quot;&quot;</span>
 
     <span class="c1"># 参数设置</span>
@@ -361,6 +394,11 @@
 </div>
 <p>更多模型在REDS_BASE数据集上的训练配置示例可参考：
 <a class="reference external" href="https://github.com/chenkang455/Spike-Zoo/tree/main/examples/train_reds_base">https://github.com/chenkang455/Spike-Zoo/tree/main/examples/train_reds_base</a></p>
+</section>
+<section id="id12">
+<h3>自定义训练<a class="headerlink" href="#id12" title="Link to this heading"></a></h3>
+<p>Spike-Zoo 提供通过继承基类的方式来分别实现 <code class="docutils literal notranslate"><span class="pre">model</span></code>, <code class="docutils literal notranslate"><span class="pre">dataset</span></code> 和 <code class="docutils literal notranslate"><span class="pre">pipeline</span></code>，以尽量少的代码修改完成自定义功能设置。</p>
+<p>具体例子见：<a class="reference external" href="https://github.com/chenkang455/Spike-Zoo/tree/main/examples/train_reds_base">https://github.com/chenkang455/Spike-Zoo/tree/main/examples/train_reds_base</a></p>
 </section>
 </section>
 </section>

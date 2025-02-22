@@ -109,12 +109,12 @@
     # 方式2: 从.dat文件加载脉冲，结果存储于infer_from_file
     pipeline.infer_from_file(file_path='data/data.dat', width=400, height=250,rate = 0.6)
     # 方式3: 直接传入脉冲张量，结果存储于infer_from_spk
-    spike = sz.load_vidar_dat("data/data.dat", width=400, height=250,rate = 0.6)
-    pipeline.infer_from_spk(spike)
+    spike = sz.load_vidar_dat("data/data.dat", width=400, height=250)
+    pipeline.infer_from_spk(spike,rate = 0.6)
 
 .. note::
 
-    函数接口参数解释见 :ref:`api_pipeline`，其中``rate`` 参数对重构图像进行了亮度矫正，具体作用参见 :ref:`param_rate` 。
+    函数接口参数解释见 :ref:`api_pipeline`，其中 ``rate`` 参数对重构图像进行了亮度矫正，具体作用参见 :ref:`param_rate` 。
 
 
 - **II-数据集可视化:** 批量保存数据集所有样本的重建结果
@@ -163,8 +163,6 @@
                 "FLOPs:" + str(flops / 1e9) + "{}".format("G"),
                 "Latency: {:.6f} seconds".format(latency),
             )
-            self.logger.info(f"----------------------Method: {model_name}----------------------")
-            self.logger.info(re_msg)
 
 关于不同模型的指标和参数计算结果，参见 :ref:`version`。
 
@@ -189,7 +187,7 @@
 
 .. note::
 
-    单卡NVIDIA RTX 4090实测：训练耗时约2分钟，PSNR 32.8dB / SSIM 0.92。完整训练配置参考 :ref:`train_pipe`。模型和数据集的参数配置参考 :ref:`eval_initial`。
+    单卡NVIDIA RTX 4090实测：训练耗时约2分钟，PSNR 32.8dB / SSIM 0.92。单卡GTX 1050 Ti: 训练耗时约12分钟，PSNR 30.59dB / SSIM 0.86。完整训练配置参考 :ref:`train_pipe`。模型和数据集的参数配置参考 :ref:`eval_initial`。
 
 
 模型直接调用
