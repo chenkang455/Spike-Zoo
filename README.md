@@ -77,7 +77,7 @@ pipeline.train()
 ``` 
 We finish the training with one 4090 GPU in `2 minutes`, achieving `32.8dB` in PSNR and `0.92` in SSIM.
 
-> 🌟 We encourage users to develop their models with simple modifications to our framework. 
+> 🌟 We encourage users to develop their models with simple modifications to our framework.
 
 ## 📚 How to navigate the documentation
 
@@ -99,7 +99,7 @@ We finish the training with one 4090 GPU in `2 minutes`, achieving `32.8dB` in P
 - [ ] Support more spike-based image reconstruction methods and datasets. 
 
 ## ✨‍ Acknowledgment
-Our code is built on the open-source projects of [SpikeCV](https://spikecv.github.io/), [IQA-Pytorch](https://github.com/chaofengc/IQA-PyTorch), [BasicSR](https://github.com/XPixelGroup/BasicSR) and [NeRFStudio](https://github.com/nerfstudio-project/nerfstudio).We appreciate the effort of the contributors to these repositories. Thanks for [@zhiwen_huang](), [@ruizhao26](https://github.com/ruizhao26), [@shiyan_chen](https://github.com/hnmizuho) and [@Leozhangjiyuan](https://github.com/Leozhangjiyuan) for their help in building this project.
+Our code is built on the open-source projects of [SpikeCV](https://spikecv.github.io/), [IQA-Pytorch](https://github.com/chaofengc/IQA-PyTorch), [BasicSR](https://github.com/XPixelGroup/BasicSR) and [NeRFStudio](https://github.com/nerfstudio-project/nerfstudio).We appreciate the effort of the contributors to these repositories. Thanks for [@zhiwen_huang](https://github.com/hzw-abc), [@ruizhao26](https://github.com/ruizhao26), [@shiyan_chen](https://github.com/hnmizuho) and [@Leozhangjiyuan](https://github.com/Leozhangjiyuan) for their help in building this project.
 
 ## 📑 Citation
 If you find our codes helpful to your research, please consider to use the following citation:
