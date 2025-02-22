@@ -121,6 +121,8 @@
 
     from spikezoo.datasets.szdata_dataset import SZData, SZDataConfig
 
+.. _datasetparam:
+
 参数配置
 ----------------
 
@@ -179,7 +181,7 @@
 - ``use_aug`` : 表示是否使用数据增强技术。
 - ``use_cache`` : 表示是否使用数据缓存技术。在数据 I/O 较大且 GPU 利用率较低时开启可以加速训练，但可能会增加 RAM 占用。
 - ``crop_size`` : 训练时如果使用数据增强技术，裁剪的尺寸大小，默认值为 (-1, -1) 表示不裁剪。
-- ``dataset_cls_local`` : 调用本地设计的数据集类，默认值为 ``None``（即导入 ``spikezoo`` 仓库的数据类）。
+- ``dataset_cls_local`` : 调用本地设计的数据集类，默认值为 ``None`` （即导入 ``spikezoo`` 仓库的数据类）。
 - ``spike_load_version`` : 脉冲加载时使用 ``python`` 接口还是 ``cpp`` 接口，默认 ``python`` 接口。
 
 

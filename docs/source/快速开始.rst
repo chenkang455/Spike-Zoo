@@ -187,7 +187,7 @@
 
 .. note::
 
-    单卡NVIDIA RTX 4090实测：训练耗时约2分钟，PSNR 32.8dB / SSIM 0.92。单卡GTX 1050 Ti: 训练耗时约12分钟，PSNR 30.59dB / SSIM 0.86。完整训练配置参考 :ref:`train_pipe`。模型和数据集的参数配置参考 :ref:`eval_initial`。
+    单卡NVIDIA RTX 4090实测：训练耗时约2分钟，PSNR 32.8dB / SSIM 0.92。单卡GTX 1050 Ti: 训练耗时约12分钟，PSNR 30.59dB / SSIM 0.86。完整训练配置参考 :ref:`train_pipe`。模型具体参数配置参考 :ref:`modelparam`, 数据集具体参数配置参考 :ref:`datasetparam`。
 
 
 模型直接调用
