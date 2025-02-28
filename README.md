@@ -64,21 +64,20 @@ pipeline.infer_from_dataset(idx = 0)
 
 
 ### 3. Training
-We provide a user-friendly code for training our provided `BASE` model (modified from the `SpikeCLIP`) for the classic `REDS` dataset introduced in `Spk2ImgNet`:
+We provide a user-friendly code for training our provided `BASE` model (modified from the `SpikeCLIP`) for our provided `BASE` dataset:
 ``` python
 from spikezoo.pipeline import TrainPipelineConfig, TrainPipeline
-from spikezoo.datasets.reds_base_dataset import REDS_BASEConfig
+from spikezoo.datasets.base_dataset import BaseDatasetConfig
 from spikezoo.models.base_model import BaseModelConfig
 pipeline = TrainPipeline(
     cfg=TrainPipelineConfig(save_folder="results", epochs = 10),
-    dataset_cfg=REDS_BASEConfig(root_dir = "spikezoo/data/reds_base"),
+    dataset_cfg=BaseDatasetConfig(),
     model_cfg=BaseModelConfig(),
 )
 pipeline.train()
 ``` 
-We finish the training with one 4090 GPU in `2 minutes`, achieving `32.8dB` in PSNR and `0.92` in SSIM.
 
-> 🌟 We encourage users to develop their models with simple modifications to our framework.
+> 🌟 We encourage users to develop their models with simple modifications to our framework. Follow the below documentation. 👇👇👇
 
 ## 📚 How to navigate the documentation
 
