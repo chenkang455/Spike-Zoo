@@ -52,7 +52,7 @@ class TrainPipelineConfig(PipelineConfig):
 
     # train setting - optimizer & scheduler & loss_dict
     "Optimizer config."
-    optimizer_cfg: OptimizerConfig = AdamOptimizerConfig(lr=1e-3)
+    optimizer_cfg: OptimizerConfig = field(default_factory=lambda: AdamOptimizerConfig(lr=1e-3))
     "Scheduler config."
     scheduler_cfg: Optional[SchedulerConfig] = None
     "Loss dict {loss_name,weight}."
@@ -82,7 +82,7 @@ class TrainPipeline(Pipeline):
         """Model and Data setup."""
         # model
         self.model: BaseModel = build_model_name(model_cfg) if isinstance(model_cfg, str) else build_model_cfg(model_cfg)
-        self.model.build_network(mode = "train",version="local")
+        self.model.build_network(mode="train", version="local")
         torch.set_grad_enabled(True)
         # data
         if isinstance(dataset_cfg, str):
@@ -94,7 +94,7 @@ class TrainPipeline(Pipeline):
         self.train_dataset.build_source("train")
         self.dataset.build_source("test")
         self.train_dataloader = build_dataloader(self.train_dataset, self.cfg)
-        self.dataloader = build_dataloader(self.dataset,self.cfg)
+        self.dataloader = build_dataloader(self.dataset, self.cfg)
         # device
         self.device = "cuda" if torch.cuda.is_available() else "cpu"
 
