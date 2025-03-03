@@ -31,11 +31,11 @@
 ### 1. Installation
 For users focused on **utilizing pretrained models for spike-to-image conversion**, we recommend installing SpikeZoo using one of the following methods:
 
-* Install the last stable version `0.2.3.5` from PyPI:
+* Install the last stable version from PyPI:
 ```
 pip install spikezoo
 ```
-*  Install the latest developing version `0.2.3.6` from the source code **(recommended)**:
+*  Install the latest developing version from the source code **(recommended)**:
 ```
 git clone https://github.com/chenkang455/Spike-Zoo
 cd Spike-Zoo
