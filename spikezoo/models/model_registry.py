@@ -1,3 +1,7 @@
+"""
+Model registry for SpikeZoo.
+"""
+
 from typing import Dict, Type, Optional, Union
 import importlib
 from pathlib import Path
