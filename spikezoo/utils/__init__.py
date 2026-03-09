@@ -17,3 +17,20 @@ from .logging_utils import (
     error,
     critical
 )
+from .visualization_utils import (
+    VisualizationConfig,
+    VisualizationManager,
+    BaseVisualizer,
+    TensorBoardVisualizer,
+    WandBVisualizer,
+    MatplotlibVisualizer,
+    get_visualization_manager,
+    setup_visualization,
+    log_scalar,
+    log_image,
+    log_histogram,
+    log_text,
+    log_config,
+    flush_visualization,
+    close_visualization
+)
