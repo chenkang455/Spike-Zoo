@@ -1,0 +1,74 @@
+# Multi-Task Configuration Example
+project_name: "SpikeZoo Multi-Task Project"
+project_version: "1.0.0"
+
+# Default settings for all tasks
+default_task_settings:
+  output_base_dir: "./results"
+  log_level: "INFO"
+  timeout: 3600
+
+# Global parameters accessible to all tasks
+global_parameters:
+  data_root: "./data"
+  model_zoo: "./models"
+  num_workers: 4
+
+# Task definitions
+tasks:
+  # Data preprocessing task
+  task_001:
+    task_id: "task_001"
+    task_name: "Data Preprocessing"
+    task_description: "Preprocess spike data for training"
+    enabled: true
+    priority: 1
+    parameters:
+      input_dir: "${data_root}/raw"
+      output_dir: "${data_root}/processed"
+      normalize: true
+      resize: [256, 256]
+    dependencies: []
+    output_dir: "${output_base_dir}/preprocessing"
+
+  # Model training task
+  task_002:
+    task_id: "task_002"
+    task_name: "Model Training"
+    task_description: "Train spike-to-image model"
+    enabled: true
+    priority: 2
+    parameters:
+      model_type: "cnn"
+      epochs: 100
+      batch_size: 32
+      learning_rate: 0.001
+      optimizer: "adam"
+    dependencies: ["task_001"]
+    output_dir: "${output_base_dir}/training"
+
+  # Model evaluation task
+  task_003:
+    task_id: "task_003"
+    task_name: "Model Evaluation"
+    task_description: "Evaluate trained model performance"
+    enabled: true
+    priority: 3
+    parameters:
+      metrics: ["psnr", "ssim", "lpips"]
+      test_batch_size: 16
+    dependencies: ["task_002"]
+    output_dir: "${output_base_dir}/evaluation"
+
+  # Visualization task
+  task_004:
+    task_id: "task_004"
+    task_name: "Visualization"
+    task_description: "Generate visualization of results"
+    enabled: false  # Disabled by default
+    priority: 4
+    parameters:
+      plot_types: ["reconstruction", "error_map"]
+      save_format: "png"
+    dependencies: ["task_003"]
+    output_dir: "${output_base_dir}/visualization"
