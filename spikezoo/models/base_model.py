@@ -3,7 +3,6 @@ import torch.nn as nn
 import importlib
 import inspect
 from dataclasses import dataclass, field
-from spikezoo.utils import load_network, download_file
 import os
 import time
 from typing import Dict, Literal
@@ -12,7 +11,12 @@ from torch.optim.lr_scheduler import CosineAnnealingLR
 import functools
 import torch.nn as nn
 from typing import Optional, Union, List
-from spikezoo.archs.base.nets import BaseNet 
+from spikezoo.archs.base.nets import BaseNet
+from spikezoo.utils.network_utils import (
+    load_network_with_retry,
+    download_file_with_retry,
+    verify_file_checksum
+) 
 
 
 # todo private design
@@ -48,6 +52,11 @@ class BaseModelConfig:
     model_cls_local: Optional[nn.Module] = None
     "Load the arch from local class or spikezoo lib. (None)"
     arch_cls_local: Optional[nn.Module] = None
+    # ------------- Retry Config -------------
+    "Maximum number of retry attempts for network loading."
+    max_retry_attempts: int = 3
+    "Delay between retry attempts in seconds."
+    retry_delay: float = 1.0
 
 class BaseModel(nn.Module):
     def __init__(self, cfg: BaseModelConfig):
@@ -108,13 +117,29 @@ class BaseModel(nn.Module):
             # no ckpt found on the device, try to download from the url
             if os.path.isfile(ckpt_path) == False and version != "local":
                 os.makedirs(os.path.dirname(ckpt_path), exist_ok=True)
-                download_file(ckpt_path_url, ckpt_path)
+                success = download_file_with_retry(
+                    ckpt_path_url, 
+                    ckpt_path, 
+                    max_retries=self.cfg.max_retry_attempts,
+                    retry_delay=self.cfg.retry_delay
+                )
+                if not success:
+                    raise RuntimeError(
+                        f"Failed to download checkpoint from {ckpt_path_url} after {self.cfg.max_retry_attempts} attempts"
+                    )
                 time.sleep(0.5)
             elif os.path.isfile(ckpt_path) == False and version == "local":
                 raise RuntimeError(
                     f"For the method {self.cfg.model_name}, no ckpt can be found on the {ckpt_path} !!! Try set the version to get the model from the url."
                 )
-            model = load_network(ckpt_path, model)
+            
+            # Load network with retry mechanism
+            model = load_network_with_retry(
+                ckpt_path, 
+                model, 
+                max_retries=self.cfg.max_retry_attempts,
+                retry_delay=self.cfg.retry_delay
+            )
         # to device
         model = model.to(self.device)
         model = nn.DataParallel(model) if self.cfg.multi_gpu == True else model
