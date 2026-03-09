@@ -11,7 +11,8 @@ from spikezoo.utils.network_utils import (
     load_network_with_retry,
     download_file_with_retry
 )
-from spikezoo.models.base_model import get_suffix, get_url_version
+# Import these functions directly from utils to avoid circular import
+from spikezoo.utils.model_utils import get_suffix, get_url_version
 
 
 def load_model_weights(

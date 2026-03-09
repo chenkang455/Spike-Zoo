@@ -24,7 +24,7 @@ from spikezoo.models.modules.metric_utils import (
     get_paired_images,
     prepare_visualization_dict
 )
-from spikezoo.utils import get_suffix, get_url_version
+from spikezoo.utils.model_utils import get_suffix, get_url_version
 
 
 @dataclass
@@ -86,13 +86,24 @@ class BaseModel:
         self.cfg.mode = mode
         
         # [1] build the model.
-        if self.cfg.model_cls_local == None:
-            module_name = self.cfg.model_file_name
-            module_name = "spikezoo.archs." + self.cfg.model_name + "." + module_name
-            module = importlib.import_module(module_name)
-            model_cls: BaseNet = getattr(module, self.cfg.model_cls_name)
+        if self.cfg.model_cls_local is None:
+            # Use the new architecture loader for plugin support
+            from spikezoo.models.architecture_loader import load_architecture_class
+            model_cls = load_architecture_class(
+                model_name=self.cfg.model_name,
+                class_name=self.cfg.model_cls_name,
+                module_name=self.cfg.model_file_name
+            )
+            
+            # Fallback to old method if loader fails
+            if model_cls is None:
+                module_name = self.cfg.model_file_name
+                module_name = "spikezoo.archs." + self.cfg.model_name + "." + module_name
+                module = importlib.import_module(module_name)
+                model_cls = getattr(module, self.cfg.model_cls_name)
         else:
-            model_cls: BaseNet = self.cfg.model_cls_local
+            model_cls = self.cfg.model_cls_local
+            
         self.net = model_cls(**self.cfg.model_params)
         
         # [2] build the network.

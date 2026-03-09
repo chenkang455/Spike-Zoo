@@ -4,7 +4,7 @@ Loss functions for SpikeZoo models.
 
 import torch
 import torch.nn as nn
-from typing import Dict, Callable
+from typing import Dict, Callable, Tuple
 from typing_extensions import Literal
 
 

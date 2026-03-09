@@ -1,7 +1,10 @@
 from .utils.spike_utils import *
-from .models import model_list
 from .datasets import dataset_list
 from .metrics import metric_all_names
+
+# Import model list differently to avoid circular imports
+import spikezoo.models
+model_list = spikezoo.models.__all__
 
 # METHOD NAME DEFINITION
 METHODS = model_list
