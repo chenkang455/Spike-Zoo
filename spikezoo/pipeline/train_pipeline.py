@@ -16,7 +16,6 @@ import torch.optim.lr_scheduler as lr_scheduler
 import functools
 from spikezoo.utils.optimizer_utils import OptimizerConfig, AdamOptimizerConfig
 from spikezoo.utils.scheduler_utils import SchedulerConfig, MultiStepSchedulerConfig, CosineAnnealingLRConfig
-from torch.utils.tensorboard import SummaryWriter
 import subprocess
 import webbrowser
 import time
@@ -25,6 +24,16 @@ from spikezoo.utils.other_utils import set_random_seed
 from spikingjelly.clock_driven import functional
 from spikezoo.utils.accelerator_utils import AcceleratorManager, AcceleratorConfig
 from spikezoo.utils.checkpoint_utils import CheckpointManager
+from spikezoo.utils.visualization_utils import (
+    VisualizationConfig,
+    VisualizationManager,
+    get_visualization_manager,
+    log_scalar,
+    log_image,
+    log_config,
+    flush_visualization,
+    close_visualization
+)
 
 
 @dataclass
@@ -69,6 +78,12 @@ class TrainPipelineConfig(PipelineConfig):
     enable_checkpoint: bool = True
     "Resume training from checkpoint."
     resume_from_checkpoint: Optional[str] = None
+    
+    # Visualization config
+    "Enable visualization."
+    enable_visualization: bool = True
+    "Visualization config."
+    visualization_cfg: Optional[VisualizationConfig] = None
 
 
 class TrainPipeline(Pipeline):
@@ -144,6 +159,31 @@ class TrainPipeline(Pipeline):
         else:
             self.accelerator_manager = None
     
+    def _setup_visualization(self):
+        """Setup visualization manager."""
+        if self.cfg.enable_visualization:
+            # Use provided config or create default
+            vis_config = self.cfg.visualization_cfg or VisualizationConfig(
+                experiment_name=f"{self.cfg.exp_name or 'experiment'}_{self.thistime}",
+                log_dir=str(self.save_folder / "logs")
+            )
+            
+            # Initialize visualization manager
+            self.visualization_manager = get_visualization_manager(vis_config)
+            
+            # Log initial configuration
+            config_dict = {
+                "model": str(self.model.cfg.model_name),
+                "dataset": str(self.dataset.cfg.dataset_name),
+                "epochs": self.cfg.epochs,
+                "batch_size": self.cfg.bs_train,
+                "learning_rate": self.cfg.optimizer_cfg.lr if hasattr(self.cfg.optimizer_cfg, 'lr') else 'unknown',
+                "save_folder": str(self.save_folder)
+            }
+            self.visualization_manager.log_config(config_dict)
+        else:
+            self.visualization_manager = None
+    
     def _setup_checkpoint(self):
         """Setup checkpoint manager."""
         if self.cfg.enable_checkpoint:
@@ -154,6 +194,28 @@ class TrainPipeline(Pipeline):
                 self._resume_from_checkpoint(self.cfg.resume_from_checkpoint)
         else:
             self.checkpoint_manager = None
+    
+    def _setup_pipeline(self):
+        """Pipeline setup."""
+        print("Pipeline is setting up...")
+        # save folder
+        self.thistime = datetime.now().strftime("%Y-%m-%d_%H-%M-%S-%f")[:23]
+        self.save_folder = Path(f"results") if len(self.cfg.save_folder) == 0 else self.cfg.save_folder
+        mode_name = "train" if self.cfg._mode == "train_mode" else "detect"
+        self.save_folder = (
+            self.save_folder / Path(f"{mode_name}/{self.thistime}")
+            if len(self.cfg.exp_name) == 0
+            else self.save_folder / Path(f"{mode_name}/{self.cfg.exp_name}")
+        )
+        # remove and establish folder
+        save_folder = str(self.save_folder)
+        if os.path.exists(save_folder):
+            shutil.rmtree(save_folder)
+        os.makedirs(save_folder)
+        save_folder = Path(save_folder)
+        
+        # Setup visualization after save folder is created
+        self._setup_visualization()
 
     def save_network(self, epoch):
         """Save the network."""
@@ -244,6 +306,19 @@ class TrainPipeline(Pipeline):
                 self.update_learning_rate()
                 self.write_log_train(epoch, loss_values_dict)
 
+                # Log training metrics to visualization
+                if self.visualization_manager is not None:
+                    try:
+                        # Log average loss
+                        avg_loss = sum(loss_values_dict.values()) / len(loss_values_dict)
+                        self.visualization_manager.log_scalar("train/avg_loss", avg_loss, epoch)
+                        
+                        # Log individual losses
+                        for loss_name, loss_value in loss_values_dict.items():
+                            self.visualization_manager.log_scalar(f"train/{loss_name}", loss_value, epoch)
+                    except Exception as e:
+                        self.logger.warning(f"Failed to log training metrics to visualization: {e}")
+
                 #  save visual results & save ckpt & evaluate metrics
                 with torch.no_grad():
                     if epoch % self.cfg.steps_per_save_imgs == 0 or epoch == self.cfg.epochs - 1:
@@ -256,6 +331,14 @@ class TrainPipeline(Pipeline):
                     if epoch % self.cfg.steps_per_cal_metrics == 0 or epoch == self.cfg.epochs - 1:
                         metrics_dict = self.cal_metrics()
                         self.write_log_test(epoch, metrics_dict)
+                        
+                        # Log evaluation metrics to visualization
+                        if self.visualization_manager is not None:
+                            try:
+                                for metric_name, metric_value in metrics_dict.items():
+                                    self.visualization_manager.log_scalar(f"eval/{metric_name}", metric_value.avg, epoch)
+                            except Exception as e:
+                                self.logger.warning(f"Failed to log evaluation metrics to visualization: {e}")
             
             # Update state back to ready
             if self.state_manager:
@@ -266,6 +349,13 @@ class TrainPipeline(Pipeline):
                 self.state_manager.transition_to_state(PipelineState.ERROR)
             self.logger.error(f"Training error: {e}")
             raise
+        finally:
+            # Close visualization manager
+            if self.visualization_manager is not None:
+                try:
+                    self.visualization_manager.close()
+                except Exception as e:
+                    self.logger.warning(f"Failed to close visualization manager: {e}")
 
     def save_visual(self, epoch):
         """Save the visual results."""
@@ -285,6 +375,22 @@ class TrainPipeline(Pipeline):
                 cv2.imwrite(str(save_folder / Path(f"{batch_idx:06d}_{key}.png")), tensor2npy(img))
                 if self.cfg.use_tensorboard == True and batch_idx == 0:
                     self.writer.add_image(f"imgs/{key}", img[0].detach().cpu(), epoch)
+                
+                # Log images to visualization manager
+                if self.visualization_manager is not None and batch_idx == 0:
+                    try:
+                        # Convert image for visualization
+                        vis_img = img[0].detach().cpu().numpy()
+                        if vis_img.ndim == 3 and vis_img.shape[0] in [1, 3, 4]:
+                            # Channel-first format (C, H, W) -> (H, W, C)
+                            vis_img = np.transpose(vis_img, (1, 2, 0))
+                        elif vis_img.ndim == 2:
+                            # Grayscale (H, W) -> (H, W, 1)
+                            vis_img = np.expand_dims(vis_img, axis=-1)
+                        
+                        self.visualization_manager.log_image(f"imgs/{key}", vis_img, epoch)
+                    except Exception as e:
+                        self.logger.warning(f"Failed to log image {key} to visualization: {e}")
 
     def optimize_parameters(self, loss_dict, final_flag):
         """Optimize the parameters from the loss_dict."""
