@@ -27,6 +27,7 @@ from spikezoo.utils.validation_utils import (
     validate_infer_from_file_params,
     validate_infer_from_spk_params
 )
+from .state_manager import StateManager, PipelineMode, PipelineState
 
 
 @dataclass
@@ -53,6 +54,8 @@ class PipelineConfig:
     pin_memory: bool = False
     "Different modes for the pipeline."
     _mode: Literal["single_mode", "multi_mode", "train_mode"] = "single_mode"
+    "Enable state management."
+    enable_state_management: bool = True
 
 
 class Pipeline:
@@ -65,10 +68,15 @@ class Pipeline:
         self.cfg = cfg
         self._setup_model_data(model_cfg, dataset_cfg)
         self._setup_pipeline()
+        self._setup_state_management()
 
     def _setup_model_data(self, model_cfg, dataset_cfg):
         """Model and Data setup."""
         print("Model and dataset is setting up...")
+        # Update state if state management is enabled
+        if self.state_manager:
+            self.state_manager.transition_to_state(PipelineState.INITIALIZING)
+        
         # model [1] build the model. [2] build the network.
         self.model: BaseModel = build_model_name(model_cfg) if isinstance(model_cfg, str) else build_model_cfg(model_cfg)
         self.model.build_network(mode="eval", version=self.cfg.version)
@@ -79,6 +87,10 @@ class Pipeline:
         self.dataloader = build_dataloader(self.dataset,self.cfg)
         # device
         self.device = "cuda" if torch.cuda.is_available() else "cpu"
+        
+        # Update state to ready
+        if self.state_manager:
+            self.state_manager.transition_to_state(PipelineState.READY)
 
     def _setup_pipeline(self):
         """Pipeline setup."""
@@ -98,6 +110,27 @@ class Pipeline:
             shutil.rmtree(save_folder)
         os.makedirs(save_folder)
         save_folder = Path(save_folder)
+    
+    def _setup_state_management(self):
+        """Setup state management."""
+        if self.cfg.enable_state_management:
+            # Determine initial mode from config
+            if self.cfg._mode == "train_mode":
+                initial_mode = PipelineMode.TRAIN_MODE
+            elif self.cfg._mode == "multi_mode":
+                initial_mode = PipelineMode.MULTI_MODE
+            else:
+                initial_mode = PipelineMode.SINGLE_MODE
+            
+            self.state_manager = StateManager(initial_mode)
+            
+            # Set initial state based on mode
+            if initial_mode == PipelineMode.TRAIN_MODE:
+                self.state_manager.transition_to_state(PipelineState.TRAINING)
+            else:
+                self.state_manager.transition_to_state(PipelineState.READY)
+        else:
+            self.state_manager = None
         # logger result
         self.logger = setup_logging(save_folder / Path("result.log"))
         self.logger.info(f"Info logs are saved on the {save_folder}/result.log")
@@ -159,7 +192,17 @@ class Pipeline:
     # TODO: To be overridden
     def infer(self, spike, img, save_folder, rate):
         """Function IV---Spike-to-image conversion interface, input data format: spike [bs,c,h,w] (0-1), img [bs,1,h,w] (0-1)"""
-        return self._infer_model(self.model, spike, img, save_folder, rate)
+        # Update state if state management is enabled
+        if self.state_manager:
+            self.state_manager.transition_to_state(PipelineState.INFERRING)
+        
+        result = self._infer_model(self.model, spike, img, save_folder, rate)
+        
+        # Update state back to ready
+        if self.state_manager:
+            self.state_manager.transition_to_state(PipelineState.READY)
+        
+        return result
 
     def save_imgs_from_dataset(self):
         """Function V---Save all images from the given dataset."""

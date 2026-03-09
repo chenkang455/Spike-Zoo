@@ -94,6 +94,10 @@ class TrainPipeline(Pipeline):
 
     def _setup_model_data(self, model_cfg, dataset_cfg):
         """Model and Data setup."""
+        # Update state if state management is enabled
+        if self.state_manager:
+            self.state_manager.transition_to_state(PipelineState.INITIALIZING)
+        
         # model
         self.model: BaseModel = build_model_name(model_cfg) if isinstance(model_cfg, str) else build_model_cfg(model_cfg)
         self.model.build_network(mode="train", version="local")
@@ -111,6 +115,10 @@ class TrainPipeline(Pipeline):
         self.dataloader = build_dataloader(self.dataset, self.cfg)
         # device
         self.device = "cuda" if torch.cuda.is_available() else "cpu"
+        
+        # Update state to ready
+        if self.state_manager:
+            self.state_manager.transition_to_state(PipelineState.READY)
 
     def _setup_training(self):
         """Setup training optimizer."""
@@ -208,41 +216,56 @@ class TrainPipeline(Pipeline):
         """Training code."""
         self.logger.info("Start Training!")
         
-        # Set starting epoch and step
-        start_epoch = getattr(self, 'start_epoch', 0)
-        start_step = getattr(self, 'start_step', 0)
-        step_count = start_step
+        # Update state if state management is enabled
+        if self.state_manager:
+            self.state_manager.transition_to_state(PipelineState.TRAINING)
         
-        for epoch in range(start_epoch, self.cfg.epochs):
-            # training
-            for batch_idx, batch in enumerate(tqdm(self.train_dataloader)):
-                batch = self.model.feed_to_device(batch)
-                outputs = self.model.get_outputs_dict(batch)
-                loss_dict, loss_values_dict = self.model.get_loss_dict(outputs, batch, self.cfg.loss_weight_dict)
-                self.optimize_parameters(loss_dict, batch_idx == len(self.train_dataloader) - 1)
-                
-                # Increment step count
-                step_count += 1
-                
-                # Save checkpoint periodically
-                if self.checkpoint_manager is not None and step_count % (self.cfg.steps_per_save_ckpt * 10) == 0:
-                    self.save_checkpoint(epoch, step_count)
+        try:
+            # Set starting epoch and step
+            start_epoch = getattr(self, 'start_epoch', 0)
+            start_step = getattr(self, 'start_step', 0)
+            step_count = start_step
             
-            self.update_learning_rate()
-            self.write_log_train(epoch, loss_values_dict)
-
-            #  save visual results & save ckpt & evaluate metrics
-            with torch.no_grad():
-                if epoch % self.cfg.steps_per_save_imgs == 0 or epoch == self.cfg.epochs - 1:
-                    self.save_visual(epoch)
-                if epoch % self.cfg.steps_per_save_ckpt == 0 or epoch == self.cfg.epochs - 1:
-                    self.save_network(epoch)
-                    # Save checkpoint when saving network
-                    if self.checkpoint_manager is not None:
+            for epoch in range(start_epoch, self.cfg.epochs):
+                # training
+                for batch_idx, batch in enumerate(tqdm(self.train_dataloader)):
+                    batch = self.model.feed_to_device(batch)
+                    outputs = self.model.get_outputs_dict(batch)
+                    loss_dict, loss_values_dict = self.model.get_loss_dict(outputs, batch, self.cfg.loss_weight_dict)
+                    self.optimize_parameters(loss_dict, batch_idx == len(self.train_dataloader) - 1)
+                    
+                    # Increment step count
+                    step_count += 1
+                    
+                    # Save checkpoint periodically
+                    if self.checkpoint_manager is not None and step_count % (self.cfg.steps_per_save_ckpt * 10) == 0:
                         self.save_checkpoint(epoch, step_count)
-                if epoch % self.cfg.steps_per_cal_metrics == 0 or epoch == self.cfg.epochs - 1:
-                    metrics_dict = self.cal_metrics()
-                    self.write_log_test(epoch, metrics_dict)
+                
+                self.update_learning_rate()
+                self.write_log_train(epoch, loss_values_dict)
+
+                #  save visual results & save ckpt & evaluate metrics
+                with torch.no_grad():
+                    if epoch % self.cfg.steps_per_save_imgs == 0 or epoch == self.cfg.epochs - 1:
+                        self.save_visual(epoch)
+                    if epoch % self.cfg.steps_per_save_ckpt == 0 or epoch == self.cfg.epochs - 1:
+                        self.save_network(epoch)
+                        # Save checkpoint when saving network
+                        if self.checkpoint_manager is not None:
+                            self.save_checkpoint(epoch, step_count)
+                    if epoch % self.cfg.steps_per_cal_metrics == 0 or epoch == self.cfg.epochs - 1:
+                        metrics_dict = self.cal_metrics()
+                        self.write_log_test(epoch, metrics_dict)
+            
+            # Update state back to ready
+            if self.state_manager:
+                self.state_manager.transition_to_state(PipelineState.READY)
+        except Exception as e:
+            # Update state to error
+            if self.state_manager:
+                self.state_manager.transition_to_state(PipelineState.ERROR)
+            self.logger.error(f"Training error: {e}")
+            raise
 
     def save_visual(self, epoch):
         """Save the visual results."""
