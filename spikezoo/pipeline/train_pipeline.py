@@ -24,6 +24,7 @@ import re
 from spikezoo.utils.other_utils import set_random_seed
 from spikingjelly.clock_driven import functional
 from spikezoo.utils.accelerator_utils import AcceleratorManager, AcceleratorConfig
+from spikezoo.utils.checkpoint_utils import CheckpointManager
 
 
 @dataclass
@@ -62,6 +63,12 @@ class TrainPipelineConfig(PipelineConfig):
     # Accelerator config
     "Accelerator config for multi-GPU training."
     accelerator_cfg: Optional[Dict[str, Any]] = None
+    
+    # Checkpoint config
+    "Enable checkpoint saving."
+    enable_checkpoint: bool = True
+    "Resume training from checkpoint."
+    resume_from_checkpoint: Optional[str] = None
 
 
 class TrainPipeline(Pipeline):
@@ -76,6 +83,7 @@ class TrainPipeline(Pipeline):
         self._setup_pipeline()
         self._setup_training()
         self._setup_accelerator()
+        self._setup_checkpoint()
 
     def _setup_pipeline(self):
         super()._setup_pipeline()
@@ -127,6 +135,17 @@ class TrainPipeline(Pipeline):
                 )
         else:
             self.accelerator_manager = None
+    
+    def _setup_checkpoint(self):
+        """Setup checkpoint manager."""
+        if self.cfg.enable_checkpoint:
+            self.checkpoint_manager = CheckpointManager(self.save_folder / Path("checkpoints"))
+            
+            # Resume from checkpoint if specified
+            if self.cfg.resume_from_checkpoint is not None:
+                self._resume_from_checkpoint(self.cfg.resume_from_checkpoint)
+        else:
+            self.checkpoint_manager = None
 
     def save_network(self, epoch):
         """Save the network."""
@@ -139,17 +158,76 @@ class TrainPipeline(Pipeline):
             self.model.save_network(save_folder / f"{epoch:06d}.pth", unwrapped_model)
         else:
             self.model.save_network(save_folder / f"{epoch:06d}.pth")
+    
+    def save_checkpoint(self, epoch, step, additional_state=None):
+        """
+        Save training checkpoint.
+        
+        Args:
+            epoch: Current epoch
+            step: Current step
+            additional_state: Additional state to save
+        """
+        if self.checkpoint_manager is not None:
+            # If using accelerator, unwrap model before saving
+            if self.accelerator_manager is not None:
+                unwrapped_model = self.accelerator_manager.unwrap_model(self.model.net)
+                self.checkpoint_manager.save_checkpoint(
+                    unwrapped_model, self.optimizer, self.scheduler, epoch, step, 
+                    additional_state=additional_state
+                )
+            else:
+                self.checkpoint_manager.save_checkpoint(
+                    self.model.net, self.optimizer, self.scheduler, epoch, step,
+                    additional_state=additional_state
+                )
+    
+    def _resume_from_checkpoint(self, checkpoint_path):
+        """
+        Resume training from checkpoint.
+        
+        Args:
+            checkpoint_path: Path to checkpoint file
+        """
+        if self.checkpoint_manager is not None:
+            checkpoint = self.checkpoint_manager.load_checkpoint(
+                self.model.net, self.optimizer, self.scheduler, checkpoint_path
+            )
+            
+            # Update training state
+            self.start_epoch = checkpoint['epoch'] + 1
+            self.start_step = checkpoint['step']
+            
+            self.logger.info(f"Resumed from checkpoint: {checkpoint_path}")
+            self.logger.info(f"Starting from epoch {self.start_epoch}, step {self.start_step}")
+        else:
+            self.start_epoch = 0
+            self.start_step = 0
 
     def train(self):
         """Training code."""
         self.logger.info("Start Training!")
-        for epoch in range(self.cfg.epochs):
+        
+        # Set starting epoch and step
+        start_epoch = getattr(self, 'start_epoch', 0)
+        start_step = getattr(self, 'start_step', 0)
+        step_count = start_step
+        
+        for epoch in range(start_epoch, self.cfg.epochs):
             # training
             for batch_idx, batch in enumerate(tqdm(self.train_dataloader)):
                 batch = self.model.feed_to_device(batch)
                 outputs = self.model.get_outputs_dict(batch)
                 loss_dict, loss_values_dict = self.model.get_loss_dict(outputs, batch, self.cfg.loss_weight_dict)
                 self.optimize_parameters(loss_dict, batch_idx == len(self.train_dataloader) - 1)
+                
+                # Increment step count
+                step_count += 1
+                
+                # Save checkpoint periodically
+                if self.checkpoint_manager is not None and step_count % (self.cfg.steps_per_save_ckpt * 10) == 0:
+                    self.save_checkpoint(epoch, step_count)
+            
             self.update_learning_rate()
             self.write_log_train(epoch, loss_values_dict)
 
@@ -159,6 +237,9 @@ class TrainPipeline(Pipeline):
                     self.save_visual(epoch)
                 if epoch % self.cfg.steps_per_save_ckpt == 0 or epoch == self.cfg.epochs - 1:
                     self.save_network(epoch)
+                    # Save checkpoint when saving network
+                    if self.checkpoint_manager is not None:
+                        self.save_checkpoint(epoch, step_count)
                 if epoch % self.cfg.steps_per_cal_metrics == 0 or epoch == self.cfg.epochs - 1:
                     metrics_dict = self.cal_metrics()
                     self.write_log_test(epoch, metrics_dict)
