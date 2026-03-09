@@ -22,6 +22,11 @@ import shutil
 from spikingjelly.clock_driven import functional
 import spikezoo as sz
 from .data_preprocessor import DataPreprocessor
+from spikezoo.utils.validation_utils import (
+    validate_infer_from_dataset_params,
+    validate_infer_from_file_params,
+    validate_infer_from_spk_params
+)
 
 
 @dataclass
@@ -109,6 +114,9 @@ class Pipeline:
 
     def infer_from_dataset(self, idx=0):
         """Function I---Save the recoverd image and calculate the metric from the given dataset."""
+        # parameter validation
+        validate_infer_from_dataset_params(idx, len(self.dataset))
+        
         # save folder
         self.logger.info("*********************** infer_from_dataset ***********************")
         save_folder = DataPreprocessor.create_save_folder(
@@ -122,6 +130,9 @@ class Pipeline:
 
     def infer_from_file(self, file_path, height=-1, width=-1, rate=1, img_path=None, remove_head=False):
         """Function II---Save the recoverd image and calculate the metric from the given input file."""
+        # parameter validation
+        validate_infer_from_file_params(file_path, height, width, rate, img_path, remove_head)
+        
         # save folder
         self.logger.info("*********************** infer_from_file ***********************")
         save_folder = DataPreprocessor.create_save_folder(self.save_folder, "file", file_path)
@@ -134,6 +145,9 @@ class Pipeline:
 
     def infer_from_spk(self, spike, rate=1, img=None):
         """Function III---Save the recoverd image and calculate the metric from the given spike stream."""
+        # parameter validation
+        validate_infer_from_spk_params(spike, rate, img)
+        
         # save folder
         self.logger.info("*********************** infer_from_spk ***********************")
         save_folder = DataPreprocessor.create_save_folder(self.save_folder, "spk")
