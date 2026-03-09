@@ -23,6 +23,7 @@ import time
 import re
 from spikezoo.utils.other_utils import set_random_seed
 from spikingjelly.clock_driven import functional
+from spikezoo.utils.accelerator_utils import AcceleratorManager, AcceleratorConfig
 
 
 @dataclass
@@ -57,6 +58,10 @@ class TrainPipelineConfig(PipelineConfig):
     scheduler_cfg: Optional[SchedulerConfig] = None
     "Loss dict {loss_name,weight}."
     loss_weight_dict: Dict[Literal["l1", "l2"], float] = field(default_factory=lambda: {"l1": 1})
+    
+    # Accelerator config
+    "Accelerator config for multi-GPU training."
+    accelerator_cfg: Optional[Dict[str, Any]] = None
 
 
 class TrainPipeline(Pipeline):
@@ -70,6 +75,7 @@ class TrainPipeline(Pipeline):
         self._setup_model_data(model_cfg, dataset_cfg)
         self._setup_pipeline()
         self._setup_training()
+        self._setup_accelerator()
 
     def _setup_pipeline(self):
         super()._setup_pipeline()
@@ -103,12 +109,36 @@ class TrainPipeline(Pipeline):
         self.optimizer = self.cfg.optimizer_cfg.setup(self.model.net.parameters())
         self.scheduler = self.cfg.scheduler_cfg.setup(self.optimizer) if self.cfg.scheduler_cfg != None else None
         self.cnt_grad = 0
+    
+    def _setup_accelerator(self):
+        """Setup accelerator for multi-GPU training."""
+        if self.cfg.accelerator_cfg is not None:
+            acc_config = AcceleratorConfig(**self.cfg.accelerator_cfg)
+            self.accelerator_manager = AcceleratorManager(acc_config)
+            
+            # Prepare model, optimizer, and dataloaders with accelerator
+            if self.scheduler is not None:
+                self.model.net, self.optimizer, self.train_dataloader, self.scheduler = self.accelerator_manager.initialize(
+                    self.model.net, self.optimizer, self.train_dataloader, self.scheduler
+                )
+            else:
+                self.model.net, self.optimizer, self.train_dataloader = self.accelerator_manager.initialize(
+                    self.model.net, self.optimizer, self.train_dataloader
+                )
+        else:
+            self.accelerator_manager = None
 
     def save_network(self, epoch):
         """Save the network."""
         save_folder = self.save_folder / Path("ckpt")
         os.makedirs(save_folder, exist_ok=True)
-        self.model.save_network(save_folder / f"{epoch:06d}.pth")
+        
+        # If using accelerator, unwrap model before saving
+        if self.accelerator_manager is not None:
+            unwrapped_model = self.accelerator_manager.unwrap_model(self.model.net)
+            self.model.save_network(save_folder / f"{epoch:06d}.pth", unwrapped_model)
+        else:
+            self.model.save_network(save_folder / f"{epoch:06d}.pth")
 
     def train(self):
         """Training code."""
@@ -156,26 +186,53 @@ class TrainPipeline(Pipeline):
         """Optimize the parameters from the loss_dict."""
         loss = functools.reduce(torch.add, loss_dict.values())
         step_grad = self.cfg.steps_grad_accumulation
-        # for snn methods
-        if self.model.cfg.model_name == "ssir":
-            if self.cnt_grad % step_grad != step_grad - 1 and final_flag == False:
-                loss.backward(retain_graph=True)
-                self.cnt_grad += 1
+        
+        # Use accelerator if available
+        if self.accelerator_manager is not None:
+            # for snn methods
+            if self.model.cfg.model_name == "ssir":
+                if self.cnt_grad % step_grad != step_grad - 1 and final_flag == False:
+                    self.accelerator_manager.backward(loss)
+                    self.cnt_grad += 1
+                else:
+                    self.accelerator_manager.backward(loss)
+                    self.accelerator_manager.step(self.optimizer)
+                    self.accelerator_manager.zero_grad(self.optimizer)
+                    self._state_reset(self.model)
+                    self.cnt_grad = 0
             else:
-                loss.backward(retain_graph=False)
-                self.optimizer.step()
-                self.optimizer.zero_grad()
-                self._state_reset(self.model)
-                self.cnt_grad = 0
+                # for cnn methods
+                self.accelerator_manager.zero_grad(self.optimizer)
+                self.accelerator_manager.backward(loss)
+                self.accelerator_manager.step(self.optimizer)
         else:
-            # for cnn methods
-            self.optimizer.zero_grad()
-            loss.backward()
-            self.optimizer.step()
+            # for snn methods
+            if self.model.cfg.model_name == "ssir":
+                if self.cnt_grad % step_grad != step_grad - 1 and final_flag == False:
+                    loss.backward(retain_graph=True)
+                    self.cnt_grad += 1
+                else:
+                    loss.backward(retain_graph=False)
+                    self.optimizer.step()
+                    self.optimizer.zero_grad()
+                    self._state_reset(self.model)
+                    self.cnt_grad = 0
+            else:
+                # for cnn methods
+                self.optimizer.zero_grad()
+                loss.backward()
+                self.optimizer.step()
 
     def update_learning_rate(self):
         """Update the learning rate."""
-        self.scheduler.step() if self.cfg.scheduler_cfg != None else None
+        if self.scheduler is not None:
+            # If using accelerator, let it handle the scheduler step
+            if self.accelerator_manager is not None:
+                # Accelerator handles scheduler step automatically in certain cases
+                # For manual control, we can still call step()
+                self.scheduler.step()
+            else:
+                self.scheduler.step()
 
     def write_log_train(self, epoch, loss_values_dict):
         """Write the train log information."""
