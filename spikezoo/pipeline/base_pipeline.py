@@ -21,6 +21,7 @@ from typing import Optional, Union, List
 import shutil
 from spikingjelly.clock_driven import functional
 import spikezoo as sz
+from .data_preprocessor import DataPreprocessor
 
 
 @dataclass
@@ -110,70 +111,35 @@ class Pipeline:
         """Function I---Save the recoverd image and calculate the metric from the given dataset."""
         # save folder
         self.logger.info("*********************** infer_from_dataset ***********************")
-        save_folder = self.save_folder / Path(f"infer_from_dataset/{self.dataset.cfg.dataset_name}_dataset/{self.dataset.split}/{idx:06d}")
-        os.makedirs(str(save_folder), exist_ok=True)
+        save_folder = DataPreprocessor.create_save_folder(
+            self.save_folder, "dataset", idx, self.dataset.cfg.dataset_name, self.dataset.split
+        )
 
         # data process
-        # todo
         batch = self.dataset[idx]
-        spike, img, rate = batch["spike"], batch["gt_img"], batch["rate"]
-        spike = spike[None].to(self.device)
-        if self.dataset.cfg.with_img == True:
-            img = img[None].to(self.device)
-        else:
-            img = None
+        spike, img, rate = DataPreprocessor.preprocess_dataset_item(batch, self.device)
         return self.infer(spike, img, save_folder, rate)
 
     def infer_from_file(self, file_path, height=-1, width=-1, rate=1, img_path=None, remove_head=False):
         """Function II---Save the recoverd image and calculate the metric from the given input file."""
         # save folder
         self.logger.info("*********************** infer_from_file ***********************")
-        save_folder = self.save_folder / Path(f"infer_from_file/{os.path.basename(file_path)}")
-        os.makedirs(str(save_folder), exist_ok=True)
+        save_folder = DataPreprocessor.create_save_folder(self.save_folder, "file", file_path)
 
-        # load spike from .dat
-        if file_path.endswith(".dat"):
-            spike = load_vidar_dat(file_path, height, width, remove_head)
-        # load spike from .npz from UHSR
-        elif file_path.endswith("npz"):
-            spike = np.load(file_path)["spk"].astype(np.float32)[:, 13:237, 13:237]
-        else:
-            raise RuntimeError("Not recognized spike input file.")
-        # load img from .png/.jpg image file
-        if img_path is not None:
-            img = cv2.imread(img_path)
-            if img.ndim == 3:
-                img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-            img = (img / 255).astype(np.float32)
-            img = torch.from_numpy(img)[None, None].to(self.device)
-        else:
-            img = img_path
-        spike = torch.from_numpy(spike)[None].to(self.device)
+        # data process
+        spike, img = DataPreprocessor.preprocess_file_input(
+            file_path, height, width, self.device, img_path, remove_head
+        )
         return self.infer(spike, img, save_folder, rate)
 
     def infer_from_spk(self, spike, rate=1, img=None):
         """Function III---Save the recoverd image and calculate the metric from the given spike stream."""
         # save folder
         self.logger.info("*********************** infer_from_spk ***********************")
-        save_folder = self.save_folder / Path(f"infer_from_spk")
-        os.makedirs(str(save_folder), exist_ok=True)
+        save_folder = DataPreprocessor.create_save_folder(self.save_folder, "spk")
 
-        # spike process
-        if isinstance(spike, np.ndarray):
-            spike = torch.from_numpy(spike)
-        spike = spike.to(self.device)
-        # [c,h,w] -> [1,c,w,h]
-        if spike.dim() == 3:
-            spike = spike[None]
-        spike = spike.float()
-        # img process
-        if img is not None:
-            if isinstance(img, np.ndarray):
-                img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY) if img.ndim == 3 else img
-                img = (img / 255).astype(np.float32)
-                img = torch.from_numpy(img)[None, None].to(self.device)
-            else:
-                raise RuntimeError("Not recognized image input type.")
+        # data process
+        spike, img = DataPreprocessor.preprocess_spike_input(spike, self.device, img)
         return self.infer(spike, img, save_folder, rate)
 
     # TODO: To be overridden
