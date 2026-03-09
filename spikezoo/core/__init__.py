@@ -3,6 +3,7 @@ from .plugin_base import PluginBase
 from .task_runner import TaskRunner
 from .model_registry import ModelRegistry, ModelInfo
 from .dataset_registry import DatasetRegistry, DatasetInfo
+from .component_registry import ComponentRegistry, ComponentInfo, ComponentType
 
 __all__ = [
     "TaskManager",
@@ -12,5 +13,8 @@ __all__ = [
     "ModelRegistry",
     "ModelInfo",
     "DatasetRegistry",
-    "DatasetInfo"
+    "DatasetInfo",
+    "ComponentRegistry",
+    "ComponentInfo",
+    "ComponentType"
 ]
