@@ -1,0 +1,55 @@
+# Training Pipeline Configuration with Checkpoint Support
+version: "local"
+save_folder: "results"
+exp_name: "checkpoint_experiment_001"
+
+# Evaluation settings
+save_metric: true
+metric_names:
+  - "psnr"
+  - "ssim"
+
+# Image saving
+save_img: true
+img_norm: false
+
+# Dataloader settings (test)
+bs_test: 1
+nw_test: 0
+pin_memory: false
+
+# Training parameters
+epochs: 100
+steps_per_save_imgs: 10
+steps_per_save_ckpt: 10
+steps_per_cal_metrics: 10
+steps_grad_accumulation: 4
+
+# Training mode
+_mode: "train_mode"
+
+# Tensorboard
+use_tensorboard: true
+
+# Random seed
+seed: 521
+
+# Dataloader settings (train)
+bs_train: 8
+nw_train: 4
+
+# Optimizer and scheduler
+optimizer_cfg:
+  type: "adam"
+  lr: 0.001
+  betas: [0.9, 0.999]
+  eps: 1.0e-08
+  weight_decay: 0
+
+# Loss weights
+loss_weight_dict:
+  l1: 1.0
+
+# Checkpoint config
+enable_checkpoint: true
+resume_from_checkpoint: null
