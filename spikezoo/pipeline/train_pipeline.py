@@ -6,7 +6,8 @@ import cv2
 from pathlib import Path
 from typing import Literal, Dict
 from tqdm import tqdm
-from spikezoo.models import build_model_cfg, build_model_name, BaseModel, BaseModelConfig
+from spikezoo.models import BaseModel, BaseModelConfig
+from spikezoo.models.model_registry import create_model, get_config_class
 from spikezoo.datasets import build_dataset_cfg, build_dataset_name, BaseDataset, BaseDatasetConfig, build_dataloader
 from typing import Union, List, Optional
 from spikezoo.pipeline.base_pipeline import Pipeline, PipelineConfig
@@ -114,8 +115,27 @@ class TrainPipeline(Pipeline):
             self.state_manager.transition_to_state(PipelineState.INITIALIZING)
         
         # model
-        self.model: BaseModel = build_model_name(model_cfg) if isinstance(model_cfg, str) else build_model_cfg(model_cfg)
-        self.model.build_network(mode="train", version="local")
+        if isinstance(model_cfg, str):
+            # For string model names, create model using registry
+            model_config_class = get_config_class(model_cfg)
+            if model_config_class:
+                model_config = model_config_class()
+                self.model: BaseModel = create_model(model_cfg, model_config)
+            else:
+                # Fallback to old method if registry doesn't have the model
+                self.model: BaseModel = build_model_name(model_cfg)
+        else:
+            # For config objects, we need to determine the model name and use registry
+            # This is a simplified approach - in practice, you might need to map configs to model names
+            # For now, we'll assume the config has a model_name attribute or fallback to old method
+            if hasattr(model_cfg, 'model_name'):
+                self.model: BaseModel = create_model(model_cfg.model_name, model_cfg)
+            else:
+                # Fallback to old method if we can't determine model name
+                self.model: BaseModel = build_model_cfg(model_cfg)
+        
+        if self.model:
+            self.model.build_network(mode="train", version="local")
         torch.set_grad_enabled(True)
         # data
         if isinstance(dataset_cfg, str):
