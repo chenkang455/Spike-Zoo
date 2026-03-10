@@ -17,9 +17,10 @@ from spikezoo.models import (
     get_config_class,
     create_model,
     build_model_name,
-    build_model_cfg,
     BaseModelConfig
 )
+# Import build_model_cfg for backward compatibility example only
+from spikezoo.models.model_registry import create_model as create_model_registry
 
 
 def example_model_registry_usage():
@@ -92,11 +93,11 @@ def example_backward_compatibility():
         print(f"   Error: {e}")
         print()
     
-    # Using old build_model_cfg function
-    print("2. Using build_model_cfg (old API):")
+    # Note: build_model_cfg is deprecated, showing how to use the new registry instead
+    print("2. Using model registry (new API replacement for build_model_cfg):")
     try:
         config = BaseModelConfig(model_name="base", load_state=True)
-        model = build_model_cfg(config)
+        model = create_model_registry("base", config)
         print(f"   Created model: {type(model).__name__}")
         print(f"   Model name: {model.cfg.model_name}")
         print(f"   Load state: {model.cfg.load_state}")
