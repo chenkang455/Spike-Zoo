@@ -56,7 +56,7 @@ class RecognitionPipeline(Pipeline):
         super()._setup_pipeline()
         set_random_seed(self.cfg.seed)
         if self.cfg.use_tensorboard:
-            self.writer = SummaryWriter(self.save_folder / Path(""))
+            self.writer = SummaryWriter(self.save_folder)
             subprocess.Popen(["tensorboard", f"--logdir={self.save_folder}"])
 
     def _setup_model_data(self, model_cfg, dataset_cfg):
@@ -210,6 +210,12 @@ class RecognitionPipeline(Pipeline):
 
     def predict(self, spike_data):
         """Make predictions on spike data."""
+        # Input validation
+        if spike_data is None:
+            raise ValueError("Input spike_data cannot be None")
+        if len(spike_data) == 0:
+            raise ValueError("Input spike_data cannot be empty")
+            
         self.model.net.eval()
         with torch.no_grad():
             spike_data = spike_data.to(self.device)
