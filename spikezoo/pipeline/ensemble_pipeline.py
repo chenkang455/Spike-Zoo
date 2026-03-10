@@ -15,7 +15,8 @@ import time
 from datetime import datetime
 from spikezoo.utils import setup_logging, save_config
 from tqdm import tqdm
-from spikezoo.models import build_model_cfg, build_model_name, BaseModel, BaseModelConfig
+from spikezoo.models import BaseModel, BaseModelConfig
+from spikezoo.models.model_registry import create_model, get_config_class
 from spikezoo.datasets import build_dataset_cfg, build_dataset_name, BaseDataset, BaseDatasetConfig, build_dataloader
 from typing import Optional, Union, List
 from spikezoo.pipeline.base_pipeline import Pipeline, PipelineConfig
@@ -45,9 +46,34 @@ class EnsemblePipeline(Pipeline):
             self.state_manager.transition_to_state(PipelineState.INITIALIZING)
         
         # model
-        self.model_list: List[BaseModel] = (
-            [build_model_name(name) for name in model_cfg_list] if isinstance(model_cfg_list[0], str) else [build_model_cfg(cfg) for cfg in model_cfg_list]
-        )
+        self.model_list: List[BaseModel] = []
+        if isinstance(model_cfg_list[0], str):
+            # For string model names
+            for name in model_cfg_list:
+                model_config_class = get_config_class(name)
+                if model_config_class:
+                    model_config = model_config_class()
+                    model = create_model(name, model_config)
+                    if model:
+                        self.model_list.append(model)
+                else:
+                    # Fallback to old method if registry doesn't have the model
+                    model = build_model_name(name)
+                    if model:
+                        self.model_list.append(model)
+        else:
+            # For config objects
+            for cfg in model_cfg_list:
+                if hasattr(cfg, 'model_name'):
+                    model = create_model(cfg.model_name, cfg)
+                    if model:
+                        self.model_list.append(model)
+                else:
+                    # Fallback to old method if we can't determine model name
+                    model = build_model_cfg(cfg)
+                    if model:
+                        self.model_list.append(model)
+        
         self.model_list = [model.build_network(mode="eval", version=self.cfg.version) for model in self.model_list]
         torch.set_grad_enabled(False)
         # data
