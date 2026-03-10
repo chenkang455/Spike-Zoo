@@ -4,7 +4,7 @@ import os
 from spikezoo.utils.img_utils import tensor2npy
 import cv2
 from pathlib import Path
-from typing import Literal, Dict
+from typing import Literal, Dict, Any, Optional
 from tqdm import tqdm
 from spikezoo.models import BaseModel, BaseModelConfig
 from spikezoo.models.model_registry import create_model, get_config_class
