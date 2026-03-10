@@ -95,8 +95,18 @@ class DetectionDataset(BaseDataset):
             spike = self.get_spike(idx)
             img = self.get_img(idx)
             
+        # Handle None values
+        if spike is None:
+            raise ValueError(f"Spike data at index {idx} is None")
+        if img is None and self.cfg.with_img:
+            raise ValueError(f"Image data at index {idx} is None")
+            
         # Get annotations
         annotations = self.get_annotations(idx)
+        
+        # Handle empty annotations
+        if annotations is None:
+            warnings.warn(f"Annotations at index {idx} are None")
 
         # Process data
         if self.cfg.use_aug == True and self.split == "train":

@@ -66,6 +66,15 @@ class DetectionModel(BaseModel):
                 box_size=self.cfg.box_size,
                 device=spike_frame.device
             )
+        elif spike_frame.shape != (self.saccade_input.spike_h, self.saccade_input.spike_w):
+            # Reinitialize for different input size
+            height, width = spike_frame.shape
+            self.saccade_input = SaccadeInput(
+                spike_h=height,
+                spike_w=width,
+                box_size=self.cfg.box_size,
+                device=spike_frame.device
+            )
             
         # Update DNF with the new spike frame
         self.saccade_input.update_dnf(spike_frame)
@@ -80,10 +89,18 @@ class DetectionModel(BaseModel):
         outputs = {}
         spike = batch["spike"]
         
+        # Handle None input
+        if spike is None:
+            raise ValueError("Input spike data is None")
+        
         # Process each frame in the spike sequence
         attention_boxes_list = []
         for t in range(spike.shape[0]):
             frame = spike[t]
+            # Handle None frame
+            if frame is None:
+                warnings.warn(f"Frame at timestep {t} is None, skipping")
+                continue
             attention_boxes = self.process_frame(frame)
             attention_boxes_list.append(attention_boxes)
             
