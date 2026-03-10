@@ -1,5 +1,5 @@
 from skimage.feature import peak_local_max
-from skimage.morphology import erosion, square
+from skimage.morphology import erosion, footprint_rectangle
 from skimage.measure import label, regionprops
 import numpy as np
 import torch
@@ -78,7 +78,7 @@ class SaccadeInput:
         tmpU = torch.relu(self.U - self.attentionThr)
         tmpU = tmpU.cpu()
         tmpU = tmpU.detach().numpy()
-        dilated_u = erosion(tmpU, square(self.peak_width))
+        dilated_u = erosion(tmpU, footprint_rectangle(self.peak_width, self.peak_width))
         peak_cord = peak_local_max(dilated_u, min_distance=self.box_width)
         num_max = len(peak_cord)
         # print('detect %d attention location' % num_max)
