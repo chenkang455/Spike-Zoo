@@ -19,4 +19,4 @@ spikezoo/data/your_data_path
 
 examples/train_reds_base/train_spcsnet.py
 TODO.md
-data/lytro-01-A.dat
+data/lytro-01-A.dat__pycache__/
