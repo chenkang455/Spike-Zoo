@@ -40,6 +40,10 @@ class EnsemblePipeline(Pipeline):
 
     def _setup_model_data(self, model_cfg_list, dataset_cfg):
         """Model and Data setup."""
+        # Update state if state management is enabled
+        if self.state_manager:
+            self.state_manager.transition_to_state(PipelineState.INITIALIZING)
+        
         # model
         self.model_list: List[BaseModel] = (
             [build_model_name(name) for name in model_cfg_list] if isinstance(model_cfg_list[0], str) else [build_model_cfg(cfg) for cfg in model_cfg_list]
@@ -52,10 +56,22 @@ class EnsemblePipeline(Pipeline):
         self.dataloader = build_dataloader(self.dataset,self.cfg)
         # device
         self.device = "cuda" if torch.cuda.is_available() else "cpu"
+        
+        # Update state to ready
+        if self.state_manager:
+            self.state_manager.transition_to_state(PipelineState.READY)
 
     def infer(self, spike, img, save_folder, rate):
+        # Update state if state management is enabled
+        if self.state_manager:
+            self.state_manager.transition_to_state(PipelineState.INFERRING)
+        
         for model in self.model_list:
             self._infer_model(model, spike, img, save_folder, rate)
+        
+        # Update state back to ready
+        if self.state_manager:
+            self.state_manager.transition_to_state(PipelineState.READY)
 
     def cal_params(self):
         for model in self.model_list:

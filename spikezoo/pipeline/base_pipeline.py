@@ -21,6 +21,13 @@ from typing import Optional, Union, List
 import shutil
 from spikingjelly.clock_driven import functional
 import spikezoo as sz
+from .data_preprocessor import DataPreprocessor
+from spikezoo.utils.validation_utils import (
+    validate_infer_from_dataset_params,
+    validate_infer_from_file_params,
+    validate_infer_from_spk_params
+)
+from .state_manager import StateManager, PipelineMode, PipelineState
 
 
 @dataclass
@@ -47,6 +54,8 @@ class PipelineConfig:
     pin_memory: bool = False
     "Different modes for the pipeline."
     _mode: Literal["single_mode", "multi_mode", "train_mode"] = "single_mode"
+    "Enable state management."
+    enable_state_management: bool = True
 
 
 class Pipeline:
@@ -59,10 +68,15 @@ class Pipeline:
         self.cfg = cfg
         self._setup_model_data(model_cfg, dataset_cfg)
         self._setup_pipeline()
+        self._setup_state_management()
 
     def _setup_model_data(self, model_cfg, dataset_cfg):
         """Model and Data setup."""
         print("Model and dataset is setting up...")
+        # Update state if state management is enabled
+        if self.state_manager:
+            self.state_manager.transition_to_state(PipelineState.INITIALIZING)
+        
         # model [1] build the model. [2] build the network.
         self.model: BaseModel = build_model_name(model_cfg) if isinstance(model_cfg, str) else build_model_cfg(model_cfg)
         self.model.build_network(mode="eval", version=self.cfg.version)
@@ -73,6 +87,10 @@ class Pipeline:
         self.dataloader = build_dataloader(self.dataset,self.cfg)
         # device
         self.device = "cuda" if torch.cuda.is_available() else "cpu"
+        
+        # Update state to ready
+        if self.state_manager:
+            self.state_manager.transition_to_state(PipelineState.READY)
 
     def _setup_pipeline(self):
         """Pipeline setup."""
@@ -92,6 +110,27 @@ class Pipeline:
             shutil.rmtree(save_folder)
         os.makedirs(save_folder)
         save_folder = Path(save_folder)
+    
+    def _setup_state_management(self):
+        """Setup state management."""
+        if self.cfg.enable_state_management:
+            # Determine initial mode from config
+            if self.cfg._mode == "train_mode":
+                initial_mode = PipelineMode.TRAIN_MODE
+            elif self.cfg._mode == "multi_mode":
+                initial_mode = PipelineMode.MULTI_MODE
+            else:
+                initial_mode = PipelineMode.SINGLE_MODE
+            
+            self.state_manager = StateManager(initial_mode)
+            
+            # Set initial state based on mode
+            if initial_mode == PipelineMode.TRAIN_MODE:
+                self.state_manager.transition_to_state(PipelineState.TRAINING)
+            else:
+                self.state_manager.transition_to_state(PipelineState.READY)
+        else:
+            self.state_manager = None
         # logger result
         self.logger = setup_logging(save_folder / Path("result.log"))
         self.logger.info(f"Info logs are saved on the {save_folder}/result.log")
@@ -108,78 +147,62 @@ class Pipeline:
 
     def infer_from_dataset(self, idx=0):
         """Function I---Save the recoverd image and calculate the metric from the given dataset."""
+        # parameter validation
+        validate_infer_from_dataset_params(idx, len(self.dataset))
+        
         # save folder
         self.logger.info("*********************** infer_from_dataset ***********************")
-        save_folder = self.save_folder / Path(f"infer_from_dataset/{self.dataset.cfg.dataset_name}_dataset/{self.dataset.split}/{idx:06d}")
-        os.makedirs(str(save_folder), exist_ok=True)
+        save_folder = DataPreprocessor.create_save_folder(
+            self.save_folder, "dataset", idx, self.dataset.cfg.dataset_name, self.dataset.split
+        )
 
         # data process
-        # todo
         batch = self.dataset[idx]
-        spike, img, rate = batch["spike"], batch["gt_img"], batch["rate"]
-        spike = spike[None].to(self.device)
-        if self.dataset.cfg.with_img == True:
-            img = img[None].to(self.device)
-        else:
-            img = None
+        spike, img, rate = DataPreprocessor.preprocess_dataset_item(batch, self.device)
         return self.infer(spike, img, save_folder, rate)
 
     def infer_from_file(self, file_path, height=-1, width=-1, rate=1, img_path=None, remove_head=False):
         """Function II---Save the recoverd image and calculate the metric from the given input file."""
+        # parameter validation
+        validate_infer_from_file_params(file_path, height, width, rate, img_path, remove_head)
+        
         # save folder
         self.logger.info("*********************** infer_from_file ***********************")
-        save_folder = self.save_folder / Path(f"infer_from_file/{os.path.basename(file_path)}")
-        os.makedirs(str(save_folder), exist_ok=True)
+        save_folder = DataPreprocessor.create_save_folder(self.save_folder, "file", file_path)
 
-        # load spike from .dat
-        if file_path.endswith(".dat"):
-            spike = load_vidar_dat(file_path, height, width, remove_head)
-        # load spike from .npz from UHSR
-        elif file_path.endswith("npz"):
-            spike = np.load(file_path)["spk"].astype(np.float32)[:, 13:237, 13:237]
-        else:
-            raise RuntimeError("Not recognized spike input file.")
-        # load img from .png/.jpg image file
-        if img_path is not None:
-            img = cv2.imread(img_path)
-            if img.ndim == 3:
-                img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-            img = (img / 255).astype(np.float32)
-            img = torch.from_numpy(img)[None, None].to(self.device)
-        else:
-            img = img_path
-        spike = torch.from_numpy(spike)[None].to(self.device)
+        # data process
+        spike, img = DataPreprocessor.preprocess_file_input(
+            file_path, height, width, self.device, img_path, remove_head
+        )
         return self.infer(spike, img, save_folder, rate)
 
     def infer_from_spk(self, spike, rate=1, img=None):
         """Function III---Save the recoverd image and calculate the metric from the given spike stream."""
+        # parameter validation
+        validate_infer_from_spk_params(spike, rate, img)
+        
         # save folder
         self.logger.info("*********************** infer_from_spk ***********************")
-        save_folder = self.save_folder / Path(f"infer_from_spk")
-        os.makedirs(str(save_folder), exist_ok=True)
+        save_folder = DataPreprocessor.create_save_folder(self.save_folder, "spk")
 
-        # spike process
-        if isinstance(spike, np.ndarray):
-            spike = torch.from_numpy(spike)
-        spike = spike.to(self.device)
-        # [c,h,w] -> [1,c,w,h]
-        if spike.dim() == 3:
-            spike = spike[None]
-        spike = spike.float()
-        # img process
-        if img is not None:
-            if isinstance(img, np.ndarray):
-                img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY) if img.ndim == 3 else img
-                img = (img / 255).astype(np.float32)
-                img = torch.from_numpy(img)[None, None].to(self.device)
-            else:
-                raise RuntimeError("Not recognized image input type.")
+        # data process
+        spike, img = DataPreprocessor.preprocess_spike_input(spike, self.device, img)
         return self.infer(spike, img, save_folder, rate)
 
     # TODO: To be overridden
     def infer(self, spike, img, save_folder, rate):
         """Function IV---Spike-to-image conversion interface, input data format: spike [bs,c,h,w] (0-1), img [bs,1,h,w] (0-1)"""
-        return self._infer_model(self.model, spike, img, save_folder, rate)
+        # Update state if state management is enabled
+        if self.state_manager:
+            self.state_manager.transition_to_state(PipelineState.INFERRING)
+        
+        result = self._infer_model(self.model, spike, img, save_folder, rate)
+        
+        # Update state back to ready
+        if self.state_manager:
+            self.state_manager.transition_to_state(PipelineState.READY)
+        
+        return result
 
     def save_imgs_from_dataset(self):
         """Function V---Save all images from the given dataset."""
